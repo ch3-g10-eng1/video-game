@@ -16,7 +16,7 @@ Codespace Info:
 - Will retain all edits even if not committed
 
 Commit Standards:
-  - Type: messagw
+- Type: message
   - Type: fix, feature, config
   - Followed by descriptive, but short message
 - Example: fix: data validation bug corrected
