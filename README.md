@@ -11,3 +11,8 @@ Codespace Info:
 - Real time edits from all using the codespace shown
 - Codespace has to be committed to update main repo
 - Will retain all edits even if not committed
+
+Commit Standards:
+- Type: fix, feature, config
+- Followed by descriptive, but short message
+- Example: fix: data validation bug corrected
