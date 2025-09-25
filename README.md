@@ -22,3 +22,6 @@ Commit Standards:
 - Example:  
   fix: data validation bug corrected
 test
+
+Names:
+Henry G
