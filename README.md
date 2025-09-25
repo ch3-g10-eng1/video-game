@@ -21,3 +21,4 @@ Commit Standards:
   - Followed by descriptive, but short message
 - Example:  
   fix: data validation bug corrected
+test
