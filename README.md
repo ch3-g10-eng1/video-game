@@ -9,7 +9,7 @@ Commit Standards:
 - Example:  
   - *fix: data validation bug corrected*
 
-Names:
+Names:  
 Henry G  
 Lenny S  
 Isaac M  
