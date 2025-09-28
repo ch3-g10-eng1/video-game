@@ -1,6 +1,7 @@
 # video-game
 Repository for developing video game. Cohort 3, Team 8.  
-Note all must use **Java 17**, may require setting in environmental variables (VS Code).
+Note all must use **Java 17**, may require (setting)[https://code.visualstudio.com/docs/java/java-project#_configure-runtime-for-projects]
+in environmental variables (VS Code).
 
 Commit Standards:
 - **Type: message**
