@@ -7,7 +7,7 @@ Commit Standards:
   - Type: **fix**, **feature**, **doc**, **config**
   - Message: short explain change
 - Example:  
-  *fix: data validation bug corrected*
+  - *fix: data validation bug corrected*
 
 Names:
 Henry G
