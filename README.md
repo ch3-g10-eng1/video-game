@@ -1,5 +1,5 @@
 # video-game
-Repository for developing video game. Cohort 3, Team 8.
+Repository for developing video game. Cohort 3, Team 8.  
 Note all must use **Java 17**, may require setting in environmental variables (VS Code).
 
 Commit Standards:
@@ -10,9 +10,9 @@ Commit Standards:
   - *fix: data validation bug corrected*
 
 Names:
-Henry G
-Lenny S
-Isaac M
-Andri K
-Rishi T
-Isaac K
+Henry G  
+Lenny S  
+Isaac M  
+Andri K  
+Rishi T  
+Isaac K  
