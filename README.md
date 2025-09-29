@@ -5,7 +5,7 @@ Repository for developing video game. Cohort 3, Team 8.
 
 Note we must all use **Adoptium's Temurin® Java 17**:
 - This is the version the modules technical requirements state we must use  
-- To test you are using the right version, run the file: *check_JDK_version.java*
+- To test you are using the right version, run the file: *CheckJDKVersion.java*
   - Expect results like this:  
     - Java Version: 17.0.16  
     - Java Vendor: Eclipse Adoptium
@@ -18,7 +18,7 @@ Note we must all use **Adoptium's Temurin® Java 17**:
     - [Linux Temurin® JDK 17 Download](https://adoptium.net/en-GB/temurin/releases?os=linux&version=17&package=jdk&arch=any&mode=filter)  
   
   - Once installed:
-    - Open a java project (e.g. *check_JDK_version.java* in this repo)
+    - Open a java project (e.g. *CheckJDKVersion.java* in this repo)
     - Open command palette: **View → Command Palette**
     - Type: *Java: Configure Java Runtime*
     - Check that **JDK: JavaSE-17** is shown
