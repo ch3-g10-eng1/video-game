@@ -1,4 +1,4 @@
-public class check_JDK_version {
+public class CheckJDKVersion {
     public static void main(String[] args) {
         System.out.println("=== Java Runtime Information ===");
         System.out.println("Java Version: " + System.getProperty("java.version"));
