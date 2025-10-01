@@ -27,13 +27,13 @@ Commit Standards:
 -----------------------------------------------------------------------
 
 Names:  
-Henry G  
-Lenny S  
-Isaac M  
-Andri K  
-Rishi T  
-Isaac K
-Viktor B
+- Henry G
+- Lenny S
+- Isaac M
+- Andri K
+- Rishi T
+- Isaac K
+- Viktor B
 
 
 
