@@ -32,7 +32,9 @@ Lenny S
 Isaac M  
 Andri K  
 Rishi T  
-Isaac K\r\n
+Isaac K
+
+
 Viktor B
 
 
