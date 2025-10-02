@@ -9,7 +9,31 @@
     - Open command palette: **View → Command Palette**
     - Type: *Java: Configure Java Runtime*
     - Check that **JDK: JavaSE-17** is shown
-    - Click the dropdown box and ensure that file path is something like: *C:\Users\name\AppData\Local\Programs\Eclipse Adoptium\jdk-17.0.16.8-hotspot*  
+    - Click the dropdown box and ensure that file path is something like: *C:\Users\name\AppData\Local\Programs\Eclipse Adoptium\jdk-17.0.16.8-hotspot*
+    <br><br>
+    - Also got to **File → Preferences → Settings**  
+    - Search for: **java.configuration.runtimes**  
+    - Click **Edit in settings .json**  
+    - Add something like or add to the current setup:
+    ```json
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-17",
+            "path": "C:\\Users\\username\\jdk-17.0.16+8",
+            "javadoc": "https://adoptium.net/docs/",
+            "default": true,
+        }
+    ]
+    ```
+
+    - **Replacing path with where your eclipse JDK is installed**  
+    - You can find this by running the command
+    ```cmd
+    where java
+    ```
+    - Copy the path for the one from **Eclipse Adoptium**  
+    - Runt **CheckJDKVersion.java** to make sure everything is set up right  
+  
 
 -----------------------------------------------------------------------
 - IntelliJ Install:  
