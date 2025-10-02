@@ -35,8 +35,7 @@ Names:
 - Isaac K
 - Viktor B
 
+-----------------------------------------------------------------------
 
-
-
-
-
+Code licensed under MIT license
+LibGDX used and licensed under Apache 2.0 license
