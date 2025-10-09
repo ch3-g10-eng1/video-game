@@ -11,18 +11,20 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class MazeGame extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture image;
+    Texture alonso;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         image = new Texture("libgdx.png");
+        alonso = new Texture("alonso.jpg");
     }
 
     @Override
     public void render() {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         batch.begin();
-        batch.draw(image, 140, 210);
+        batch.draw(alonso, 150, 250);
         batch.end();
     }
 
