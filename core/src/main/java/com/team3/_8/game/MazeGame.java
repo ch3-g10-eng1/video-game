@@ -20,6 +20,9 @@ public class MazeGame extends ApplicationAdapter {
 
     private Sprite sprite;
 
+    public int bobHeight = 200;
+    public int bobWidth = 320;
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -28,7 +31,7 @@ public class MazeGame extends ApplicationAdapter {
         bob = new Texture("bob.jpg");
 
         sprite = new Sprite(bob);
-        sprite.setBounds(0, 0, 320, 200);
+        sprite.setBounds(0, 0, bobWidth, bobHeight);
     }
 
     @Override
@@ -62,14 +65,22 @@ public class MazeGame extends ApplicationAdapter {
         float speed = 40f;
         float delta = Gdx.graphics.getDeltaTime();
 
+        // Movement controller, can probably make it more efficient later (switch??) but for now it works well, learning stage frfr
 
-        if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D))) && (sprite.getX() < (Gdx.graphics.getWidth() - 320))){
+        //X-axis
+        if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D))) && (sprite.getX() < (Gdx.graphics.getWidth() - bobWidth))) {
             sprite.translateX(speed * delta);
-            System.out.println(Gdx.graphics.getWidth());
-            System.out.println(sprite.getX());
         }
         if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A))) && (sprite.getX() > 0)) {
             sprite.translateX(-speed * delta);
+        }
+
+        //Y-axis
+        if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W))) && (sprite.getY() < (Gdx.graphics.getHeight() - bobHeight))) {
+            sprite.translateY(speed * delta);
+        }
+        if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S))) && (sprite.getY() > 0)) {
+            sprite.translateY(-speed * delta);
         }
 
     }
