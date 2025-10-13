@@ -3,8 +3,6 @@ package com.team3._8.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -53,17 +51,27 @@ public class MazeGame extends ApplicationAdapter {
         batch.dispose();
 
         bob.dispose();
+
     }
 
     @Override
     public void resize(int width, int height) {
+        /*
+        This method acts when the screen gets resized.
+        It ensures that the sprite statys in the same position.
+         */
         System.out.println(Math.abs(width - 1024)/2);
         batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
     }
 
     private void input(){
-        float speed = 40f;
-        float delta = Gdx.graphics.getDeltaTime();
+        /*
+        This method is the controller for the player character.
+        Right now it only controls the movement on the x and y-axis.
+        It gets the input key for the movement, and checks if the character is inside bounds before moving the character.
+         */
+        float speed = 120f;
+        float delta = Gdx.graphics.getDeltaTime(); // Delta time is to ensure that it is the same speed on every machine.
 
         // Movement controller, can probably make it more efficient later (switch??) but for now it works well, learning stage frfr
 
