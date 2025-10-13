@@ -63,12 +63,12 @@ public class MazeGame extends ApplicationAdapter {
         float delta = Gdx.graphics.getDeltaTime();
 
 
-        if ((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) && (sprite.getX() < (Gdx.graphics.getWidth() - 320))){
+        if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D))) && (sprite.getX() < (Gdx.graphics.getWidth() - 320))){
             sprite.translateX(speed * delta);
             System.out.println(Gdx.graphics.getWidth());
             System.out.println(sprite.getX());
         }
-        if ((Gdx.input.isKeyPressed(Input.Keys.LEFT)) && (sprite.getX() > 0)) {
+        if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A))) && (sprite.getX() > 0)) {
             sprite.translateX(-speed * delta);
         }
 
