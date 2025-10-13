@@ -3,18 +3,23 @@ package com.team3._8.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class MazeGame extends ApplicationAdapter {
     private SpriteBatch batch;
+//    private FitViewport viewport;
 
 //    private Texture alonso;
 
     private Texture bob;
+
+    private Texture background;
 
     private Sprite sprite;
 
@@ -24,9 +29,11 @@ public class MazeGame extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
+//        viewport = new FitViewport(1024, 1024);
 
 //        alonso = new Texture("alonso.jpg");
         bob = new Texture("bob.jpg");
+        background = new Texture("background.jpg");
 
         sprite = new Sprite(bob);
         sprite.setBounds(0, 0, bobWidth, bobHeight);
@@ -37,10 +44,21 @@ public class MazeGame extends ApplicationAdapter {
 
         input();
 
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+        draw();
+
+    }
+
+    private void draw(){
+        ScreenUtils.clear(Color.BLACK);
+//        viewport.apply();
+//        batch.setProjectionMatrix(viewport.getCamera().combined);
 
         batch.begin();
 
+        float worldWidth = Gdx.graphics.getWidth();
+        float worldHeight = Gdx.graphics.getHeight();
+
+        batch.draw(background, 0, 0, worldWidth, worldHeight);
         sprite.draw(batch);
 
         batch.end();
@@ -51,6 +69,7 @@ public class MazeGame extends ApplicationAdapter {
         batch.dispose();
 
         bob.dispose();
+        background.dispose();
 
     }
 
@@ -58,10 +77,9 @@ public class MazeGame extends ApplicationAdapter {
     public void resize(int width, int height) {
         /*
         This method acts when the screen gets resized.
-        It ensures that the sprite statys in the same position.
          */
-        System.out.println(Math.abs(width - 1024)/2);
         batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
+//        viewport.update(width, height, true);
     }
 
     private void input(){
