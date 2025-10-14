@@ -79,3 +79,8 @@ LibGDX wants its spritesheets as texture atlases, which are in the `.atlas` form
 In order to get the images into the spritesheet in the correct format, there is a GUI tool that packs different sprites into one large spritesheet.
 
 We will be using [libGDX TexturePacker](https://github.com/crashinvaders/gdx-texture-packer-gui).
+
+-----------------------------------------------------------------------
+# Troubleshooting
+
+In order to check that we don't have any memory leaks, and is performing correctly, we will use [VisualVM](https://visualvm.github.io/) to troubleshoot the game.
