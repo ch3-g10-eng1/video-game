@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -23,6 +24,10 @@ public class MazeGame extends ApplicationAdapter {
 
     private Sprite sprite;
 
+    private Rectangle bobRectangle;
+    private Rectangle collisionRectangle;
+
+
     public int bobHeight = 200;
     public int bobWidth = 320;
 
@@ -37,6 +42,9 @@ public class MazeGame extends ApplicationAdapter {
 
         sprite = new Sprite(bob);
         sprite.setBounds(0, 0, bobWidth, bobHeight);
+
+        bobRectangle = new Rectangle();
+        collisionRectangle = new Rectangle();
     }
 
     @Override
@@ -45,6 +53,8 @@ public class MazeGame extends ApplicationAdapter {
         input();
 
         draw();
+
+        logic();
 
     }
 
@@ -107,6 +117,23 @@ public class MazeGame extends ApplicationAdapter {
         }
         if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S))) && (sprite.getY() > 0)) {
             sprite.translateY(-speed * delta);
+        }
+
+    }
+
+    private void logic(){
+        /*
+        This method controls the logic regarding the collision boxes (Rectangles).
+        Right now, there are two collision boxes, for the bob character and one in the corner,
+        just to see how they work:
+            - When the game is minimised, the collision boxes overlap, causing the if statement to activate repeatedly
+         */
+        bobRectangle.set(sprite.getX(), sprite.getY(), bobWidth, bobHeight);
+
+        collisionRectangle.set(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), bobWidth, bobHeight);
+
+        if (bobRectangle.overlaps(collisionRectangle)) {
+            System.out.println("bob collision");
         }
 
     }
