@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class MazeGame extends ApplicationAdapter {
     private SpriteBatch batch;
-//    private FitViewport viewport;
+    private FitViewport viewport;
 
 //    private Texture alonso;
 
@@ -34,11 +34,11 @@ public class MazeGame extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-//        viewport = new FitViewport(1024, 1024);
+        viewport = new FitViewport(1024, 1024);
 
 //        alonso = new Texture("alonso.jpg");
         bob = new Texture("bob.jpg");
-        background = new Texture("background.jpg");
+        background = new Texture("background2.jpg");
 
         sprite = new Sprite(bob);
         sprite.setBounds(0, 0, bobWidth, bobHeight);
@@ -60,13 +60,13 @@ public class MazeGame extends ApplicationAdapter {
 
     private void draw(){
         ScreenUtils.clear(Color.BLACK);
-//        viewport.apply();
-//        batch.setProjectionMatrix(viewport.getCamera().combined);
+        viewport.apply();
+        batch.setProjectionMatrix(viewport.getCamera().combined);
 
         batch.begin();
 
-        float worldWidth = Gdx.graphics.getWidth();
-        float worldHeight = Gdx.graphics.getHeight();
+        float worldWidth = viewport.getWorldWidth();
+        float worldHeight = viewport.getWorldHeight();
 
         batch.draw(background, 0, 0, worldWidth, worldHeight);
         sprite.draw(batch);
@@ -88,8 +88,8 @@ public class MazeGame extends ApplicationAdapter {
         /*
         This method acts when the screen gets resized.
          */
-        batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
-//        viewport.update(width, height, true);
+//        batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
+        viewport.update(width, height, true);
     }
 
     private void input(){
