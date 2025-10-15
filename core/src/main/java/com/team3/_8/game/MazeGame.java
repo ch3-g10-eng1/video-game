@@ -9,14 +9,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class MazeGame extends ApplicationAdapter {
     private SpriteBatch batch;
+//    private ExtendViewport viewport;
     private FitViewport viewport;
-
-//    private Texture alonso;
 
     private Texture bob;
 
@@ -34,9 +34,8 @@ public class MazeGame extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        viewport = new FitViewport(1024, 1024);
+        viewport = new FitViewport(1440,1080);
 
-//        alonso = new Texture("alonso.jpg");
         bob = new Texture("bob.jpg");
         background = new Texture("background2.jpg");
 
@@ -88,7 +87,6 @@ public class MazeGame extends ApplicationAdapter {
         /*
         This method acts when the screen gets resized.
          */
-//        batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
         viewport.update(width, height, true);
     }
 
