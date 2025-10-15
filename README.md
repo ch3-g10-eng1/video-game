@@ -25,6 +25,13 @@ Commit Standards:
     - *fix: data validation bug corrected*
 
 -----------------------------------------------------------------------
+# Aspect Ratio 
+
+We have gone with a 4:3 aspect ratio, and are using a FitViewport - this causes black bars to appear 
+on devices with a 16:9 aspect ratio on the side of the screen, which was decided to 
+be a better alternative to black bars on the top of the screen, if it was the other way around.
+
+----------------------------------------------------------------------
 
 Names:
 - Henry G
