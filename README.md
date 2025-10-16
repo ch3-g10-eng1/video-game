@@ -25,6 +25,13 @@ Commit Standards:
     - *fix: data validation bug corrected*
 
 -----------------------------------------------------------------------
+# Aspect Ratio 
+
+We have gone with a 4:3 aspect ratio, and are using a FitViewport - this causes black bars to appear 
+on devices with a 16:9 aspect ratio on the side of the screen, which was decided to 
+be a better alternative to black bars on the top of the screen, if it was the other way around.
+
+----------------------------------------------------------------------
 
 Names:
 - Henry G
@@ -70,3 +77,17 @@ Useful Gradle tasks and flags:
 
 Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
 For example, `core:clean` removes `build` folder only from the `core` project.
+
+-----------------------------------------------------------------------
+
+# Texture Atlases
+
+LibGDX wants its spritesheets as texture atlases, which are in the `.atlas` format.
+In order to get the images into the spritesheet in the correct format, there is a GUI tool that packs different sprites into one large spritesheet.
+
+We will be using [libGDX TexturePacker](https://github.com/crashinvaders/gdx-texture-packer-gui).
+
+-----------------------------------------------------------------------
+# Troubleshooting
+
+In order to check that we don't have any memory leaks, and is performing correctly, we will use [VisualVM](https://visualvm.github.io/) to troubleshoot the game.
