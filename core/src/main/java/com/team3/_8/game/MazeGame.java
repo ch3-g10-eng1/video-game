@@ -1,6 +1,7 @@
 package com.team3._8.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -13,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class MazeGame extends ApplicationAdapter {
+public class MazeGame implements ApplicationListener {
     private SpriteBatch batch;
 //    private ExtendViewport viewport;
     private FitViewport viewport;
@@ -135,4 +136,13 @@ public class MazeGame extends ApplicationAdapter {
         }
 
     }
+
+    @Override
+	public void pause () {
+	}
+
+	@Override
+	public void resume () {
+	}
+
 }
