@@ -91,3 +91,11 @@ We will be using [libGDX TexturePacker](https://github.com/crashinvaders/gdx-tex
 # Troubleshooting
 
 In order to check that we don't have any memory leaks, and is performing correctly, we will use [VisualVM](https://visualvm.github.io/) to troubleshoot the game.
+
+-----------------------------------------------------------------------
+# Map generation
+
+to generate the map we're using the Tiled software (which is free to use) with a public domain tilemap
+
+Tiled: https://thorbjorn.itch.io/tiled
+TileMap: https://rpg.hamsterrepublic.com/ohrrpgce/Free_Tilemaps
