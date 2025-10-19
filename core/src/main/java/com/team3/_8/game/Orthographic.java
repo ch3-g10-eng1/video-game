@@ -14,12 +14,16 @@ public class Orthographic implements ApplicationListener {
     static final int WORLD_WIDTH = 200;
     static final int WORLD_HEIGHT = 100;
 
+    static final int BOB_HEIGHT = 15;
+    static final int BOB_WIDTH = 15;
+
     private OrthographicCamera camera;
     private SpriteBatch batch;
 
     private Sprite sprite;
     private Sprite bob;
     private float rotationSpeed;
+
 
 
     @Override
@@ -32,12 +36,14 @@ public class Orthographic implements ApplicationListener {
 
         bob = new Sprite(new Texture(Gdx.files.internal("bob.jpg")));
         bob.setPosition(0,0);
-        bob.setSize(15,15);
+        bob.setSize(BOB_WIDTH,BOB_HEIGHT);
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera(30, 30 * (w / h));
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+//        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+        camera.position.set(bob.getX() + ((float) BOB_WIDTH / 2), bob.getY() + ((float) BOB_HEIGHT / 2), 0);
+        camera.zoom = 2.5f;
         camera.update();
 
         batch = new SpriteBatch();
@@ -55,6 +61,7 @@ public class Orthographic implements ApplicationListener {
         handleInput();
         movement();
 //        camera.lookAt(bob.getX(), bob.getY(), 0);
+        camera.position.set(bob.getX() + ((float) BOB_WIDTH / 2), bob.getY() + ((float) BOB_HEIGHT / 2), 0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
@@ -75,6 +82,7 @@ public class Orthographic implements ApplicationListener {
         if (Gdx.input.isKeyPressed(Input.Keys.E)) {
             camera.zoom -= 0.02f;
         }
+//        System.out.println("camera zoom: " + camera.zoom);
     }
 
     private void movement(){
@@ -85,18 +93,18 @@ public class Orthographic implements ApplicationListener {
 
         //X-axis
         if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D)))) {
-            sprite.translateX(speed * delta);
+            bob.translateX(speed * delta);
         }
         if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A)))) {
-            sprite.translateX(-speed * delta);
+            bob.translateX(-speed * delta);
         }
 
         //Y-axis
         if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W)))) {
-            sprite.translateY(speed * delta);
+            bob.translateY(speed * delta);
         }
         if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S)))) {
-            sprite.translateY(-speed * delta);
+            bob.translateY(-speed * delta);
         }
     }
 
