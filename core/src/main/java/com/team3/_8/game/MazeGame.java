@@ -36,7 +36,6 @@ public class MazeGame implements ApplicationListener {
     public void create() {
         batch = new SpriteBatch();
         viewport = new FitViewport(1440,1080);
-
         bob = new Texture("bob.jpg");
         background = new Texture("background2.jpg");
 
