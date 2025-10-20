@@ -8,11 +8,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+
 
 public class Orthographic implements ApplicationListener {
 
     static final int WORLD_WIDTH = 200;
-    static final int WORLD_HEIGHT = 100;
+    static final int WORLD_HEIGHT = 200;
 
     static final int BOB_HEIGHT = 15;
     static final int BOB_WIDTH = 15;
@@ -20,9 +22,11 @@ public class Orthographic implements ApplicationListener {
     private OrthographicCamera camera;
     private SpriteBatch batch;
 
-    private Sprite sprite;
+    //private Sprite sprite;
     private Sprite bob;
     private float rotationSpeed;
+
+    private TiledMapRenderer map_render;
 
 
 
@@ -30,9 +34,9 @@ public class Orthographic implements ApplicationListener {
     public void create() {
         rotationSpeed = 0.5f;
 
-        sprite = new Sprite(new Texture(Gdx.files.internal("background2.jpg")));
-        sprite.setPosition(0,0);
-        sprite.setSize(WORLD_WIDTH,WORLD_HEIGHT);
+        //sprite = new Sprite(new Texture(Gdx.files.internal("background2.jpg")));
+        //sprite.setPosition(0,0);
+        //sprite.setSize(WORLD_WIDTH,WORLD_HEIGHT);
 
         bob = new Sprite(new Texture(Gdx.files.internal("bob.jpg")));
         bob.setPosition(0,0);
@@ -45,7 +49,7 @@ public class Orthographic implements ApplicationListener {
         camera.position.set(bob.getX() + ((float) BOB_WIDTH / 2), bob.getY() + ((float) BOB_HEIGHT / 2), 0);
         camera.zoom = 2.5f;
         camera.update();
-
+        map_render = MapGen.generateMaze();
         batch = new SpriteBatch();
     }
 
@@ -67,11 +71,14 @@ public class Orthographic implements ApplicationListener {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        MapGen.renderMap(camera, map_render);
+        
         batch.begin();
-        sprite.draw(batch);
+        //sprite.draw(batch);
         bob.draw(batch);
         batch.end();
 
+        
 
     }
 
