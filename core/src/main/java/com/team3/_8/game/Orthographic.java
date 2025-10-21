@@ -28,7 +28,6 @@ public class Orthographic implements ApplicationListener {
     private Viewport viewport;
     private SpriteBatch batch;
 
-    private Sprite sprite;
     private Sprite bob;
     private TextureAtlas atlas;
 
@@ -40,13 +39,6 @@ public class Orthographic implements ApplicationListener {
     public void create() {
         atlas = new TextureAtlas(Gdx.files.internal("assets\\atlas\\bob.atlas"));
 
-        //sprite = new Sprite(new Texture(Gdx.files.internal("background2.jpg")));
-        //sprite.setPosition(0,0);
-        //sprite.setSize(WORLD_WIDTH,WORLD_HEIGHT);
-
-        // Old bob image sprite
-        // bob = new Sprite(new Texture(Gdx.files.internal("bob.jpg")));
-
         // Gets bob sprite from texture atlas
         bob = new Sprite(atlas.findRegion("front-bob-2"));
         bob.setPosition(0,0);
@@ -55,7 +47,6 @@ public class Orthographic implements ApplicationListener {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera(30, 30 * (w / h));
-//        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.position.set(bob.getX() + ((float) BOB_WIDTH / 2), bob.getY() + ((float) BOB_HEIGHT / 2), 0);
         camera.zoom = 2.5f;
         camera.update();
@@ -75,7 +66,6 @@ public class Orthographic implements ApplicationListener {
     public void render() {
         handleInput();
         movement();
-//        camera.lookAt(bob.getX(), bob.getY(), 0);
         camera.position.set(bob.getX() + ((float) BOB_WIDTH / 2), bob.getY() + ((float) BOB_HEIGHT / 2), 0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -85,7 +75,6 @@ public class Orthographic implements ApplicationListener {
         MapGen.renderMap(camera, map_render);
 
         batch.begin();
-        //sprite.draw(batch);
         bob.draw(batch);
         batch.end();
 
@@ -100,7 +89,6 @@ public class Orthographic implements ApplicationListener {
         if (Gdx.input.isKeyPressed(Input.Keys.E)) {
             camera.zoom -= 0.02f;
         }
-//        System.out.println("camera zoom: " + camera.zoom);
     }
 
     private void movement(){
