@@ -8,13 +8,13 @@ import com.team3._8.game.Orthographic;
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
     public static void main(String[] args) {
-        new Lwjgl3Application(new Orthographic());
+//        new Lwjgl3Application(new Orthographic());
         if (StartupHelper.startNewJvmIfRequired()) return; // This handles macOS support and helps on Windows.
         createApplication();
     }
 
     private static Lwjgl3Application createApplication() {
-        return new Lwjgl3Application(new MazeGame(), getDefaultConfiguration());
+        return new Lwjgl3Application(new Orthographic(), getDefaultConfiguration());
     }
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
