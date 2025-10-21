@@ -9,6 +9,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 
 public class Orthographic implements ApplicationListener {
@@ -20,11 +24,11 @@ public class Orthographic implements ApplicationListener {
     static final int BOB_WIDTH = 15;
 
     private OrthographicCamera camera;
+    private Viewport viewport;
     private SpriteBatch batch;
 
     //private Sprite sprite;
     private Sprite bob;
-    private float rotationSpeed;
 
     private TiledMapRenderer map_render;
 
@@ -32,7 +36,6 @@ public class Orthographic implements ApplicationListener {
 
     @Override
     public void create() {
-        rotationSpeed = 0.5f;
 
         //sprite = new Sprite(new Texture(Gdx.files.internal("background2.jpg")));
         //sprite.setPosition(0,0);
@@ -51,13 +54,13 @@ public class Orthographic implements ApplicationListener {
         camera.update();
         map_render = MapGen.generateMaze();
         batch = new SpriteBatch();
+
+        viewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
     }
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = 30f;
-        camera.viewportHeight = 30f;
-        camera.update();
+        viewport.update(width, height, true);
     }
 
     @Override
@@ -72,13 +75,13 @@ public class Orthographic implements ApplicationListener {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         MapGen.renderMap(camera, map_render);
-        
+
         batch.begin();
         //sprite.draw(batch);
         bob.draw(batch);
         batch.end();
 
-        
+
 
     }
 
