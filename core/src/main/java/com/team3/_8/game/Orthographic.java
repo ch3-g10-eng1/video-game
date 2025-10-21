@@ -18,8 +18,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Orthographic implements ApplicationListener {
 
-    static final int WORLD_WIDTH = 50;
-    static final int WORLD_HEIGHT = 50;
+    static final int WORLD_WIDTH = 60;
+    static final int WORLD_HEIGHT = 120;
 
     static final int BOB_HEIGHT = 15;
     static final int BOB_WIDTH = 15;
@@ -30,7 +30,6 @@ public class Orthographic implements ApplicationListener {
 
     private Sprite bob;
     private TextureAtlas atlas;
-
     private TiledMapRenderer map_render;
 
 
@@ -46,13 +45,14 @@ public class Orthographic implements ApplicationListener {
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
+
         camera = new OrthographicCamera(30, 30 * (w / h));
         camera.position.set(bob.getX() + ((float) BOB_WIDTH / 2), bob.getY() + ((float) BOB_HEIGHT / 2), 0);
-        camera.zoom = 2.5f;
+        camera.zoom = 2f;
         camera.update();
+
         map_render = MapGen.generateMaze();
         batch = new SpriteBatch();
-
         viewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
 
     }
@@ -101,7 +101,7 @@ public class Orthographic implements ApplicationListener {
         if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D)))) {
             bob.translateX(speed * delta);
         }
-        if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A)))) {
+        else if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A)))) {
             bob.translateX(-speed * delta);
         }
 
@@ -109,7 +109,7 @@ public class Orthographic implements ApplicationListener {
         if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W)))) {
             bob.translateY(speed * delta);
         }
-        if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S)))) {
+        else if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S)))) {
             bob.translateY(-speed * delta);
         }
     }
