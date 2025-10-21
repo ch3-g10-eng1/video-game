@@ -3,17 +3,36 @@ package com.team3._8.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class MazeGame extends ApplicationAdapter {
+    static final int WORLD_WIDTH = 200;
+    static final int WORLD_HEIGHT = 200;
+
+    private OrthographicCamera camera;
+    private Viewport viewport;
+
     private SpriteBatch batch;
     private Texture image;
 
     @Override
     public void create() {
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+
+        camera = new OrthographicCamera(30, 30 * (w/h));
+        camera.position.set(camera.viewportWidth/2f, camera.viewportHeight/2f, 0);
+        camera.update();
+
+        viewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
+
         batch = new SpriteBatch();
         image = new Texture("libgdx.png");
     }
@@ -24,6 +43,11 @@ public class MazeGame extends ApplicationAdapter {
         batch.begin();
         batch.draw(image, 140, 210);
         batch.end();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        viewport.update(width, height, true);
     }
 
     @Override
