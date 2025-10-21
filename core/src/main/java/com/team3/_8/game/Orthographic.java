@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -17,8 +18,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Orthographic implements ApplicationListener {
 
-    static final int WORLD_WIDTH = 200;
-    static final int WORLD_HEIGHT = 200;
+    static final int WORLD_WIDTH = 50;
+    static final int WORLD_HEIGHT = 50;
 
     static final int BOB_HEIGHT = 15;
     static final int BOB_WIDTH = 15;
@@ -27,8 +28,9 @@ public class Orthographic implements ApplicationListener {
     private Viewport viewport;
     private SpriteBatch batch;
 
-    //private Sprite sprite;
+    private Sprite sprite;
     private Sprite bob;
+    private TextureAtlas atlas;
 
     private TiledMapRenderer map_render;
 
@@ -36,12 +38,17 @@ public class Orthographic implements ApplicationListener {
 
     @Override
     public void create() {
+        atlas = new TextureAtlas(Gdx.files.internal("assets\\atlas\\bob.atlas"));
 
         //sprite = new Sprite(new Texture(Gdx.files.internal("background2.jpg")));
         //sprite.setPosition(0,0);
         //sprite.setSize(WORLD_WIDTH,WORLD_HEIGHT);
 
-        bob = new Sprite(new Texture(Gdx.files.internal("bob.jpg")));
+        // Old bob image sprite
+        // bob = new Sprite(new Texture(Gdx.files.internal("bob.jpg")));
+
+        // Gets bob sprite from texture atlas
+        bob = new Sprite(atlas.findRegion("front-bob-2"));
         bob.setPosition(0,0);
         bob.setSize(BOB_WIDTH,BOB_HEIGHT);
 
@@ -56,6 +63,7 @@ public class Orthographic implements ApplicationListener {
         batch = new SpriteBatch();
 
         viewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
+
     }
 
     @Override
