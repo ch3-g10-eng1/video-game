@@ -15,6 +15,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class MazeGame extends ApplicationAdapter {
+    //PLACEHOLDERS!!!
+    private Texture image;
+
     // constants in arbitrary units for the camera
     static final int WORLD_WIDTH = 200;
     static final int WORLD_HEIGHT = 200;
@@ -27,7 +30,6 @@ public class MazeGame extends ApplicationAdapter {
     private Viewport viewport;
 
     private SpriteBatch batch;
-    private Texture image;
     private TextureAtlas atlas;
     private Sprite bobSprite;
 
@@ -35,6 +37,9 @@ public class MazeGame extends ApplicationAdapter {
 
     @Override
     public void create() {
+        //Placeholder Textures!!!
+        image = new Texture("libgdx.png");
+
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
@@ -50,7 +55,7 @@ public class MazeGame extends ApplicationAdapter {
         // Making the camera and the viewport
         camera = new OrthographicCamera(30, 30 * (w/h));
         camera.position.set(bob.getEntity().getX() + ((float) BOB_WIDTH / 2), bob.getEntity().getY() + ((float) BOB_HEIGHT / 2), 0);
-        camera.zoom = 2f; // Starting a bit zoomed in
+        camera.zoom += 2f; // Starting a bit zoomed in
         camera.update();
 
         // Creation of the viewport
@@ -58,12 +63,12 @@ public class MazeGame extends ApplicationAdapter {
         viewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
 
         batch = new SpriteBatch();
-        image = new Texture("libgdx.png");
     }
 
     @Override
     public void render() {
-        handleInput(); // The input for the zoom in and out
+        handleInput();// The input for the zoom in and out
+        bob.move();
 
         // Centres the camera on Bob and then updates it
         camera.position.set(bobSprite.getX(), bobSprite.getY(), 0);
@@ -74,6 +79,7 @@ public class MazeGame extends ApplicationAdapter {
 
         // Sprite batch drawing
         batch.begin();
+        batch.draw(image, 0, 0); //Temporary image to test Bob movement
         bob.draw(batch);
         batch.end();
     }
