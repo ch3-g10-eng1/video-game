@@ -11,9 +11,9 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public class Entity {
 
-    private Sprite sprite;
-    private float speed;
-    private Rectangle collisionBox;
+    protected Sprite sprite;
+    protected float speed;
+    protected Rectangle collisionBox;
 
     /**
      * Creates the entity based on the sprite given and creates its collision box
@@ -28,6 +28,10 @@ public class Entity {
 
     public void draw (Batch batch) {
         this.sprite.draw(batch); // Draws the sprite on the spritebatch provided
+    }
+
+    public void move(){
+
     }
 
     public Sprite getEntity() {
