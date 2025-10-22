@@ -26,6 +26,8 @@ public class MazeGame extends ApplicationAdapter {
     static final int BOB_WIDTH = 15;
     static final int BOB_HEIGHT = 15;
 
+    private boolean isWon = false; //Variable to see if the game has been won
+
     private OrthographicCamera camera;
     private Viewport viewport;
 
@@ -50,12 +52,12 @@ public class MazeGame extends ApplicationAdapter {
         bobSprite.setPosition(0, 0);
         bobSprite.setSize(BOB_WIDTH, BOB_HEIGHT);
 
-        bob = new Bob(bobSprite, 4); //The actual creation of Bob, he has arrived
+        bob = new Bob(bobSprite, 15); //The actual creation of Bob, he has arrived
 
         // Making the camera and the viewport
         camera = new OrthographicCamera(30, 30 * (w/h));
-        camera.position.set(bob.getEntity().getX() + ((float) BOB_WIDTH / 2), bob.getEntity().getY() + ((float) BOB_HEIGHT / 2), 0);
-        camera.zoom += 2f; // Starting a bit zoomed in
+        camera.position.set(bob.getEntity().getX() - ((float) BOB_WIDTH / 2), bob.getEntity().getY() - ((float) BOB_HEIGHT / 2), 0);
+        camera.zoom = 1f; // Starting a bit zoomed in
         camera.update();
 
         // Creation of the viewport
@@ -103,5 +105,6 @@ public class MazeGame extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         image.dispose();
+        bob.dispose();
     }
 }
