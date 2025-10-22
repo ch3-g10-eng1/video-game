@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.io.Console;
+
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class MazeGame extends ApplicationAdapter {
     //PLACEHOLDERS!!!
@@ -27,6 +29,8 @@ public class MazeGame extends ApplicationAdapter {
     static final int BOB_HEIGHT = 15;
 
     private boolean isWon = false; //Variable to see if the game has been won
+
+    private boolean paused = false; //Variable to see if the game is paused
 
     private OrthographicCamera camera;
     private Viewport viewport;
@@ -70,7 +74,10 @@ public class MazeGame extends ApplicationAdapter {
     @Override
     public void render() {
         handleInput();// The input for the zoom in and out
-        bob.move();
+
+        if (!paused){
+            bob.move();
+        }
 
         // Centres the camera on Bob and then updates it
         camera.position.set(bobSprite.getX(), bobSprite.getY(), 0);
@@ -81,11 +88,17 @@ public class MazeGame extends ApplicationAdapter {
 
         // Sprite batch drawing
         batch.begin();
-        batch.draw(image, 0, 0); //Temporary image to test Bob movement
+
+        if (paused){
+        batch.draw(image, 0, 0); //Temporary image to test Bob movement, and pause now
+        }
+
         bob.draw(batch);
         batch.end();
     }
 
+
+    //This whole method should be cleaned up at some point
     private void handleInput() {
         //When Q is pressed, the camera is zoomed in, and zoomed out when E is pressed
         if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
@@ -94,6 +107,12 @@ public class MazeGame extends ApplicationAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.E)) {
             camera.zoom -= 0.02f;
         }
+
+        //This is to pause the game
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            paused = !paused;
+        }
+        System.out.println("Paused state is: " + paused); //Display the current pause state
     }
 
     @Override
