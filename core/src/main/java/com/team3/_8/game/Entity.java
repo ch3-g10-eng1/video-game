@@ -1,5 +1,6 @@
 package com.team3._8.game;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -13,6 +14,17 @@ public class Entity {
         this.sprite = sprite;
         this.speed = speed;
         this.createBox();
+    }
+
+    public void draw (Batch batch) {
+        this.sprite.draw(batch);
+    }
+
+    public Sprite getEntity() {
+        return sprite;
+    }
+    public float getSpeed() {
+        return speed;
     }
 
     private void createBox(){
