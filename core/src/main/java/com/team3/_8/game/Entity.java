@@ -30,6 +30,10 @@ public class Entity {
         this.sprite.draw(batch); // Draws the sprite on the spritebatch provided
     }
 
+    public void dispose () {
+        this.sprite.getTexture().dispose();
+    }
+
     public void move(){
 
     }
