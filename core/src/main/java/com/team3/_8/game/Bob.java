@@ -15,6 +15,9 @@ public class Bob extends Entity
         super(sprite, speed);
     }
 
+    /**
+     * This method controls the movement of Bob, by moving him around the axis, depending on the input
+     */
     @Override
     public void move(){
         float delta = Gdx.graphics.getDeltaTime();
