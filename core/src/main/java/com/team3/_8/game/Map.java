@@ -49,7 +49,7 @@ public class Map {
      * @return a boolean array of size 4 which indicates which side of the wall is being hit 
      *      0-left, 1-top, 2-right, 3-bottom
      */
-	public boolean[] hitsWall(Entity entity, float delta) {
+	public boolean[] hitsWall(CollidableEntity entity, float delta) {
 		boolean[] movement_halter = new boolean[4];
 		double right_wall_X;
 		double left_wall_X;

@@ -3,14 +3,13 @@ package com.team3._8.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
 
 /**
  * This is the class for the character (Bob), inheriting from Entity
  * @author Lenny
  */
-public class PlayerChar extends Entity
-{
+public class PlayerChar extends CollidableEntity {
+
     public PlayerChar(Sprite sprite, float speed)
     {
         super(sprite, speed);
@@ -47,10 +46,5 @@ public class PlayerChar extends Entity
         }
         this.collisionBox.setX(this.sprite.getX());
         this.collisionBox.setY(this.sprite.getY());
-    }
-
-    @Override
-    protected void createBox(){
-        this.collisionBox = new Rectangle(this.sprite.getX(), this.sprite.getY(), this.sprite.getWidth() - 3, this.sprite.getHeight() - 3);
     }
 }
