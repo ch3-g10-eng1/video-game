@@ -31,12 +31,21 @@ public class Orthographic implements ApplicationListener {
     private Viewport viewport;
     private SpriteBatch batch;
 
+    private Sprite bobFront;
+    private Sprite bobLeft;
+    private Sprite bobRight;
+    private Sprite bobUpDown;
+    private Sprite bobDown;
+    private Sprite bobRocket;
     private Sprite bob;
+
+    float bobX;
+    float bobY;
+
     private TextureAtlas atlas;
     private Map maze;
 
     private boolean[] overlapping_walls;
-
 
 
     @Override
@@ -44,9 +53,16 @@ public class Orthographic implements ApplicationListener {
         atlas = new TextureAtlas(Gdx.files.internal("assets\\atlas\\bob.atlas"));
 
         // Gets bob sprite from texture atlas
-        bob = new Sprite(atlas.findRegion("front-bob-2"));
-        bob.setPosition(50,50);
-        bob.setSize(BOB_WIDTH,BOB_HEIGHT);
+        bobFront = new Sprite(atlas.findRegion("front-bob-2"));
+        bobLeft = new Sprite(atlas.findRegion("left-bob-2"));
+        bobRight = new Sprite(atlas.findRegion("right-bob-2"));
+        bobDown = new Sprite(atlas.findRegion("up-down-bob-2"));
+        bobDown.flip(false, true);
+        bobUpDown = new Sprite(atlas.findRegion("up-down-bob-2"));
+        bobRocket = new Sprite(atlas.findRegion("rocket-bob-2"));
+
+        bob = bobFront;
+        bob.setPosition(30,30);
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -82,11 +98,9 @@ public class Orthographic implements ApplicationListener {
 
         maze.renderMap(camera);
         batch.begin();
+        bob.setSize(BOB_WIDTH,BOB_HEIGHT);
         bob.draw(batch);
         batch.end();
-
-
-
     }
 
     private void handleInput() {
@@ -107,20 +121,45 @@ public class Orthographic implements ApplicationListener {
 
         //X-axis
         overlapping_walls = maze.hits_wall(bob, speed, delta);
+
+        bobX = bob.getX();
+        bobY = bob.getY();
+
         if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D))) && !overlapping_walls[0] ) {
+            bob = bobRight;
+            bob.setPosition(bobX, bobY);
             bob.translateX(speed * delta);
+
+            bobX = bob.getX();
+            bobY = bob.getY();
         }
         if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A))) && !overlapping_walls[2]) {
+            bob = bobLeft;
+            bob.setPosition(bobX, bobY);
             bob.translateX(-speed * delta);
+
+            bobX = bob.getX();
+            bobY = bob.getY();
         }
 
         //Y-axis
-        else if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W))) && !overlapping_walls[3]) {
+        if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W))) && !overlapping_walls[3]) {
+            bob = bobDown;
+            bob.setPosition(bobX, bobY);
             bob.translateY(speed * delta);
+
+            bobX = bob.getX();
+            bobY = bob.getY();
         }
-        else if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S))) && !overlapping_walls[1]) {
+        if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S))) && !overlapping_walls[1]) {
+            bob = bobUpDown;
+            bob.setPosition(bobX, bobY);
             bob.translateY(-speed * delta);
+
+            bobX = bob.getX();
+            bobY = bob.getY();
         }
+        
         
     }
 
