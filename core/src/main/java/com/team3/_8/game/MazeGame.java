@@ -45,7 +45,7 @@ public class MazeGame extends ApplicationAdapter {
     private TextureAtlas atlas;
     private Sprite bobSprite;
 
-    private Bob bob; // This is a glorious piece of code, Dr Mike J Freeman would be proud
+    private PlayerChar bob; // This is a glorious piece of code, Dr Mike J Freeman would be proud
 
     private Map maze;
 
@@ -69,7 +69,7 @@ public class MazeGame extends ApplicationAdapter {
         bobSprite.setPosition(50,50);
         bobSprite.setSize(BOB_WIDTH, BOB_HEIGHT);
 
-        bob = new Bob(bobSprite, 15); //The actual creation of Bob, he has arrived
+        bob = new PlayerChar(bobSprite, 15); //The actual creation of Bob, he has arrived
 
         // Making the camera and the viewport
         camera = new OrthographicCamera(30, 30 * (w/h));

@@ -9,9 +9,9 @@ import com.badlogic.gdx.math.Rectangle;
  * This is the class for the character (Bob), inheriting from Entity
  * @author Lenny
  */
-public class Bob extends Entity
+public class PlayerChar extends Entity
 {
-    public Bob(Sprite sprite, float speed)
+    public PlayerChar(Sprite sprite, float speed)
     {
         super(sprite, speed);
     }
