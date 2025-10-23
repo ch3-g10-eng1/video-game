@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 
 
 public class Orthographic implements ApplicationListener {
@@ -26,7 +29,9 @@ public class Orthographic implements ApplicationListener {
     private Sprite bob;
     private float rotationSpeed;
 
-    private TiledMapRenderer map_render;
+    private Map maze;
+
+    private boolean[] overlapping_walls;
 
 
 
@@ -39,7 +44,7 @@ public class Orthographic implements ApplicationListener {
         //sprite.setSize(WORLD_WIDTH,WORLD_HEIGHT);
 
         bob = new Sprite(new Texture(Gdx.files.internal("bob.jpg")));
-        bob.setPosition(0,0);
+        bob.setPosition(50,50);
         bob.setSize(BOB_WIDTH,BOB_HEIGHT);
 
         float w = Gdx.graphics.getWidth();
@@ -49,7 +54,11 @@ public class Orthographic implements ApplicationListener {
         camera.position.set(bob.getX() + ((float) BOB_WIDTH / 2), bob.getY() + ((float) BOB_HEIGHT / 2), 0);
         camera.zoom = 2.5f;
         camera.update();
-        map_render = MapGen.generateMaze();
+    
+        maze = new Map("test_map.tmx", "walls");
+        maze.renderMap(camera);
+
+
         batch = new SpriteBatch();
     }
 
@@ -71,8 +80,7 @@ public class Orthographic implements ApplicationListener {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        MapGen.renderMap(camera, map_render);
-        
+        maze.renderMap(camera);
         batch.begin();
         //sprite.draw(batch);
         bob.draw(batch);
@@ -93,26 +101,28 @@ public class Orthographic implements ApplicationListener {
     }
 
     private void movement(){
-        float speed = 120f;
+        float speed = 10f;
         float delta = Gdx.graphics.getDeltaTime(); // Delta time is to ensure that it is the same speed on every machine.
 
         // Movement controller, can probably make it more efficient later (switch??) but for now it works well, learning stage frfr
 
         //X-axis
-        if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D)))) {
+        overlapping_walls = maze.hits_wall(bob, speed, delta);
+        if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D))) && !overlapping_walls[0] ) {
             bob.translateX(speed * delta);
         }
-        if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A)))) {
+        if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A))) && !overlapping_walls[2]) {
             bob.translateX(-speed * delta);
         }
 
         //Y-axis
-        if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W)))) {
+        if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W))) && !overlapping_walls[3]) {
             bob.translateY(speed * delta);
         }
-        if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S)))) {
+        if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S))) && !overlapping_walls[1]) {
             bob.translateY(-speed * delta);
         }
+        
     }
 
     @Override
