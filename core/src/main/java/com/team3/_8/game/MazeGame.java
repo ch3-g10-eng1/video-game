@@ -41,6 +41,8 @@ public class MazeGame extends ApplicationAdapter {
 
     private Bob bob; // This is a glorious piece of code, Dr Mike J Freeman would be proud
 
+    private Map maze;
+
     @Override
     public void create() {
         //Placeholder Textures!!!
@@ -49,7 +51,7 @@ public class MazeGame extends ApplicationAdapter {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
-        
+        maze = new Map("test_map.tmx", "walls");
 
         // Start of Bob's creation - the birth of Bob
         atlas = new TextureAtlas(Gdx.files.internal("atlas/bob.atlas"));
@@ -81,7 +83,8 @@ public class MazeGame extends ApplicationAdapter {
         }
 
         // Centres the camera on Bob and then updates it
-        camera.position.set(bobSprite.getX(), bobSprite.getY(), 0);
+        camera.position.set(bobSprite.getX() + bobSprite.getWidth()/2, 
+                            bobSprite.getY() + bobSprite.getHeight()/2, 0);
         camera.update();
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clears the screen
@@ -95,6 +98,8 @@ public class MazeGame extends ApplicationAdapter {
         }
 
         bob.draw(batch);
+        maze.renderMap(camera);
+
         batch.end();
     }
 
