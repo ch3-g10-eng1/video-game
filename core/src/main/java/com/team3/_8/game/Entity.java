@@ -34,7 +34,7 @@ public class Entity {
         this.sprite.getTexture().dispose();
     }
 
-    public void move(){
+    public void move(boolean[] movement_halter){
 
     }
 

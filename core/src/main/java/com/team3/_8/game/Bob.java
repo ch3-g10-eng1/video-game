@@ -18,26 +18,35 @@ public class Bob extends Entity
 
     /**
      * This method controls the movement of Bob, by moving him around the axis, depending on the input
+     * @param movement_halter the directions that bob cannot move, false allowing movement
+     *      0-left, 1-top, 2-right, 3-bottom
      */
     @Override
-    public void move(){
+    public void move(boolean[] movement_halter){
         float delta = Gdx.graphics.getDeltaTime();
 
+
         //X-axis
-        if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D)))) {
+        if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D))) 
+             && !movement_halter[0]) {
             this.sprite.translateX(this.speed * delta);
         }
-        else if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A)))) {
+        else if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A))) 
+             && !movement_halter[2]) {
             this.sprite.translateX(-speed * delta);
         }
 
         //Y-axis
-        if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W)))) {
+        if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W)))
+             && !movement_halter[3]) {
             this.sprite.translateY(speed * delta);
         }
-        else if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S)))) {
+        else if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S)))
+             && !movement_halter[1]) {
             this.sprite.translateY(-speed * delta);
         }
+        this.collisionBox.setX(this.sprite.getX());
+        this.collisionBox.setY(this.sprite.getY());
     }
 
     @Override

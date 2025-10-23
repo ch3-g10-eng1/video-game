@@ -49,13 +49,13 @@ public class Map {
      * @return a boolean array of size 4 which indicates which side of the wall is being hit 
      *      0-left, 1-top, 2-right, 3-bottom
      */
-	public boolean[] hits_wall(Entity entity, float delta) {
+	public boolean[] hitsWall(Entity entity, float delta) {
 		boolean[] movement_halter = new boolean[4];
 		double right_wall_X;
 		double left_wall_X;
 		double wall_Y;
 		Rectangle wall_collision = null;
-        float effective_speed = entity.getSpeed() * delta;
+        float effective_speed = entity.getSpeed() * delta *2;
 
 		for (RectangleMapObject wall : walls.getByType(RectangleMapObject.class)) {
 			wall_collision = wall.getRectangle();

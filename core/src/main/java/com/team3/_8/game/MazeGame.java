@@ -43,6 +43,8 @@ public class MazeGame extends ApplicationAdapter {
 
     private Map maze;
 
+    private boolean[] movement_halter;
+
     @Override
     public void create() {
         //Placeholder Textures!!!
@@ -56,7 +58,7 @@ public class MazeGame extends ApplicationAdapter {
         // Start of Bob's creation - the birth of Bob
         atlas = new TextureAtlas(Gdx.files.internal("atlas/bob.atlas"));
         bobSprite = new Sprite(atlas.findRegion("front-bob-2"));
-        bobSprite.setPosition(0, 0);
+        bobSprite.setPosition(50,50);
         bobSprite.setSize(BOB_WIDTH, BOB_HEIGHT);
 
         bob = new Bob(bobSprite, 15); //The actual creation of Bob, he has arrived
@@ -79,7 +81,9 @@ public class MazeGame extends ApplicationAdapter {
         handleInput();// The input for the zoom in and out
 
         if (!paused){
-            bob.move();
+            movement_halter = maze.hitsWall(bob, Gdx.graphics.getDeltaTime());
+            System.out.println(movement_halter[0] + ", " + movement_halter[1] + ", " + movement_halter[2] + ", " + movement_halter[3]);
+            bob.move(movement_halter);
         }
 
         // Centres the camera on Bob and then updates it
@@ -118,7 +122,7 @@ public class MazeGame extends ApplicationAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             paused = !paused;
         }
-        System.out.println("Paused state is: " + paused); //Display the current pause state
+        //System.out.println("Paused state is: " + paused); //Display the current pause state
     }
 
     @Override
