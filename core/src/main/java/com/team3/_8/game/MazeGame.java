@@ -3,9 +3,11 @@ package com.team3._8.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -28,9 +30,13 @@ public class MazeGame extends ApplicationAdapter {
     static final int BOB_WIDTH = 15;
     static final int BOB_HEIGHT = 15;
 
+    // Booleans for the game
     private boolean isWon = false; //Variable to see if the game has been won
-
     private boolean paused = false; //Variable to see if the game is paused
+
+    // Timer
+    private float timer;
+    private BitmapFont font;
 
     private OrthographicCamera camera;
     private Viewport viewport;
@@ -53,6 +59,8 @@ public class MazeGame extends ApplicationAdapter {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
+        timer = 0f; // The timer variable
+
         maze = new Map("test_map.tmx", "walls");
 
         // Start of Bob's creation - the birth of Bob
@@ -69,6 +77,10 @@ public class MazeGame extends ApplicationAdapter {
         camera.zoom = 1f; // Starting a bit zoomed in
         camera.update();
 
+        // Things for the text for the timer and other strings
+        font =  new BitmapFont();
+        font.setColor(Color.WHITE);
+
         // Creation of the viewport
         // We are using a Fill Viewport, since the entire screen is covered, whilst the aspect ratio is kept intact
         viewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
@@ -83,10 +95,11 @@ public class MazeGame extends ApplicationAdapter {
         if (!paused){
             movement_halter = maze.hitsWall(bob, Gdx.graphics.getDeltaTime());
             bob.move(movement_halter);
+            timer += Gdx.graphics.getDeltaTime();
         }
 
         // Centres the camera on Bob and then updates it
-        camera.position.set(bobSprite.getX() + bobSprite.getWidth()/2, 
+        camera.position.set(bobSprite.getX() + bobSprite.getWidth()/2,
                             bobSprite.getY() + bobSprite.getHeight()/2, 0);
         camera.update();
 
@@ -102,6 +115,7 @@ public class MazeGame extends ApplicationAdapter {
 
         bob.draw(batch);
         maze.renderMap(camera);
+        font.draw(batch, "Timer: " + (int)timer + "s", 50, 100);
 
         batch.end();
     }
