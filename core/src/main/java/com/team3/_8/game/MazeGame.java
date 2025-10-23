@@ -82,7 +82,6 @@ public class MazeGame extends ApplicationAdapter {
 
         if (!paused){
             movement_halter = maze.hitsWall(bob, Gdx.graphics.getDeltaTime());
-            System.out.println(movement_halter[0] + ", " + movement_halter[1] + ", " + movement_halter[2] + ", " + movement_halter[3]);
             bob.move(movement_halter);
         }
 
