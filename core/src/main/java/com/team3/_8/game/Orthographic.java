@@ -99,7 +99,8 @@ public class Orthographic implements ApplicationListener {
     }
 
     private void movement(){
-        float speed = 35f;
+        // Max 500 to prevent issues with collision boxes
+        float speed = 30f;
         float delta = Gdx.graphics.getDeltaTime(); // Delta time is to ensure that it is the same speed on every machine.
 
         // Movement controller, can probably make it more efficient later (switch??) but for now it works well, learning stage frfr
