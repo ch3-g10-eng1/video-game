@@ -16,7 +16,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class MazeGame implements ApplicationListener {
     private SpriteBatch batch;
-//    private ExtendViewport viewport;
     private FitViewport viewport;
 
     private Texture bob;

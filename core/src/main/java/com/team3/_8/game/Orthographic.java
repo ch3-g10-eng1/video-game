@@ -8,27 +8,31 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 
 public class Orthographic implements ApplicationListener {
 
-    static final int WORLD_WIDTH = 200;
-    static final int WORLD_HEIGHT = 200;
+    static final int WORLD_WIDTH = 60;
+    static final int WORLD_HEIGHT = 120;
 
     static final int BOB_HEIGHT = 15;
     static final int BOB_WIDTH = 15;
 
     private OrthographicCamera camera;
+    private Viewport viewport;
     private SpriteBatch batch;
 
-    //private Sprite sprite;
     private Sprite bob;
-    private float rotationSpeed;
-
+    private TextureAtlas atlas;
     private Map maze;
 
     private boolean[] overlapping_walls;
@@ -37,22 +41,19 @@ public class Orthographic implements ApplicationListener {
 
     @Override
     public void create() {
-        rotationSpeed = 0.5f;
+        atlas = new TextureAtlas(Gdx.files.internal("assets\\atlas\\bob.atlas"));
 
-        //sprite = new Sprite(new Texture(Gdx.files.internal("background2.jpg")));
-        //sprite.setPosition(0,0);
-        //sprite.setSize(WORLD_WIDTH,WORLD_HEIGHT);
-
-        bob = new Sprite(new Texture(Gdx.files.internal("bob.jpg")));
-        bob.setPosition(50,50);
+        // Gets bob sprite from texture atlas
+        bob = new Sprite(atlas.findRegion("front-bob-2"));
+        bob.setPosition(0,0);
         bob.setSize(BOB_WIDTH,BOB_HEIGHT);
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
+
         camera = new OrthographicCamera(30, 30 * (w / h));
-//        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.position.set(bob.getX() + ((float) BOB_WIDTH / 2), bob.getY() + ((float) BOB_HEIGHT / 2), 0);
-        camera.zoom = 2.5f;
+        camera.zoom = 2f;
         camera.update();
     
         maze = new Map("test_map.tmx", "walls");
@@ -60,20 +61,19 @@ public class Orthographic implements ApplicationListener {
 
 
         batch = new SpriteBatch();
+        viewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
+
     }
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = 30f;
-        camera.viewportHeight = 30f;
-        camera.update();
+        viewport.update(width, height, true);
     }
 
     @Override
     public void render() {
         handleInput();
         movement();
-//        camera.lookAt(bob.getX(), bob.getY(), 0);
         camera.position.set(bob.getX() + ((float) BOB_WIDTH / 2), bob.getY() + ((float) BOB_HEIGHT / 2), 0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -82,11 +82,10 @@ public class Orthographic implements ApplicationListener {
 
         maze.renderMap(camera);
         batch.begin();
-        //sprite.draw(batch);
         bob.draw(batch);
         batch.end();
 
-        
+
 
     }
 
@@ -97,7 +96,6 @@ public class Orthographic implements ApplicationListener {
         if (Gdx.input.isKeyPressed(Input.Keys.E)) {
             camera.zoom -= 0.02f;
         }
-//        System.out.println("camera zoom: " + camera.zoom);
     }
 
     private void movement(){
