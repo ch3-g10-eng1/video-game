@@ -99,7 +99,7 @@ public class Orthographic implements ApplicationListener {
     }
 
     private void movement(){
-        float speed = 10f;
+        float speed = 35f;
         float delta = Gdx.graphics.getDeltaTime(); // Delta time is to ensure that it is the same speed on every machine.
 
         // Movement controller, can probably make it more efficient later (switch??) but for now it works well, learning stage frfr
@@ -114,10 +114,10 @@ public class Orthographic implements ApplicationListener {
         }
 
         //Y-axis
-        if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W))) && !overlapping_walls[3]) {
+        else if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W))) && !overlapping_walls[3]) {
             bob.translateY(speed * delta);
         }
-        if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S))) && !overlapping_walls[1]) {
+        else if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S))) && !overlapping_walls[1]) {
             bob.translateY(-speed * delta);
         }
         
