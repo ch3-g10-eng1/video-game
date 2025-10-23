@@ -45,7 +45,7 @@ public class Orthographic implements ApplicationListener {
 
         // Gets bob sprite from texture atlas
         bob = new Sprite(atlas.findRegion("front-bob-2"));
-        bob.setPosition(0,0);
+        bob.setPosition(50,50);
         bob.setSize(BOB_WIDTH,BOB_HEIGHT);
 
         float w = Gdx.graphics.getWidth();

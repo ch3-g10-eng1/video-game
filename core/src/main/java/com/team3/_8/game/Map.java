@@ -51,7 +51,7 @@ public class Map {
 		double left_wall_X;
 		double wall_Y;
 		Rectangle wall_collision = null;
-		float effective_speed = speed*delta;
+		float effective_speed = speed*delta*2;
 		//make entity have it's effective speed
 
 
