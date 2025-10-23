@@ -46,9 +46,6 @@ public class Entity {
     }
 
     private void createBox(){
-        float width = this.sprite.getWidth();
-        float height = this.sprite.getHeight();
-
-        this.collisionBox = new Rectangle(this.sprite.getX(), this.sprite.getY(), width, height);
+        this.collisionBox = new Rectangle(this.sprite.getX(), this.sprite.getY(), this.sprite.getWidth(), this.sprite.getHeight());
     }
 }
