@@ -49,6 +49,7 @@ public class MazeGame extends ApplicationAdapter {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
+        
 
         // Start of Bob's creation - the birth of Bob
         atlas = new TextureAtlas(Gdx.files.internal("atlas/bob.atlas"));
