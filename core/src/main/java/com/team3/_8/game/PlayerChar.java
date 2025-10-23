@@ -16,7 +16,8 @@ public class PlayerChar extends CollidableEntity {
     }
 
     /**
-     * This method controls the movement of Bob, by moving him around the axis, depending on the input
+     * This method controls the movement of Bob, by moving him around the axis, 
+     * depending on the input
      * @param movement_halter the directions that bob cannot move, false allowing movement
      *      0-left, 1-top, 2-right, 3-bottom
      */
@@ -26,22 +27,26 @@ public class PlayerChar extends CollidableEntity {
 
 
         //X-axis
-        if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D))) 
-             && !movement_halter[0]) {
+        if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || 
+             (Gdx.input.isKeyPressed(Input.Keys.D))) 
+              && !movement_halter[0]) {
             this.sprite.translateX(this.speed * delta);
         }
-        else if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A))) 
-             && !movement_halter[2]) {
+        else if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || 
+                  (Gdx.input.isKeyPressed(Input.Keys.A)))
+                   && !movement_halter[2]) {
             this.sprite.translateX(-speed * delta);
         }
 
         //Y-axis
-        if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W)))
-             && !movement_halter[3]) {
+        if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || 
+             (Gdx.input.isKeyPressed(Input.Keys.W)))
+              && !movement_halter[3]) {
             this.sprite.translateY(speed * delta);
         }
-        else if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S)))
-             && !movement_halter[1]) {
+        else if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || 
+                (Gdx.input.isKeyPressed(Input.Keys.S)))
+                && !movement_halter[1]) {
             this.sprite.translateY(-speed * delta);
         }
         this.collisionBox.setX(this.sprite.getX());

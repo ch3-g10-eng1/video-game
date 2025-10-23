@@ -12,12 +12,16 @@ abstract class CollidableEntity extends Entity {
 
     protected Rectangle collisionBox;
 
+    /**
+     * creates a collision box around the entity
+     */
     public CollidableEntity(Sprite sprite, float speed) {
         super(sprite, speed);
         this.createBox();
     }
 
     protected void createBox(){
-        this.collisionBox = new Rectangle(this.sprite.getX(), this.sprite.getY(), this.sprite.getWidth(), this.sprite.getHeight());
+        this.collisionBox = new Rectangle(this.sprite.getX(), this.sprite.getY(), 
+            this.sprite.getWidth(), this.sprite.getHeight());
     }
 }

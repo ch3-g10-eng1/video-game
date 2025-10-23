@@ -23,10 +23,17 @@ abstract class Entity {
         this.speed = speed;
     }
 
+    /**
+     * Draws the sprite on the spritebatch provided
+     * @param batch sprite batch to be drawn
+     */
     public void draw (Batch batch) {
-        this.sprite.draw(batch); // Draws the sprite on the spritebatch provided
+        this.sprite.draw(batch); 
     }
 
+    /**
+     * disposes of the sprite texture
+     */
     public void dispose () {
         this.sprite.getTexture().dispose();
     }

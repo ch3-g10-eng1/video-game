@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -19,7 +18,7 @@ import java.io.Console;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class MazeGame extends ApplicationAdapter {
-    //PLACEHOLDERS!!!
+    //PLACEHOLDERS!!!!!!!!!!!!!!!!!!!
     private Texture image;
 
     // constants in arbitrary units for the camera
@@ -38,18 +37,19 @@ public class MazeGame extends ApplicationAdapter {
     private float timer;
     private BitmapFont font;
 
+    // Camera
     private OrthographicCamera camera;
     private Viewport viewport;
 
+    // Sprites
     private SpriteBatch batch;
     private TextureAtlas atlas;
     private Sprite bobSprite;
 
     private PlayerChar bob; // This is a glorious piece of code, Dr Mike J Freeman would be proud
 
+    // Map
     private Map maze;
-
-    private boolean[] movement_halter;
 
     @Override
     public void create() {
@@ -73,7 +73,8 @@ public class MazeGame extends ApplicationAdapter {
 
         // Making the camera and the viewport
         camera = new OrthographicCamera(30, 30 * (w/h));
-        camera.position.set(bob.getEntity().getX() - ((float) BOB_WIDTH / 2), bob.getEntity().getY() - ((float) BOB_HEIGHT / 2), 0);
+        camera.position.set(bob.getEntity().getX() - ((float) BOB_WIDTH / 2), 
+            bob.getEntity().getY() - ((float) BOB_HEIGHT / 2), 0);
         camera.zoom = 1f; // Starting a bit zoomed in
         camera.update();
 
@@ -82,7 +83,8 @@ public class MazeGame extends ApplicationAdapter {
         font.setColor(Color.WHITE);
 
         // Creation of the viewport
-        // We are using a Fill Viewport, since the entire screen is covered, whilst the aspect ratio is kept intact
+        // We are using a Fill Viewport, since the entire screen is covered, 
+        // whilst the aspect ratio is kept intact
         viewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
 
         batch = new SpriteBatch();
@@ -93,7 +95,7 @@ public class MazeGame extends ApplicationAdapter {
         handleInput();// The input for the zoom in and out
 
         if (!paused){
-            movement_halter = maze.hitsWall(bob, Gdx.graphics.getDeltaTime());
+            boolean[] movement_halter = maze.hitsWall(bob, Gdx.graphics.getDeltaTime());
             bob.move(movement_halter);
             timer += Gdx.graphics.getDeltaTime();
         }
@@ -119,7 +121,6 @@ public class MazeGame extends ApplicationAdapter {
 
         batch.end();
     }
-
 
     //This whole method should be cleaned up at some point
     private void handleInput() {
