@@ -32,24 +32,32 @@ public class MazeGame extends ApplicationAdapter {
 
     // Booleans for the game
     private boolean isWon = false; //Variable to see if the game has been won
+    private boolean isEnded = false; // Variable to see if the game has ended
     private boolean paused = false; //Variable to see if the game is paused
 
     // Timer
     private float timer;
     private BitmapFont font;
 
+    // Camera and viewport
     private OrthographicCamera camera;
     private Viewport viewport;
 
+    // Thw two sprite batches -> ones for the main game, and one for the HUD
     private SpriteBatch batch;
     private SpriteBatch HUDBatch;
+
+    // The texture atlas containing Bob, and the sprite of Bob
     private TextureAtlas atlas;
     private Sprite bobSprite;
 
-    private Bob bob; // This is a glorious piece of code, Dr Mike J Freeman would be proud
+    // This is a glorious piece of code, Dr Mike J Freeman would be proud
+    private Bob bob;
 
+    // The map object
     private Map maze;
 
+    // Boolean array to see if Bob has hit a wall, and what wall he has hit
     private boolean[] movement_halter;
 
     @Override
@@ -121,11 +129,20 @@ public class MazeGame extends ApplicationAdapter {
 
         batch.end();
 
+        // The drawing of the HUD of the game
+        // Right now its just a timer but other things can be added
         HUDBatch.begin();
 
-        font.draw(HUDBatch, formatTime(timer), 550, 370);
+        font.draw(HUDBatch, formatTime(timer), 550, 370); // Draws the timer to the screen
 
         HUDBatch.end();
+
+        // The code to check if the game has ended -> This might work better as a function, but i cba rn
+        // Another one for the future game controller!! YIPPEEEEE
+        if (timer >= 300){
+            paused = true;
+            isEnded = true;
+        }
     }
 
 
@@ -143,7 +160,6 @@ public class MazeGame extends ApplicationAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             paused = !paused;
         }
-        //System.out.println("Paused state is: " + paused); //Display the current pause state
     }
 
     // THIS METHOD DOES NOT BELONG HERE --> THIS WILL GO TO THE GAME CONTROLLER WHEN ITS CREATED
