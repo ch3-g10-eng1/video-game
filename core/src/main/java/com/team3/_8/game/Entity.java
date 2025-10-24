@@ -41,8 +41,17 @@ public class Entity {
     public Sprite getEntity() {
         return sprite;
     }
+
     public float getSpeed() {
         return speed;
+    }
+
+    public float getX() {
+        return sprite.getX();
+    }
+
+    public float getY() {
+        return sprite.getY();
     }
 
     protected void createBox(){
