@@ -42,6 +42,7 @@ public class MazeGame extends ApplicationAdapter {
     private Viewport viewport;
 
     private SpriteBatch batch;
+    private SpriteBatch HUDBatch;
     private TextureAtlas atlas;
     private Sprite bobSprite;
 
@@ -86,6 +87,8 @@ public class MazeGame extends ApplicationAdapter {
         viewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
 
         batch = new SpriteBatch();
+
+        HUDBatch = new SpriteBatch();
     }
 
     @Override
@@ -115,9 +118,14 @@ public class MazeGame extends ApplicationAdapter {
 
         bob.draw(batch);
         maze.renderMap(camera);
-        font.draw(batch, "Timer: " + (int)timer + "s", 50, 100);
 
         batch.end();
+
+        HUDBatch.begin();
+
+        font.draw(HUDBatch, formatTime(timer), 550, 370);
+
+        HUDBatch.end();
     }
 
 
@@ -136,6 +144,18 @@ public class MazeGame extends ApplicationAdapter {
             paused = !paused;
         }
         //System.out.println("Paused state is: " + paused); //Display the current pause state
+    }
+
+    // THIS METHOD DOES NOT BELONG HERE --> THIS WILL GO TO THE GAME CONTROLLER WHEN ITS CREATED
+    public String formatTime(float currentTime){
+        int mins = 0;
+        int secs = 0;
+        currentTime = (int)currentTime;
+
+        mins = (int)currentTime / 60;
+        secs = (int)currentTime % 60;
+
+        return "Timer: " + mins + ":" + String.format("%02d", secs);
     }
 
     @Override
