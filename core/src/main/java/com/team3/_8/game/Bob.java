@@ -27,11 +27,11 @@ public class Bob extends Entity
 
 
         //X-axis
-        if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D))) 
+        if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D)))
              && !movement_halter[0]) {
             this.sprite.translateX(this.speed * delta);
         }
-        else if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A))) 
+        else if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A)))
              && !movement_halter[2]) {
             this.sprite.translateX(-speed * delta);
         }
@@ -51,6 +51,8 @@ public class Bob extends Entity
 
     @Override
     protected void createBox(){
-        this.collisionBox = new Rectangle(this.sprite.getX(), this.sprite.getY(), this.sprite.getWidth() - 3, this.sprite.getHeight() - 3);
+        this.collisionBox = new Rectangle(this.sprite.getX(),
+            this.sprite.getY(), this.sprite.getWidth() - 3,
+            this.sprite.getHeight() - 3);
     }
 }
