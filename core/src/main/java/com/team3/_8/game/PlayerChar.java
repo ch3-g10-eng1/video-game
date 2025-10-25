@@ -3,13 +3,12 @@ package com.team3._8.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
 
 /**
  * This is the class for the character (Bob), inheriting from Entity
  * @author Lenny
  */
-public class Bob extends Entity
+public class Bob extends CollidableEntity
 {
     public Bob(Sprite sprite, float speed)
     {
@@ -17,7 +16,8 @@ public class Bob extends Entity
     }
 
     /**
-     * This method controls the movement of Bob, by moving him around the axis, depending on the input
+     * This method controls the movement of Bob, by moving him around the axis,
+     * depending on the input
      * @param movement_halter the directions that bob cannot move, false allowing movement
      *      0-left, 1-top, 2-right, 3-bottom
      */
@@ -27,32 +27,29 @@ public class Bob extends Entity
 
 
         //X-axis
-        if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D)))
-             && !movement_halter[0]) {
+        if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) ||
+             (Gdx.input.isKeyPressed(Input.Keys.D)))
+              && !movement_halter[0]) {
             this.sprite.translateX(this.speed * delta);
         }
-        else if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A)))
-             && !movement_halter[2]) {
+        else if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) ||
+                  (Gdx.input.isKeyPressed(Input.Keys.A)))
+                   && !movement_halter[2]) {
             this.sprite.translateX(-speed * delta);
         }
 
         //Y-axis
-        if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W)))
-             && !movement_halter[3]) {
+        if (((Gdx.input.isKeyPressed(Input.Keys.UP)) ||
+             (Gdx.input.isKeyPressed(Input.Keys.W)))
+              && !movement_halter[3]) {
             this.sprite.translateY(speed * delta);
         }
-        else if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S)))
-             && !movement_halter[1]) {
+        else if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) ||
+                (Gdx.input.isKeyPressed(Input.Keys.S)))
+                && !movement_halter[1]) {
             this.sprite.translateY(-speed * delta);
         }
         this.collisionBox.setX(this.sprite.getX());
         this.collisionBox.setY(this.sprite.getY());
-    }
-
-    @Override
-    protected void createBox(){
-        this.collisionBox = new Rectangle(this.sprite.getX(),
-            this.sprite.getY(), this.sprite.getWidth() - 3,
-            this.sprite.getHeight() - 3);
     }
 }

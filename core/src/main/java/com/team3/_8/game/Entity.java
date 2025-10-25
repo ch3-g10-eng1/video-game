@@ -2,18 +2,16 @@ package com.team3._8.game;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
 
 
 /**
  * This is the class for all the entities in the game, to inherit from.
  * @author Lenny
  */
-public class Entity {
+abstract class Entity {
 
     protected Sprite sprite;
     protected float speed;
-    protected Rectangle collisionBox;
 
     /**
      * Creates the entity based on the sprite given and creates its collision box
@@ -23,20 +21,24 @@ public class Entity {
     public Entity(Sprite sprite, float speed) {
         this.sprite = sprite;
         this.speed = speed;
-        this.createBox();
     }
 
+    /**
+     * Draws the sprite on the spritebatch provided
+     * @param batch sprite batch to be drawn
+     */
     public void draw (Batch batch) {
         this.sprite.draw(batch); // Draws the sprite on the spritebatch provided
     }
 
+    /**
+     * disposes of the sprite texture
+     */
     public void dispose () {
         this.sprite.getTexture().dispose();
     }
 
-    public void move(boolean[] movement_halter){
-
-    }
+    public abstract void move(boolean[] movement_halter);
 
     public Sprite getEntity() {
         return sprite;
