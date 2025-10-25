@@ -8,11 +8,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  * This is the class for the character (Bob), inheriting from Entity
  * @author Lenny
  */
-public class Bob extends CollidableEntity
-{
-    public Bob(Sprite sprite, float speed)
-    {
+public class Bob extends CollidableEntity {
+
+    public Bob(Sprite sprite, float speed){
         super(sprite, speed);
+    }
+
+    public Bob(Sprite sprite, float speed, float widthChange, float heightChange){
+        super(sprite, speed, widthChange, heightChange);
     }
 
     /**
