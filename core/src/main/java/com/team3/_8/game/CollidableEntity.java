@@ -14,14 +14,38 @@ abstract class CollidableEntity extends Entity {
 
     /**
      * creates a collision box around the entity
+     * @param sprite Sprite: the sprite of the entity
+     * @param speed float: the speed of the entity
      */
     public CollidableEntity(Sprite sprite, float speed) {
         super(sprite, speed);
         this.createBox();
     }
 
+    /**
+     * Creates a collision box around the entity
+     * @param sprite Sprite: the sprite of the entity
+     * @param speed float: the speed of the entity
+     * @param widthChange float: the change in collision box height (must be negative for smaller)
+     * @param heightChange float: the change in collision box width (must be negative for smaller)
+     */
+    public CollidableEntity(Sprite sprite, float speed, float widthChange, float heightChange) {
+        super(sprite, speed);
+        this.createBox(widthChange, heightChange);
+    }
+
     protected void createBox(){
-        this.collisionBox = new Rectangle(this.sprite.getX(), this.sprite.getY(), 
+        this.collisionBox = new Rectangle(this.sprite.getX(), this.sprite.getY(),
             this.sprite.getWidth(), this.sprite.getHeight());
+    }
+
+    /**
+     * This is the override of the createBox method, allowing for the box to be altered when it is creates
+     * @param widthChange float: the change of the width
+     * @param heightChange float: the change of the height
+     */
+    protected void createBox(float widthChange, float heightChange){
+        this.collisionBox = new Rectangle(this.sprite.getX(), this.sprite.getY(),
+            this.sprite.getWidth() + widthChange, this.sprite.getHeight() + heightChange);
     }
 }
