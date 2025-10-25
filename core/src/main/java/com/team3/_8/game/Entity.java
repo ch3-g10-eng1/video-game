@@ -55,8 +55,4 @@ abstract class Entity {
     public float getY() {
         return sprite.getY();
     }
-
-    protected void createBox(){
-        this.collisionBox = new Rectangle(this.sprite.getX(), this.sprite.getY(), this.sprite.getWidth(), this.sprite.getHeight());
-    }
 }
