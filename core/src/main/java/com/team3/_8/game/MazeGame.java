@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -78,7 +77,7 @@ public class MazeGame extends ApplicationAdapter {
         bobSprite.setPosition(50,50);
         bobSprite.setSize(BOB_WIDTH, BOB_HEIGHT);
 
-        bob = new Bob(bobSprite, 15); //The actual creation of Bob, he has arrived
+        bob = new Bob(bobSprite, 15, -4, -3); //The actual creation of Bob, he has arrived
 
         // Making the camera and the viewport
         camera = new OrthographicCamera(30, 30 * (w/h));
@@ -132,10 +131,11 @@ public class MazeGame extends ApplicationAdapter {
         batch.end();
 
         // The drawing of the HUD of the game
-        // Right now its just a timer but other things can be added
+        // Right now it's just a timer but other things can be added
+        // If we get enough items, we could make this into a class?
         HUDBatch.begin();
 
-        font.draw(HUDBatch, formatTime(timer), 550, 370); // Draws the timer to the screen
+        font.draw(HUDBatch, gameController.formatTime(timer), 550, 370); // Draws the timer to the screen
 
         HUDBatch.end();
 
@@ -162,18 +162,6 @@ public class MazeGame extends ApplicationAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             paused = !paused;
         }
-    }
-
-    // THIS METHOD DOES NOT BELONG HERE --> THIS WILL GO TO THE GAME CONTROLLER WHEN ITS CREATED
-    public String formatTime(float currentTime){
-        int mins = 0;
-        int secs = 0;
-        currentTime = (int)currentTime;
-
-        mins = (int)currentTime / 60;
-        secs = (int)currentTime % 60;
-
-        return "Timer: " + mins + ":" + String.format("%02d", secs);
     }
 
     @Override

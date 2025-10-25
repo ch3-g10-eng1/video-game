@@ -45,7 +45,6 @@ abstract class CollidableEntity extends Entity {
      * @param heightChange float: the change of the height
      */
     protected void createBox(float widthChange, float heightChange){
-        this.collisionBox = new Rectangle(this.sprite.getX(), this.sprite.getY(),
-            this.sprite.getWidth() + widthChange, this.sprite.getHeight() + heightChange);
-    }
+        this.collisionBox = new Rectangle(this.getX(), this.getY(), // No matter what I do here, the coordinates seem to be stuck in place, anyone know why??
+            this.sprite.getWidth() + widthChange, this.sprite.getHeight() + heightChange);}
 }
