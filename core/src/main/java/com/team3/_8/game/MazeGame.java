@@ -102,7 +102,7 @@ public class MazeGame extends ApplicationAdapter {
 
     @Override
     public void render() {
-        handleInput();// The input for the zoom in and out
+        paused = gameController.handleInput(camera, paused);// The input for the zoom in and out
 
         if (!paused){
             boolean[] movement_halter = maze.hitsWall(bob, Gdx.graphics.getDeltaTime());
@@ -148,21 +148,21 @@ public class MazeGame extends ApplicationAdapter {
     }
 
 
-    //This whole method should be cleaned up at some point
-    private void handleInput() {
-        //When Q is pressed, the camera is zoomed in, and zoomed out when E is pressed
-        if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
-            camera.zoom += 0.02f;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-            camera.zoom -= 0.02f;
-        }
-
-        //This is to pause the game
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            paused = !paused;
-        }
-    }
+//    //This whole method should be cleaned up at some point
+//    private void handleInput() {
+//        //When Q is pressed, the camera is zoomed in, and zoomed out when E is pressed
+//        if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+//            camera.zoom += 0.02f;
+//        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+//            camera.zoom -= 0.02f;
+//        }
+//
+//        //This is to pause the game
+//        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+//            paused = !paused;
+//        }
+//    }
 
     @Override
     public void resize(int width, int height) {
