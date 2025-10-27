@@ -60,7 +60,7 @@ public class Bob extends CollidableEntity {
     }
 
     public boolean addInventory(String inventory){
-        if (this.inventoryEnd < 6){
+        if (this.inventoryEnd < 5){
             this.inventory[this.inventoryEnd] = inventory;
             this.inventoryEnd++;
             return true;

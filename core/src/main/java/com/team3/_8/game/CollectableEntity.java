@@ -27,7 +27,7 @@ public class CollectableEntity extends CollidableEntity{
      * @param bob Bob
      */
     public void collides(Bob bob) {
-        if (bob.getCollisionBox().overlaps(this.collisionBox)) {
+        if (bob.getCollisionBox().overlaps(this.collisionBox) && !this.collected) {
             this.collected = bob.addInventory(this.type); // Calls the method which adds itself to Bob's inventory if it isn't full. Else it isn't collected
         }
     }
