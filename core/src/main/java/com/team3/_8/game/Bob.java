@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  */
 public class Bob extends CollidableEntity {
 
+    private String[] inventory = new String[5];// Creates an inventory of size 5, which will be filled with String IDs
+    private int inventoryEnd = 0;
+
     public Bob(Sprite sprite, float speed){
         super(sprite, speed);
     }
@@ -54,5 +57,14 @@ public class Bob extends CollidableEntity {
         }
         this.collisionBox.setX(this.sprite.getX());
         this.collisionBox.setY(this.sprite.getY());
+    }
+
+    public boolean addInventory(String inventory){
+        if (this.inventoryEnd < 6){
+            this.inventory[this.inventoryEnd] = inventory;
+            this.inventoryEnd++;
+            return true;
+        }
+        return false;
     }
 }
