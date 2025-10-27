@@ -42,7 +42,7 @@ public class MazeGame extends ApplicationAdapter {
     private OrthographicCamera camera;
     private Viewport viewport;
 
-    // Thw two sprite batches -> ones for the main game, and one for the HUD
+    // The two sprite batches -> ones for the main game, and one for the HUD
     private SpriteBatch batch;
     private SpriteBatch HUDBatch;
 
@@ -52,6 +52,13 @@ public class MazeGame extends ApplicationAdapter {
 
     // This is a glorious piece of code, Dr Mike J Freeman would be proud
     private Bob bob;
+
+    // The sprite for the keycard
+    private Texture keycardTexture;
+    private Sprite keycardSprite;
+
+    // The creation of the keycard entity
+    private CollectableEntity keycard;
 
     // Map
     private Map maze;
@@ -77,7 +84,18 @@ public class MazeGame extends ApplicationAdapter {
         bobSprite.setPosition(50,50);
         bobSprite.setSize(BOB_WIDTH, BOB_HEIGHT);
 
+
         bob = new Bob(bobSprite, 15, -4, -3); //The actual creation of Bob, he has arrived
+        System.out.println(bob.collisionBox.width+ ","+bob.collisionBox.height);
+
+
+        // Creation of the keycard
+        keycardTexture = new Texture("keycard.png");
+        keycardSprite = new Sprite(keycardTexture);
+        keycardSprite.setPosition(30,30);
+        keycardSprite.setSize((float) BOB_WIDTH / 2, (float) BOB_HEIGHT / 2);
+        keycard = new CollectableEntity(keycardSprite, 0, "Keycard");
+        System.out.println(keycard.collisionBox.width+ ","+ keycard.collisionBox.height);
 
         // Making the camera and the viewport
         camera = new OrthographicCamera(30, 30 * (w/h));
@@ -104,6 +122,8 @@ public class MazeGame extends ApplicationAdapter {
     public void render() {
         paused = gameController.handleInput(camera, paused);// The input for the zoom in and out
 
+        keycard.collides(bob);
+
         if (!paused){
             boolean[] movement_halter = maze.hitsWall(bob, Gdx.graphics.getDeltaTime());
             bob.move(movement_halter);
@@ -127,6 +147,7 @@ public class MazeGame extends ApplicationAdapter {
 
         bob.draw(batch);
         maze.renderMap(camera);
+        keycard.draw(batch);
 
         batch.end();
 
@@ -140,29 +161,14 @@ public class MazeGame extends ApplicationAdapter {
         HUDBatch.end();
 
         // The code to check if the game has ended -> This might work better as a function, but i cba rn
-        // Another one for the future game controller!! YIPPEEEEE
         if (timer >= 300){
             paused = true;
             isEnded = true;
         }
+
+
     }
 
-
-//    //This whole method should be cleaned up at some point
-//    private void handleInput() {
-//        //When Q is pressed, the camera is zoomed in, and zoomed out when E is pressed
-//        if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
-//            camera.zoom += 0.02f;
-//        }
-//        if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-//            camera.zoom -= 0.02f;
-//        }
-//
-//        //This is to pause the game
-//        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-//            paused = !paused;
-//        }
-//    }
 
     @Override
     public void resize(int width, int height) {
