@@ -80,12 +80,12 @@ public class MazeGame extends ApplicationAdapter {
 
         // Start of Bob's creation - the birth of Bob
         atlas = new TextureAtlas(Gdx.files.internal("atlas/bob.atlas"));
-        bobSprite = new Sprite(atlas.findRegion("front-bob-2"));
+        bobSprite = new Sprite(atlas.findRegion("front-bob"));
         bobSprite.setPosition(50,50);
         bobSprite.setSize(BOB_WIDTH, BOB_HEIGHT);
 
 
-        bob = new Bob(bobSprite, 15, -4, -3); //The actual creation of Bob, he has arrived
+        bob = new Bob(bobSprite, 30, -4, -3); //The actual creation of Bob, he has arrived
         System.out.println(bob.collisionBox.width+ ","+bob.collisionBox.height);
 
 
@@ -100,7 +100,7 @@ public class MazeGame extends ApplicationAdapter {
         // Making the camera and the viewport
         camera = new OrthographicCamera(30, 30 * (w/h));
         camera.position.set(bob.getEntity().getX() - ((float) BOB_WIDTH / 2),
-            bob.getEntity().getY() - ((float) BOB_HEIGHT / 2), 0);
+        bob.getEntity().getY() - ((float) BOB_HEIGHT / 2), 0);
         camera.zoom = 1f; // Starting a bit zoomed in
         camera.update();
 
@@ -114,7 +114,6 @@ public class MazeGame extends ApplicationAdapter {
         viewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
 
         batch = new SpriteBatch();
-
         HUDBatch = new SpriteBatch();
     }
 
