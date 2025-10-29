@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -31,16 +33,19 @@ public class Orthographic implements ApplicationListener {
     private Viewport viewport;
     private SpriteBatch batch;
 
-    private TextureRegion bobFront;
-    private TextureRegion bobLeft;
-    private TextureRegion bobRight;
-    private TextureRegion bobUp;
-    private TextureRegion bobDown;
-    private TextureRegion bobRocket;
+    // Vars to hold each set of animation images
+    private Animation<TextureRegion> bobFront;
+    private Animation<TextureRegion> bobLeft;
+    private Animation<TextureRegion> bobRight;
+    private Animation<TextureRegion> bobUp;
+    private Animation<TextureRegion> bobDown;
+    private Animation<TextureRegion> bobRocket;
+    private Animation<TextureRegion> bobSquash;
+
     private Sprite bob;
 
-    float bobX;
-    float bobY;
+    // Used to control animation time
+    float stateTime;
 
     private TextureAtlas atlas;
     private Map maze;
@@ -52,19 +57,35 @@ public class Orthographic implements ApplicationListener {
     public void create() {
         atlas = new TextureAtlas(Gdx.files.internal("assets\\atlas\\bob.atlas"));
 
-        // Gets bob sprite from texture atlas
-        bobFront = new TextureRegion(atlas.findRegion("front-bob-2"));
-        bobRight = new TextureRegion(atlas.findRegion("side-bob-2"));
+        // Loads animation frames
+        Array<TextureAtlas.AtlasRegion> frontFrames = atlas.findRegions("front-bob");
+        // Creates animation object
+        bobFront = new Animation<TextureRegion>(0.5f, frontFrames);
 
-        bobLeft =  new TextureRegion(atlas.findRegion("side-bob-2"));
-        bobLeft.flip(true, false);
+        Array<TextureAtlas.AtlasRegion> rightFrames = atlas.findRegions("side-bob");
+        bobRight = new Animation<TextureRegion>(0.5f, rightFrames);
+
+        // Flips right into left frames
+        Array<TextureRegion> leftFrames = new Array<>();
+        for (TextureRegion frame: rightFrames){
+            TextureRegion temp_frame = new TextureRegion(frame);
+            temp_frame.flip(true, false);
+            leftFrames.add(temp_frame);
+        }
+        bobLeft = new Animation<TextureRegion>(0.5f, leftFrames);
+
+        Array<TextureAtlas.AtlasRegion> upFrames = atlas.findRegions("up-bob");
+        bobUp = new Animation<TextureRegion>(0.5f, upFrames);
 
         bobDown = bobFront;
+        
+        Array<TextureAtlas.AtlasRegion> squashFrames = atlas.findRegions("squash-bob");
+        bobSquash = new Animation<TextureRegion>(0.5f, squashFrames);
 
-        bobUp = new TextureRegion(atlas.findRegion("up-bob-2"));
-        bobRocket =  new TextureRegion(atlas.findRegion("rocket-bob-2"));
+        Array<TextureAtlas.AtlasRegion> rocketFrames = atlas.findRegions("rocket-bob");
+        bobRocket = new Animation<TextureRegion>(0.1f, rocketFrames);
 
-        bob = new Sprite(atlas.findRegion("front-bob-2"));
+        bob = new Sprite(atlas.findRegion("front-bob"));
         bob.setSize(BOB_WIDTH,BOB_HEIGHT);
         bob.setPosition(30,30);
 
@@ -81,6 +102,7 @@ public class Orthographic implements ApplicationListener {
 
 
         batch = new SpriteBatch();
+        stateTime = 0f;
         viewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
 
     }
@@ -94,15 +116,18 @@ public class Orthographic implements ApplicationListener {
     public void render() {
         handleInput();
         movement();
+
+        // Clears past animation & ticks to next frame
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stateTime += Gdx.graphics.getDeltaTime();
+
         camera.position.set(bob.getX() + ((float) BOB_WIDTH / 2), bob.getY() + ((float) BOB_HEIGHT / 2), 0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         maze.renderMap(camera);
         batch.begin();
-        bob.draw(batch);
+        bob.draw(batch); // Renders bob sprite animation
         batch.end();
     }
 
@@ -125,27 +150,33 @@ public class Orthographic implements ApplicationListener {
         //X-axis
         overlapping_walls = maze.hits_wall(bob, speed, delta);
 
+        // Default animation if no movement
+        TextureRegion bobAnimation = bobFront.getKeyFrame(stateTime, true);
+
         if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D))) && !overlapping_walls[0] ) {
-            bob.setRegion(bobRight); // Changes bob sprite icon
+            // Sets animation for right movement
+            bobAnimation = bobRight.getKeyFrame(stateTime, true);
             bob.translateX(speed * delta);
         }
         if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A))) && !overlapping_walls[2]) {
-            bob.setRegion(bobLeft);
+            // bob.setRegion(bobLeft);
+            bobAnimation = bobLeft.getKeyFrame(stateTime, true);
             bob.translateX(-speed * delta);
         }
 
         //Y-axis
         if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W))) && !overlapping_walls[3]) {
-            bob.setRegion(bobUp);
+           bobAnimation = bobUp.getKeyFrame(stateTime, true);
             bob.translateY(speed * delta);
         }
 
         if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S))) && !overlapping_walls[1]) {
-            bob.setRegion(bobDown);
+            bobAnimation = bobDown.getKeyFrame(stateTime, true);
             bob.translateY(-speed * delta);
         }
-        
-        
+
+        // Sets bob sprite to run the animation configured above
+        bob.setRegion(bobAnimation);
     }
 
     @Override
