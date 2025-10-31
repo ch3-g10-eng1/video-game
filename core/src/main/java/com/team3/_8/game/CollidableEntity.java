@@ -26,12 +26,11 @@ abstract class CollidableEntity extends Entity {
      * Creates a collision box around the entity
      * @param sprite Sprite: the sprite of the entity
      * @param speed float: the speed of the entity
-     * @param widthChange float: the change in collision box height (must be negative for smaller)
-     * @param heightChange float: the change in collision box width (must be negative for smaller)
+     * @param Collision__size_change float: the change in collision box size (must be negative for smaller)
      */
-    public CollidableEntity(Sprite sprite, float speed, float widthChange, float heightChange) {
+    public CollidableEntity(Sprite sprite, float speed, float Collision__size_change) {
         super(sprite, speed);
-        this.createBox(widthChange, heightChange);
+        this.createBox(Collision__size_change);
     }
 
     protected void createBox(){
@@ -44,9 +43,9 @@ abstract class CollidableEntity extends Entity {
      * @param widthChange float: the change of the width
      * @param heightChange float: the change of the height
      */
-    protected void createBox(float widthChange, float heightChange){
-        this.collisionBox = new Rectangle(this.getX(), this.getY(), // No matter what I do here, the coordinates seem to be stuck in place, anyone know why??
-            this.sprite.getWidth() + widthChange, this.sprite.getHeight() + heightChange);
+    protected void createBox(float Collision__size_change){
+        this.collisionBox = new Rectangle(this.getX() - Collision__size_change, this.getY() - Collision__size_change, // No matter what I do here, the coordinates seem to be stuck in place, anyone know why??
+            this.sprite.getWidth() + Collision__size_change*2, this.sprite.getHeight() + Collision__size_change*2);
     }
 
     public Rectangle getCollisionBox() {

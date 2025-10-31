@@ -85,7 +85,7 @@ public class MazeGame extends ApplicationAdapter {
         bobSprite.setSize(BOB_WIDTH, BOB_HEIGHT);
 
 
-        bob = new Bob(bobSprite, 30, -4, -3); //The actual creation of Bob, he has arrived
+        bob = new Bob(bobSprite, 30, -3); //The actual creation of Bob, he has arrived
         System.out.println(bob.collisionBox.width+ ","+bob.collisionBox.height);
 
 
