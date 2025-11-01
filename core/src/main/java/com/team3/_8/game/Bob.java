@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Array;
  */
 public class Bob extends CollidableEntity {
 
-    private String[] inventory = new String[5];// Creates an inventory of size 5, which will be filled with String IDs
+    private String[] inventory = {"","","","",""};// Creates an inventory of size 5, which will be filled with String IDs
     private int inventoryEnd = 0;
     private float collision__size_change; //offset for collision size, required for move()
 
@@ -126,5 +126,9 @@ public class Bob extends CollidableEntity {
             return true;
         }
         return false;
+    }
+
+    public String[] getInventory(){
+        return this.inventory;
     }
 }
