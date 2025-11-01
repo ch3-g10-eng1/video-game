@@ -45,6 +45,7 @@ public class MazeGame extends ApplicationAdapter {
     // The two sprite batches -> ones for the main game, and one for the HUD
     private SpriteBatch batch;
     private SpriteBatch HUDBatch;
+    private HUD hud;
 
     // The texture atlas containing Bob, and the sprite of Bob
     private TextureAtlas atlas;
@@ -100,7 +101,7 @@ public class MazeGame extends ApplicationAdapter {
         // Making the camera and the viewport
         camera = new OrthographicCamera(30, 30 * (w/h));
         camera.position.set(bob.getEntity().getX() - ((float) BOB_WIDTH / 2),
-        bob.getEntity().getY() - ((float) BOB_HEIGHT / 2), 0);
+            bob.getEntity().getY() - ((float) BOB_HEIGHT / 2), 0);
         camera.zoom = 1f; // Starting a bit zoomed in
         camera.update();
 
@@ -114,7 +115,10 @@ public class MazeGame extends ApplicationAdapter {
         viewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
 
         batch = new SpriteBatch();
+
+        //Creation of the HUD
         HUDBatch = new SpriteBatch();
+        hud = new HUD(HUDBatch, keycardTexture);
     }
 
     @Override
@@ -151,13 +155,8 @@ public class MazeGame extends ApplicationAdapter {
         batch.end();
 
         // The drawing of the HUD of the game
-        // Right now it's just a timer but other things can be added
-        // If we get enough items, we could make this into a class?
-        HUDBatch.begin();
-
-        font.draw(HUDBatch, gameController.formatTime(timer), 550, 370); // Draws the timer to the screen
-
-        HUDBatch.end();
+        // I've made it a class now, to clean up the current code and future code to be added
+        hud.draw(font, gameController.formatTime(timer), bob);
 
         // The code to check if the game has ended -> This might work better as a function, but i cba rn
         if (timer >= 300){
