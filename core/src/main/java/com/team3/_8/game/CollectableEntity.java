@@ -47,8 +47,9 @@ public class CollectableEntity extends CollidableEntity{
         }
     }
 
-
-
+    /**
+     * implements move to do nothing as collectable entitys cannot move
+     */
     @Override
     public void move(boolean[] movement_halter){}
 

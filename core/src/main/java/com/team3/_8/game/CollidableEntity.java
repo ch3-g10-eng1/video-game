@@ -33,13 +33,16 @@ abstract class CollidableEntity extends Entity {
         this.createBox(Collision__size_change);
     }
 
+    /**
+     * creates a collision box for the entity with the spirte information
+     */
     protected void createBox(){
         this.collisionBox = new Rectangle(this.sprite.getX(), this.sprite.getY(),
             this.sprite.getWidth(), this.sprite.getHeight());
     }
 
     /**
-     * This is the override of the createBox method, allowing for the box to be altered when it is creates
+     * This is the alternative of the createBox method, allowing for the box to be altered when it is creates
      * @param widthChange float: the change of the width
      * @param heightChange float: the change of the height
      */

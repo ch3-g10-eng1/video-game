@@ -19,8 +19,8 @@ import java.util.LinkedList;
  */
 public class Map {
 	
-	private TiledMap map;
-	private TiledMapRenderer map_render;
+	private TiledMap map; // the map
+	private TiledMapRenderer map_render; // the rendere 
 	private LinkedList<MapObjects> collidable_objects;
 
     /**
@@ -33,6 +33,7 @@ public class Map {
 		map_render = new OrthogonalTiledMapRenderer(map);
 		collidable_objects = new LinkedList<MapObjects>();
 		for (String layer : collision_layers) {
+			// add every collision layer to the list
 			collidable_objects.add((map.getLayers().get(layer)).getObjects());
 		}
 	}
@@ -55,22 +56,27 @@ public class Map {
      *      0-left, 1-top, 2-right, 3-bottom
      */
 	public boolean[] hitsWall(CollidableEntity entity, float delta) {
-		boolean[] movement_halter = new boolean[4];
-		double right_wall_X;
+		boolean[] movement_halter = new boolean[4]; 
+		// walls of the collision box, used to determine direction entity is colliding wall
+		double right_wall_X; 
 		double left_wall_X;
 		double wall_Y;
-		Rectangle wall_collision = null;
-        float effective_speed = entity.getSpeed() * delta *2;
+		Rectangle wall_collision = null; // collision box of the map
+		// distance bob moves every time function is called (+allowance for changes to delta)
+        float effective_speed = entity.getSpeed() * delta *2; 
+
 		for (MapObjects collidable_layer : collidable_objects) {
 			for (RectangleMapObject wall : collidable_layer.getByType(RectangleMapObject.class)) {
 				wall_collision = wall.getRectangle();
 
-				//define different points to measure where entity is in comparison
+				// define different points to measure where entity is in comparison
 				right_wall_X = wall_collision.getX() + wall_collision.getWidth() - effective_speed;
 				left_wall_X = wall_collision.getX() + effective_speed;
 				wall_Y = wall_collision.getY() + effective_speed;
 
 				if (Intersector.overlaps(wall_collision, entity.collisionBox)) {
+					// if entity collides with box, which side of the box
+					// Use a whiteboard to visualise
 					if ((left_wall_X) > entity.collisionBox.getX()+entity.collisionBox.getWidth()) {
 						movement_halter[0] = true;
 					}				
@@ -90,10 +96,19 @@ public class Map {
 		return movement_halter;
 	}
 
+	/**
+	 * method to add a new collision layer to the collidable objects linked list
+	 * @param collision_layer name of the object layer to be made collidable 
+	 */
 	public void addCollisionLayer(String collision_layer) {
 		collidable_objects.add((map.getLayers().get(collision_layer)).getObjects());
 	}
 
+	/**
+	 * method to remove a collision layer from the collidable objects linked list if it is present
+	 * @param collision_layer name of the object layer to be made non-collidable 
+	 * @return boolean to indicate success of removal, true if successful 
+	 */
 	public boolean removeCollisionLayer(String collision_layer) {
 		return collidable_objects.remove((map.getLayers().get(collision_layer)).getObjects());	
 	} 

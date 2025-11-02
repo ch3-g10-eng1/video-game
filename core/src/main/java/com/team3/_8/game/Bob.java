@@ -16,7 +16,7 @@ public class Bob extends CollidableEntity {
 
     private String[] inventory = {"","","","",""};// Creates an inventory of size 5, which will be filled with String IDs
     private int inventoryEnd = 0;
-    private float collision__size_change; //offset for collision size, required for move()
+    private float collision__size_change; // offset for collision size, required for move()
 
     // Vars to hold each set of animation images
     private Animation<TextureRegion> bobFront;
@@ -90,6 +90,9 @@ public class Bob extends CollidableEntity {
         sprite.setRegion(bobAnimation);
     }
 
+    /**
+     * loads the animation files from atlas into the animation variables
+     */
     public void loadTextures(){
         atlas = new TextureAtlas(Gdx.files.internal("assets\\atlas\\bob.atlas"));
 
@@ -119,6 +122,11 @@ public class Bob extends CollidableEntity {
         bobRocket = new Animation<TextureRegion>(0.1f, rocketFrames);
     }
 
+    /**
+     * function to add item to bobs inventory if it is not full and item is not already present
+     * @param inventory ID for the item being added to inventory
+     * @return boolean to indicate success of function, true if item was added successfully
+     */
     public boolean addInventory(String inventory){
         if (this.inventoryEnd < 5){
             this.inventory[this.inventoryEnd] = inventory;
