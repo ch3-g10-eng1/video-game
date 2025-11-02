@@ -77,7 +77,7 @@ public class MazeGame extends ApplicationAdapter {
 
         timer = 0f; // The timer variable
 
-        maze = new Map("test_map.tmx", "walls");
+        maze = new Map("Map/CSE_map.tmx", "Collision");
 
         // Start of Bob's creation - the birth of Bob
         atlas = new TextureAtlas(Gdx.files.internal("atlas/bob.atlas"));
