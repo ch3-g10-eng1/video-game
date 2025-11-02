@@ -10,6 +10,8 @@ import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Intersector;
 
+import java.util.LinkedList;
+
 
 /**
  * Class defines a Map object that renders background map
@@ -19,17 +21,20 @@ public class Map {
 	
 	private TiledMap map;
 	private TiledMapRenderer map_render;
-	private MapObjects walls;
+	private LinkedList<MapObjects> collidable_objects;
 
     /**
      * constructor for map that defines a map, its renderer and its collision objects 
      * @param filename that the map is stored under
      * @param collision_layer name of the object layer where collision items are found
      */
-	public Map(String filename, String collision_layer) {
+	public Map(String filename, String[] collision_layers) {
 		map = new TmxMapLoader().load(filename);
 		map_render = new OrthogonalTiledMapRenderer(map);
-		walls = (map.getLayers().get(collision_layer)).getObjects();
+		collidable_objects = new LinkedList<MapObjects>();
+		for (String layer : collision_layers) {
+			collidable_objects.add((map.getLayers().get(layer)).getObjects());
+		}
 	}
 
 	/**
@@ -56,31 +61,40 @@ public class Map {
 		double wall_Y;
 		Rectangle wall_collision = null;
         float effective_speed = entity.getSpeed() * delta *2;
+		for (MapObjects collidable_layer : collidable_objects) {
+			for (RectangleMapObject wall : collidable_layer.getByType(RectangleMapObject.class)) {
+				wall_collision = wall.getRectangle();
 
-		for (RectangleMapObject wall : walls.getByType(RectangleMapObject.class)) {
-			wall_collision = wall.getRectangle();
+				//define different points to measure where entity is in comparison
+				right_wall_X = wall_collision.getX() + wall_collision.getWidth() - effective_speed;
+				left_wall_X = wall_collision.getX() + effective_speed;
+				wall_Y = wall_collision.getY() + effective_speed;
 
-            //define different points to measure where entity is in comparison
-			right_wall_X = wall_collision.getX() + wall_collision.getWidth() - effective_speed;
-			left_wall_X = wall_collision.getX() + effective_speed;
-			wall_Y = wall_collision.getY() + effective_speed;
+				if (Intersector.overlaps(wall_collision, entity.collisionBox)) {
+					if ((left_wall_X) > entity.collisionBox.getX()+entity.collisionBox.getWidth()) {
+						movement_halter[0] = true;
+					}				
+					else if (right_wall_X < entity.collisionBox.getX()) {
+						movement_halter[2] = true;
+					}				
+					else if ((wall_Y > entity.collisionBox.getY())) {
+						movement_halter[3] = true;
+					}
+					else if ((wall_Y < entity.collisionBox.getY()+entity.collisionBox.getHeight())) {
+						movement_halter[1] = true;
+					}
 
-			if (Intersector.overlaps(wall_collision, entity.collisionBox)) {
-				if ((left_wall_X) > entity.collisionBox.getX()+entity.collisionBox.getWidth()) {
-					movement_halter[0] = true;
-				}				
-				else if (right_wall_X < entity.collisionBox.getX()) {
-					movement_halter[2] = true;
-				}				
-				else if ((wall_Y > entity.collisionBox.getY())) {
-					movement_halter[3] = true;
 				}
-				else if ((wall_Y < entity.collisionBox.getY()+entity.collisionBox.getHeight())) {
-					movement_halter[1] = true;
-				}
-
 			}
 		}
 		return movement_halter;
 	}
+
+	public void addCollisionLayer(String collision_layer) {
+		collidable_objects.add((map.getLayers().get(collision_layer)).getObjects());
+	}
+
+	public boolean removeCollisionLayer(String collision_layer) {
+		return collidable_objects.remove((map.getLayers().get(collision_layer)).getObjects());	
+	} 
 }

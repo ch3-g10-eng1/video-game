@@ -77,7 +77,8 @@ public class MazeGame extends ApplicationAdapter {
 
         timer = 0f; // The timer variable
 
-        maze = new Map("Map/CSE_map.tmx", "Collision");
+        String[] collidable_layers = {"Collision", "Doors"};
+        maze = new Map("Map/CSE_map.tmx", collidable_layers);
 
         // Start of Bob's creation - the birth of Bob
         atlas = new TextureAtlas(Gdx.files.internal("atlas/bob.atlas"));
@@ -87,8 +88,6 @@ public class MazeGame extends ApplicationAdapter {
 
 
         bob = new Bob(bobSprite, 30, -3); //The actual creation of Bob, he has arrived
-        System.out.println(bob.collisionBox.width+ ","+bob.collisionBox.height);
-
 
         // Creation of the keycard
         keycardTexture = new Texture("keycard.png");
@@ -147,6 +146,7 @@ public class MazeGame extends ApplicationAdapter {
         if (paused){
         batch.draw(image, 0, 0); //Temporary image to test Bob movement, and pause now
         }
+
 
         bob.draw(batch);
         maze.renderMap(camera);
