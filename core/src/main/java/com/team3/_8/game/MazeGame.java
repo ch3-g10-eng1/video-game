@@ -83,16 +83,16 @@ public class MazeGame extends ApplicationAdapter {
         // Start of Bob's creation - the birth of Bob
         atlas = new TextureAtlas(Gdx.files.internal("atlas/bob.atlas"));
         bobSprite = new Sprite(atlas.findRegion("front-bob"));
-        bobSprite.setPosition(50,50);
+        bobSprite.setPosition(100,500);
         bobSprite.setSize(BOB_WIDTH, BOB_HEIGHT);
 
 
-        bob = new Bob(bobSprite, 30, -3); //The actual creation of Bob, he has arrived
+        bob = new Bob(bobSprite, 60, -3); //The actual creation of Bob, he has arrived
 
         // Creation of the keycard
         keycardTexture = new Texture("keycard.png");
         keycardSprite = new Sprite(keycardTexture);
-        keycardSprite.setPosition(30,30);
+        keycardSprite.setPosition(20,20);
         keycardSprite.setSize((float) BOB_WIDTH / 2, (float) BOB_HEIGHT / 2);
         keycard = new CollectableEntity(keycardSprite, 0, "Keycard");
         System.out.println(keycard.collisionBox.width+ ","+ keycard.collisionBox.height);
@@ -101,7 +101,7 @@ public class MazeGame extends ApplicationAdapter {
         camera = new OrthographicCamera(30, 30 * (w/h));
         camera.position.set(bob.getEntity().getX() - ((float) BOB_WIDTH / 2),
             bob.getEntity().getY() - ((float) BOB_HEIGHT / 2), 0);
-        camera.zoom = 1f; // Starting a bit zoomed in
+        camera.zoom = 2f; 
         camera.update();
 
         // Things for the text for the timer and other strings
@@ -124,7 +124,9 @@ public class MazeGame extends ApplicationAdapter {
     public void render() {
         paused = gameController.handleInput(camera, paused);// The input for the zoom in and out
 
-        keycard.collides(bob);
+        if (keycard.collides(bob)) {
+            maze.removeCollisionLayer("Doors");
+        }
 
         if (!paused){
             boolean[] movement_halter = maze.hitsWall(bob, Gdx.graphics.getDeltaTime());
