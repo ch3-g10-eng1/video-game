@@ -28,8 +28,10 @@ public class CollectableEntity extends CollidableEntity{
      */
     public boolean collides(Bob bob) {
         if (bob.getCollisionBox().overlaps(this.collisionBox) && !this.collected) {
-            this.collected = bob.addInventory(this.type); // Calls the method which adds itself to Bob's inventory if it isn't full. Else it isn't collected
-            return true;
+            this.collected = bob.addInventory(this.type); 
+            // Calls the method which adds itself to Bob's inventory if it isn't full. 
+            // Else it isn't collected
+            return collected;
         }
         return false;
     }
