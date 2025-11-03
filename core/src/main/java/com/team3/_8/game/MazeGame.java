@@ -29,6 +29,9 @@ public class MazeGame extends ApplicationAdapter {
     static final int BOB_WIDTH = 15;
     static final int BOB_HEIGHT = 15;
 
+    // Screen manager
+    private int active_screen = 0;
+
     // Booleans for the game
     private boolean isWon = false; //Variable to see if the game has been won
     private boolean isEnded = false; // Variable to see if the game has ended
@@ -69,6 +72,7 @@ public class MazeGame extends ApplicationAdapter {
 
     @Override
     public void create() {
+
         //Placeholder Textures!!!
         image = new Texture("libgdx.png");
 
@@ -122,6 +126,18 @@ public class MazeGame extends ApplicationAdapter {
 
     @Override
     public void render() {
+        if (active_screen == 0) {
+            titleScreenRender();
+        }
+        else if (active_screen == 1) {
+            gameScreenRender();
+        }
+    }
+
+    /**
+     * runs the code for the game screen every frame
+     */
+    private void gameScreenRender() {
         paused = gameController.handleInput(camera, paused);// The input for the zoom in and out
 
         if (keycard.collected(bob)) {
@@ -166,10 +182,24 @@ public class MazeGame extends ApplicationAdapter {
             paused = true;
             isEnded = true;
         }
-
-
     }
 
+    private void titleScreenRender() {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clears the screen
+        batch.setProjectionMatrix(camera.combined);
+
+        camera.position.set(0,0,0);
+        camera.update();
+
+        batch.begin();
+        font.draw(batch, "This is a game.", 0, 30);;
+        font.draw(batch, "Press space to start", 0, 0);;
+        batch.end();
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            active_screen = 1;
+        }
+    }
 
     @Override
     public void resize(int width, int height) {
