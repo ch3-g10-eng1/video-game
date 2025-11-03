@@ -126,6 +126,7 @@ public class MazeGame extends ApplicationAdapter {
 
         if (keycard.collected(bob)) {
             maze.removeCollisionLayer("Doors");
+            maze.removeVisibleLayer("ClosedDoors");
         }
 
         if (!paused){

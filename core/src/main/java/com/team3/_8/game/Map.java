@@ -6,9 +6,11 @@ import com.badlogic.gdx.math.Rectangle;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.maps.MapLayers;
 
 import java.util.LinkedList;
 
@@ -22,19 +24,41 @@ public class Map {
 	private TiledMap map; // the map
 	private TiledMapRenderer map_render; // the rendere 
 	private LinkedList<MapObjects> collidable_objects;
+	private int[] visible_layers; 
+	// index of every map layer, set to its own index if it should be visible. 
+	// layer 0 must always be visible
 
     /**
-     * constructor for map that defines a map, its renderer and its collision objects 
+     * constructor for map that defines a map, renderer, visible layers and its collision objects
      * @param filename that the map is stored under
+	 * @param visible_layer_names of the layers to be made visible
      * @param collision_layer name of the object layer where collision items are found
      */
-	public Map(String filename, String[] collision_layers) {
+	public Map(String filename, String[] visible_layer_names, String[] collision_layers) {
 		map = new TmxMapLoader().load(filename);
+		visible_layers = new int[map.getLayers().getCount()];		
 		map_render = new OrthogonalTiledMapRenderer(map);
+
+		for (String layer : visible_layer_names) {
+			this.addVisibleLayer(layer);
+		}
 		collidable_objects = new LinkedList<MapObjects>();
 		for (String layer : collision_layers) {
 			// add every collision layer to the list
 			collidable_objects.add((map.getLayers().get(layer)).getObjects());
+		}
+	}
+
+	/**
+     * constructor for map that defines a map, renderer and collision objects 
+	 * makes every layer in map visible
+     * @param filename that the map is stored under
+     * @param collision_layer name of the object layer where collision items are found
+     */
+	public Map(String filename, String[] collision_layers) {
+		this(filename, new String[0], collision_layers);
+		for (int index = 0; index < visible_layers.length; index++) {
+			visible_layers[index] = index;
 		}
 	}
 
@@ -44,7 +68,7 @@ public class Map {
 	 */
 	protected void renderMap(OrthographicCamera camera) {
         map_render.setView(camera);
-        map_render.render();
+        map_render.render(visible_layers);
 	}
 
     /**
@@ -112,4 +136,36 @@ public class Map {
 	public boolean removeCollisionLayer(String collision_layer) {
 		return collidable_objects.remove((map.getLayers().get(collision_layer)).getObjects());	
 	} 
+
+	/**
+	 * adds a new layer to be rendered every frame
+	 * @param new_layer name of new layer to be rendered
+	 * @return boolean to indicate success of addition, true if successful 
+	 */
+	public boolean addVisibleLayer(String new_layer) {
+		int layer_index = map.getLayers().getIndex(new_layer);
+		if (layer_index == -1) {
+			return false;
+		}
+		else {
+			visible_layers[layer_index] = layer_index;
+			return true;
+		}
+	}
+
+	/**
+	 * removes a layer so that it is no longer rendered
+	 * @param layer name of layer to be removed
+	 * @return boolean to indicate success of removal, true if removed successfully
+	 */
+	public boolean removeVisibleLayer(String layer) {
+		int layer_index = map.getLayers().getIndex(layer);
+		if (layer_index == -1) {
+			return false;
+		}
+		else {
+			visible_layers[layer_index] = 0;
+			return true;
+		}
+	}
 }
