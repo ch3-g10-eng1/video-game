@@ -172,7 +172,7 @@ public class MazeGame extends ApplicationAdapter {
         batch.end();
 
         // The drawing of the HUD of the game
-        hud.draw(font, gameController.formatTime(timer), bob);
+        hud.draw(font, gameController.formatTime(timer), bob, paused);
 
         if (paused){
             hud.pauseScreen(font, viewport);
