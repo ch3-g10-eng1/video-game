@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
+import java.util.Set;
 /**
  * This class creates the HUD of the game. The idea is that you pass textures that will be rendered
  * through to the class and then you can have all the decision-making in here, to clean up the code
@@ -39,7 +40,7 @@ public class HUD {
      * @param bob
      */
     private void drawTextures(Bob bob){
-        String[] bobInventory;
+        Set<String> bobInventory;
         bobInventory = bob.getInventory();
 
         for (String item : bobInventory){

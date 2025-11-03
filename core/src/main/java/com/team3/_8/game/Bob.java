@@ -9,7 +9,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
 
 /**
  * This is the class for the character (Bob), inheriting from Entity
@@ -17,9 +20,8 @@ import java.util.Map;
  */
 public class Bob extends CollidableEntity {
 
-    private String[] inventory = {"","","","",""};
-    // Creates an inventory of size 5, which will be filled with String IDs
-    private int inventoryEnd = 0;
+    private Set<String> inventory = new HashSet<String>();
+    // Creates an inventory, which will be filled with String IDs
     private float collision__size_change; // offset for collision size, required for move()
 
     private TextureAtlas atlas;
@@ -125,32 +127,20 @@ public class Bob extends CollidableEntity {
      * @param inventory ID for the item being added to inventory
      * @return boolean to indicate success of function, true if item was added successfully
      */
-    public boolean addInventory(String inventory){
-        if (this.inventoryEnd < 5){
-            this.inventory[this.inventoryEnd] = inventory;
-            this.inventoryEnd++;
-            return true;
-        }
-        return false;
+    public boolean addInventory(String item){
+        return inventory.add(item);
     }
 
     /**
      * function to remove item from bobs inventory if it contains that item 
      * @param item to be removed from the inventory
      * @return boolean to indicate success of function 
-     *  (true if item was removed, false if it could not be found)
      */
     public boolean removeInventory(String item) {
-        for (String inv_item : inventory) {
-            if (inv_item == item) {
-                inv_item = "";
-                return true;
-            }
-        }
-        return false;
+        return inventory.remove(item);
     }
 
-    public String[] getInventory(){
+    public Set<String> getInventory(){
         return this.inventory;
     }
 }
