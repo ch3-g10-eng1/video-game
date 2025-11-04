@@ -131,11 +131,11 @@
 </data>
  </layer>
  <objectgroup id="2" name="Collision">
-  <object id="13" x="280" y="502" width="20" height="178"/>
-  <object id="14" x="279.333" y="660" width="60" height="19.3333"/>
-  <object id="15" x="318.667" y="460" width="22" height="218.667"/>
-  <object id="16" x="200.667" y="460.667" width="138.667" height="19.3333"/>
-  <object id="17" x="140" y="500" width="158" height="18"/>
+  <object id="13" x="280" y="499.333" width="22.6667" height="180.667"/>
+  <object id="14" x="279.333" y="656.667" width="60" height="22.6666"/>
+  <object id="15" x="315.667" y="460" width="25" height="218.667"/>
+  <object id="16" x="200.667" y="460.667" width="138.667" height="24"/>
+  <object id="17" x="140" y="495.667" width="158" height="22.3333"/>
   <object id="18" x="139.333" y="361.667" width="19.3333" height="155.667"/>
   <object id="19" x="140" y="360" width="79.3333" height="20"/>
   <object id="20" x="198.667" y="361" width="22" height="118.333"/>
