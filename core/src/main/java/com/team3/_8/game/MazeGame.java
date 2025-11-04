@@ -97,7 +97,7 @@ public class MazeGame extends ApplicationAdapter {
         keycardTexture = new Texture("keycard.png");
         keycardSprite = new Sprite(keycardTexture);
         keycardSprite.setPosition(20,20);
-        keycardSprite.setSize((float) BOB_WIDTH / 2, (float) BOB_HEIGHT / 2);
+        keycardSprite.setSize(BOB_WIDTH * 2, BOB_HEIGHT * 2);
         keycard = new CollectableEntity(keycardSprite, 0, "Keycard");
         System.out.println(keycard.collisionBox.width+ ","+ keycard.collisionBox.height);
 
@@ -105,7 +105,7 @@ public class MazeGame extends ApplicationAdapter {
         camera = new OrthographicCamera(30, 30 * (w/h));
         camera.position.set(bob.getEntity().getX() - ((float) BOB_WIDTH / 2),
             bob.getEntity().getY() - ((float) BOB_HEIGHT / 2), 0);
-        camera.zoom = 2f; 
+        camera.zoom = 2f;
         camera.update();
 
         // Things for the text for the timer and other strings
@@ -121,7 +121,7 @@ public class MazeGame extends ApplicationAdapter {
 
         //Creation of the HUD
         HUDBatch = new SpriteBatch();
-        hud = new HUD(HUDBatch, keycardTexture);
+        hud = new HUD(HUDBatch);
     }
 
     @Override
@@ -162,22 +162,24 @@ public class MazeGame extends ApplicationAdapter {
         // Sprite batch drawing
         batch.begin();
 
-        if (paused){
-        batch.draw(image, 0, 0); //Temporary image to test Bob movement, and pause now
-        }
 
 
         bob.draw(batch);
         maze.renderMap(camera);
         keycard.draw(batch);
 
+
         batch.end();
 
         // The drawing of the HUD of the game
-        // I've made it a class now, to clean up the current code and future code to be added
-        hud.draw(font, gameController.formatTime(timer), bob);
+        hud.draw(font, gameController.formatTime(timer), bob, paused);
 
-        // The code to check if the game has ended -> This might work better as a function, but i cba rn
+        if (paused){
+            hud.pauseScreen(font, viewport);
+        }
+
+
+        // The code to check if the game has ended
         if (timer >= 300){
             paused = true;
             isEnded = true;
