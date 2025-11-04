@@ -51,6 +51,8 @@ public class Bob extends CollidableEntity {
     @Override
     public void move(boolean[] movement_halter){
         float delta = Gdx.graphics.getDeltaTime();
+
+        // Timer for animation
         stateTime += Gdx.graphics.getDeltaTime();
         // Default animation if no movement
         TextureRegion current_animation = bob_animations.get("Front").getKeyFrame(stateTime, true);
@@ -60,6 +62,7 @@ public class Bob extends CollidableEntity {
              (Gdx.input.isKeyPressed(Input.Keys.D)))
               && !movement_halter[0]) {
             this.sprite.translateX(this.speed * delta);
+            // Sets sprite animation to right
             current_animation = bob_animations.get("Right").getKeyFrame(stateTime, true);
         }
         else if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) ||
@@ -95,6 +98,7 @@ public class Bob extends CollidableEntity {
      * loads the animation files from atlas into the animation variables
      */
     public void loadTextures(){
+        // Loads sprites from Texture atlas
         atlas = new TextureAtlas(Gdx.files.internal("assets\\atlas\\bob.atlas"));
 
         bob_animations = new HashMap<String, Animation<TextureRegion>>();
