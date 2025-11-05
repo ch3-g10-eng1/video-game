@@ -12,7 +12,9 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Intersector;
 // import com.badlogic.gdx.maps.MapLayers;
 
-import java.util.LinkedList;
+import java.util.Set;
+import java.util.HashSet;
+
 
 
 /**
@@ -23,10 +25,11 @@ public class Map {
 	
 	private TiledMap map; // the map
 	private TiledMapRenderer map_render; // the rendere 
-	private LinkedList<MapObjects> collidable_objects;
+	private Set<MapObjects> collidable_objects; // Set of the map objects of all collidable layers
 	private int[] visible_layers; 
 	// index of every map layer, set to its own index if it should be visible. 
 	// layer 0 must always be visible
+	// needs to be int[] because the MapRenderer.render method is shit
 
     /**
      * constructor for map that defines a map, renderer, visible layers and its collision objects
@@ -42,7 +45,7 @@ public class Map {
 		for (String layer : visible_layer_names) {
 			this.addVisibleLayer(layer);
 		}
-		collidable_objects = new LinkedList<MapObjects>();
+		collidable_objects = new HashSet<MapObjects>();
 		for (String layer : collision_layers) {
 			// add every collision layer to the list
 			collidable_objects.add((map.getLayers().get(layer)).getObjects());
