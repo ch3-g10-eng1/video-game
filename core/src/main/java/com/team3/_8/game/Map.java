@@ -6,11 +6,11 @@ import com.badlogic.gdx.math.Rectangle;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.MapLayer;
+// import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.maps.MapLayers;
+// import com.badlogic.gdx.maps.MapLayers;
 
 import java.util.LinkedList;
 
