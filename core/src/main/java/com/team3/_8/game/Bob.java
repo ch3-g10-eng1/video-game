@@ -37,7 +37,7 @@ public class Bob extends CollidableEntity {
     }
 
     public Bob(Sprite sprite, float speed, float collision__size_change){
-        super(sprite, speed, collision__size_change);        
+        super(sprite, speed, collision__size_change);
         this.collision__size_change = collision__size_change;
         loadTextures();
     }
@@ -85,8 +85,8 @@ public class Bob extends CollidableEntity {
             this.sprite.translateY(-speed * delta);
             current_animation = bob_animations.get("Front").getKeyFrame(stateTime, true);
         }
-        
-        // Sets the collision box of bob after he moves 
+
+        // Sets the collision box of bob after he moves
         this.collisionBox.setX(this.sprite.getX() - collision__size_change);
         this.collisionBox.setY(this.sprite.getY() - collision__size_change);
 
@@ -99,7 +99,7 @@ public class Bob extends CollidableEntity {
      */
     public void loadTextures(){
         // Loads sprites from Texture atlas
-        atlas = new TextureAtlas(Gdx.files.internal("assets\\atlas\\bob.atlas"));
+        atlas = new TextureAtlas("atlas/bob.atlas");
 
         bob_animations = new HashMap<String, Animation<TextureRegion>>();
         // Loads animation frames
@@ -136,9 +136,9 @@ public class Bob extends CollidableEntity {
     }
 
     /**
-     * function to remove item from bobs inventory if it contains that item 
+     * function to remove item from bobs inventory if it contains that item
      * @param item to be removed from the inventory
-     * @return boolean to indicate success of function 
+     * @return boolean to indicate success of function
      */
     public boolean removeInventory(String item) {
         return inventory.remove(item);

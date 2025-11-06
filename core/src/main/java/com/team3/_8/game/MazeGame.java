@@ -92,7 +92,7 @@ public class MazeGame extends ApplicationAdapter {
         maze = new Map("Map/CSE_map.tmx", collidable_layers);
 
         // Start of Bob's creation - the birth of Bob
-        atlas = new TextureAtlas(Gdx.files.internal("atlas/bob.atlas"));
+        atlas = new TextureAtlas("atlas/bob.atlas");
         bobSprite = new Sprite(atlas.findRegion("front-bob"));
         bobSprite.setPosition(100,500);
         bobSprite.setSize(BOB_WIDTH, BOB_HEIGHT);

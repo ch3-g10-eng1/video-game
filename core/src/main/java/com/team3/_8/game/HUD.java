@@ -21,7 +21,7 @@ public class HUD {
 
     public HUD(Batch HUDbatch) {
         this.HUDbatch = HUDbatch;
-        this.keycard = new Texture("Keycard.png");
+        this.keycard = new Texture("keycard.png");
         this.pause = new Texture("libgdx.png");
     }
 
@@ -57,6 +57,7 @@ public class HUD {
             }
         }
     }
+
 
     public void pauseScreen(BitmapFont font, Viewport viewport){
         this.HUDbatch.begin();
