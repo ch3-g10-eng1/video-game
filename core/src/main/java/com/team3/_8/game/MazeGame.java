@@ -64,11 +64,18 @@ public class MazeGame extends ApplicationAdapter {
     // The creation of the keycard entity
     private CollectableEntity keycard;
 
+    // Evil bob sprite
+    private Sprite evilBobSprite;
+    //Evil bob collidable entity
+    private EvilBob evilBob;
+
     // Map
     private Map maze;
 
+
     // Boolean array to see if Bob has hit a wall, and what wall he has hit
-    private boolean[] movement_halter;
+    // Unused?
+    // private boolean[] movement_halter;
 
     @Override
     public void create() {
@@ -90,8 +97,13 @@ public class MazeGame extends ApplicationAdapter {
         bobSprite.setPosition(100,500);
         bobSprite.setSize(BOB_WIDTH, BOB_HEIGHT);
 
-
         bob = new Bob(bobSprite, 60, -3); //The actual creation of Bob, he has arrived
+
+        // Creation of evil bob character
+        evilBobSprite = new Sprite(atlas.findRegion("evil-bob"));
+        evilBobSprite.setPosition(500,500);
+        evilBobSprite.setSize(2*BOB_WIDTH, 2*BOB_HEIGHT);
+        evilBob = new EvilBob(evilBobSprite, 0);
 
         // Creation of the keycard
         keycardTexture = new Texture("keycard.png");
@@ -100,6 +112,7 @@ public class MazeGame extends ApplicationAdapter {
         keycardSprite.setSize(BOB_WIDTH * 2, BOB_HEIGHT * 2);
         keycard = new CollectableEntity(keycardSprite, 0, "Keycard");
         System.out.println(keycard.collisionBox.width+ ","+ keycard.collisionBox.height);
+
 
         // Making the camera and the viewport
         camera = new OrthographicCamera(30, 30 * (w/h));
@@ -118,6 +131,8 @@ public class MazeGame extends ApplicationAdapter {
         viewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
 
         batch = new SpriteBatch();
+
+        
 
         //Creation of the HUD
         HUDBatch = new SpriteBatch();
@@ -147,6 +162,7 @@ public class MazeGame extends ApplicationAdapter {
 
         if (!paused){
             boolean[] movement_halter = maze.hitsWall(bob, Gdx.graphics.getDeltaTime());
+            evilBob.collision(bob); // Add return value to movement halter to holt player movement over character
             bob.move(movement_halter);
             timer += Gdx.graphics.getDeltaTime();
         }
@@ -160,12 +176,11 @@ public class MazeGame extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.combined);
 
         // Sprite batch drawing
-        batch.begin();
-
-
-
-        bob.draw(batch);
         maze.renderMap(camera);
+        
+        batch.begin();
+        evilBob.draw(batch, 1000, 1050);
+        bob.draw(batch);
         keycard.draw(batch);
 
 
@@ -213,5 +228,6 @@ public class MazeGame extends ApplicationAdapter {
         batch.dispose();
         image.dispose();
         bob.dispose();
+        evilBob.dispose();
     }
 }

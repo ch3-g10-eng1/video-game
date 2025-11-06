@@ -22,7 +22,7 @@ import java.util.LinkedList;
 public class Map {
 	
 	private TiledMap map; // the map
-	private TiledMapRenderer map_render; // the rendere 
+	private TiledMapRenderer map_render; // the render 
 	private LinkedList<MapObjects> collidable_objects;
 	private int[] visible_layers; 
 	// index of every map layer, set to its own index if it should be visible. 

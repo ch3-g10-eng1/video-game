@@ -12,7 +12,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
  * @author Lenny
  */
 public class gameController {
-
+    // Enables developer features (e.g. camera zooming)
+    static boolean developerMode = true;
 
     /**
      * This method is used to format the time in minutes and seconds
@@ -40,10 +41,10 @@ public class gameController {
      */
     public static boolean handleInput(OrthographicCamera camera, boolean paused) {
         //When Q is pressed, the camera is zoomed in, and zoomed out when E is pressed
-        if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.MINUS) && developerMode) {
             camera.zoom += 0.02f;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.EQUALS) && developerMode) {
             camera.zoom -= 0.02f;
         }
 
