@@ -75,7 +75,7 @@ public class MazeGame extends ApplicationAdapter {
 
     // Boolean array to see if Bob has hit a wall, and what wall he has hit
     // Unused?
-    // private boolean[] movement_halter;
+    private boolean[] movement_halter;
 
     @Override
     public void create() {
@@ -161,7 +161,7 @@ public class MazeGame extends ApplicationAdapter {
         }
 
         if (!paused){
-            boolean[] movement_halter = maze.hitsWall(bob, Gdx.graphics.getDeltaTime());
+            movement_halter = maze.hitsWall(bob, Gdx.graphics.getDeltaTime());
             evilBob.collision(bob); // Add return value to movement halter to holt player movement over character
             bob.move(movement_halter);
             timer += Gdx.graphics.getDeltaTime();
