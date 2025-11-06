@@ -320,7 +320,7 @@
  <objectgroup id="5" name="Doors">
   <object id="206" x="1200" y="672.333" width="20" height="58.6667"/>
   <object id="207" x="966" y="438.667" width="68.6667" height="20"/>
-  <object id="208" x="969.5" y="878.5" width="62" height="21"/>
+  <object id="208" x="969.5" y="878.5" width="62" height="23.6667"/>
   <object id="209" x="1100.5" y="986.5" width="19" height="64"/>
   <object id="210" x="461" y="983" width="19" height="67"/>
   <object id="213" x="319.75" y="200" width="60" height="19.25"/>

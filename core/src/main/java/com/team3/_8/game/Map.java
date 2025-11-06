@@ -90,7 +90,8 @@ public class Map {
 		double wall_Y;
 		Rectangle wall_collision = null; // collision box of the map
 		// distance bob moves every time function is called (+allowance for changes to delta)
-        float effective_speed = entity.getSpeed() * delta *2; 
+		System.out.println(delta);
+        float effective_speed = entity.getSpeed() * delta * 3; 
 
 		for (MapObjects collidable_layer : collidable_objects) {
 			for (RectangleMapObject wall : collidable_layer.getByType(RectangleMapObject.class)) {
