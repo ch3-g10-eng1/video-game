@@ -105,7 +105,7 @@ public class MazeGame extends ApplicationAdapter {
         timer = 0f; // The timer variable
 
         String[] collidable_layers = {"Collision", "Doors"};
-        maze = new Map("Map/CSE_map.tmx", collidable_layers);
+        maze = new Map("Map/CSE_map.tmx", collidable_layers, "WinDoors");
 
         // Start of Bob's creation - the birth of Bob
         // bob = createSprite("atlas/bob.atlas", "front-bob", 100, 500, BOB_WIDTH, BOB_HEIGHT, Bob::new);
@@ -163,6 +163,9 @@ public class MazeGame extends ApplicationAdapter {
         else if (active_screen == 2) {
             tutorialScreenRender();
         }
+        else if (active_screen == 3) {
+            winScreenRender();
+        }
     }
 
     /**
@@ -219,13 +222,16 @@ public class MazeGame extends ApplicationAdapter {
         if (paused){
             hud.pauseScreen(font, viewport);
         }
-
-
+        if (maze.HitsWinLayer(bob)) {
+            active_screen = 3;
+        }
         // The code to check if the game has ended
         if (timer >= 300){
             paused = true;
             isEnded = true;
         }
+
+
     }
 
     private void titleScreenRender() {
@@ -265,6 +271,19 @@ public class MazeGame extends ApplicationAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             active_screen = 0;
         }
+    }
+
+    private void winScreenRender() {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clears the screen
+        batch.setProjectionMatrix(camera.combined);
+
+        camera.position.set(0,0,0);
+        camera.update();
+
+        batch.begin();
+        font.draw(batch, "Well done!!", 0, 30);;
+        font.draw(batch, "You won the game", 0, 0);;
+        batch.end();
     }
 
     @Override
