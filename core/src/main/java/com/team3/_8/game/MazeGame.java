@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -97,7 +98,7 @@ public class MazeGame extends ApplicationAdapter {
 
     // Animation for campus security
     private Animation<TextureRegion> campusSecurity;
-    private CampusSecurity test[] = new CampusSecurity[5];
+    private CampusSecurity allCampusSecuritySprites[] = new CampusSecurity[5];
     boolean created;
 
     // Boolean array to see if Bob has hit a wall, and what wall he has hit
@@ -179,6 +180,9 @@ public class MazeGame extends ApplicationAdapter {
         else if (active_screen == 3) {
             winScreenRender();
         }
+        else if (active_screen == 4) {
+            loseScreenRender();
+        }
     }
 
     /**
@@ -217,15 +221,13 @@ public class MazeGame extends ApplicationAdapter {
         bob.draw(batch);
         keycard.draw(batch);
 
-
         if (created){
             int mod = 0;
             for (int i = 0; i < 5; i++){
-                test[i].draw(batch, 870+ mod, 1150, maze.hitsWall(test[i], Gdx.graphics.getDeltaTime()));
+                allCampusSecuritySprites[i].draw(batch, 870+ mod, 1150, maze.hitsWall(allCampusSecuritySprites[i], Gdx.graphics.getDeltaTime()));
                 mod += 35;
             }
         }
-
 
         batch.end();
 
@@ -240,6 +242,7 @@ public class MazeGame extends ApplicationAdapter {
         }
         // The code to check if the game has ended
         if (timer >= 300){
+            active_screen = 4;
             paused = true;
             isEnded = true;
         }
@@ -254,10 +257,18 @@ public class MazeGame extends ApplicationAdapter {
         camera.position.set(0,0,0);
         camera.update();
 
+        GlyphLayout topLayout = new GlyphLayout(font, "Welcome to ... The Life of Bob");
+        GlyphLayout centreLayout = new GlyphLayout(font, "Press space to start");
+        GlyphLayout bottomLayout = new GlyphLayout(font, "Press T to see tutorial");
+        GlyphLayout[] textLayout = {topLayout, centreLayout, bottomLayout};
+        Map<String, Float> layoutValues = positionText(textLayout, false, false);
+
         batch.begin();
-        font.draw(batch, "This is a game.", 0, 30);;
-        font.draw(batch, "Press space to start", 0, 0);;
-        font.draw(batch, "Press T to see turorial", 0, -30);;
+
+        // draw centered text
+        font.draw(batch, topLayout, layoutValues.get("x1"), layoutValues.get("y1"));
+        font.draw(batch, centreLayout, layoutValues.get("x2"), layoutValues.get("y2"));
+        font.draw(batch, bottomLayout, layoutValues.get("x3"), layoutValues.get("y3"));
 
         batch.end();
 
@@ -276,9 +287,13 @@ public class MazeGame extends ApplicationAdapter {
         camera.position.set(0,0,0);
         camera.update();
 
+        GlyphLayout topLayout = new GlyphLayout(font, "Press ESC to go back");
+        GlyphLayout[] textLayout = {topLayout};
+        Map<String, Float> layoutValues = positionText(textLayout, true, false);
+
         batch.begin();
         tutorial_sprite.draw(batch);
-        font.draw(batch, "Press ESC to go back", -100, 100);;
+        font.draw(batch, topLayout, layoutValues.get("x1"), layoutValues.get("y1"));
 
         batch.end();
 
@@ -294,10 +309,93 @@ public class MazeGame extends ApplicationAdapter {
         camera.position.set(0,0,0);
         camera.update();
 
+        // Prepare text layouts for measurement
+        GlyphLayout topLayout = new GlyphLayout(font, "Well done!!");
+        GlyphLayout bottomLayout = new GlyphLayout(font, "You won the game");
+        GlyphLayout[] textLayout = {topLayout, bottomLayout};
+
+        Map<String, Float> layoutValues = positionText(textLayout, false, false);
+
         batch.begin();
-        font.draw(batch, "Well done!!", 0, 30);;
-        font.draw(batch, "You won the game", 0, 0);;
+
+        // draw centered text
+        font.draw(batch, topLayout, layoutValues.get("x1"), layoutValues.get("y1"));
+        font.draw(batch, bottomLayout, layoutValues.get("x2"), layoutValues.get("y2"));
         batch.end();
+    }
+
+    private void loseScreenRender() {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clears the screen
+        batch.setProjectionMatrix(camera.combined);
+
+        camera.position.set(0,0,0);
+        camera.update();
+
+        // Prepare text layouts for measurement
+        GlyphLayout topLayout = new GlyphLayout(font, "Time's Up!");
+        GlyphLayout bottomLayout = new GlyphLayout(font, "You lost the game :(");
+        GlyphLayout[] textLayout = {topLayout, bottomLayout};
+        Map<String, Float> layoutValues = positionText(textLayout, false, false);
+
+        // centre the bob sprite
+        bobSprite.setPosition(layoutValues.get("centreX") - bobSprite.getWidth() / 2f, (layoutValues.get("centreY") + 20f) - bobSprite.getHeight() / 2f);
+        bobSprite.setSize(2*BOB_WIDTH, 2*BOB_HEIGHT);
+        bob.setAnimation("Squash");
+
+        batch.begin();
+
+        // Runs each of the 23 animation frames
+        for (int i = 0; i < 23; i++){
+            movement_halter = new boolean[]{true, true, true, true};
+            bob.move(movement_halter);
+            bob.draw(batch);
+        }
+
+        // draw centered text
+        font.draw(batch, topLayout, layoutValues.get("x1"), layoutValues.get("y1"));
+        font.draw(batch, bottomLayout, layoutValues.get("x2"), layoutValues.get("y2"));
+        
+        batch.end();
+    }
+
+    /**
+     * Positions text passed in to format nicely on the screen
+     * @param textLayout Text objects to position
+     * @param top Position top
+     * @param bottom Position bottom
+     * If top and bottom are both false, defaults to centre
+     * @return map x,y values for positioning. Accessed via x1, x2 etc.
+     */
+    private Map<String, Float> positionText(GlyphLayout textLayout[], boolean top, boolean bottom){
+        Map<String, Float> returnValues = new HashMap<>();
+        int numLines = textLayout.length;
+        float spacing = 20f;
+
+        float offset;
+        if (top){
+            offset = 120f;
+        }
+        else if (bottom){
+            offset = -120f;
+        }
+        else{
+            offset = (numLines-1)*spacing;
+        }
+
+        // centre of the screen in world coordinates
+        float centerX = camera.position.x;
+        float centerY = camera.position.y;
+        returnValues.put("centreX", centerX);
+        returnValues.put("centreY", centerY);
+
+        for (int i = 1; i <= numLines; i++){
+            float x = centerX - textLayout[i-1].width / 2f;
+            float y = centerY - i*spacing + offset;
+            returnValues.put(("x" + String.valueOf(i)), x);
+            returnValues.put(("y" + String.valueOf(i)), y);
+        }
+
+        return returnValues;
     }
 
     @Override
@@ -312,8 +410,8 @@ public class MazeGame extends ApplicationAdapter {
         evilBob.dispose();
         font.dispose();
         maze.dispose();
-        for (int i = 0; i<test.length; ++i){
-            if (created){test[i].dispose();}
+        for (int i = 0; i<allCampusSecuritySprites.length; ++i){
+            if (created){allCampusSecuritySprites[i].dispose();}
         }
     }
 
@@ -332,8 +430,8 @@ public class MazeGame extends ApplicationAdapter {
     private void handleInteraction() {
         if (evilBobReturnData.containsKey("Create Campus Security")){
             if (evilBobReturnData.get("Create Campus Security") && !created){
-                for (int i = 0; i < test.length; i++){
-                test[i] = createSprite("atlas/security_geese.atlas", "walking", 500, 500, 2*BOB_WIDTH, 2*BOB_HEIGHT, 10, CampusSecurity::new);
+                for (int i = 0; i < allCampusSecuritySprites.length; i++){
+                allCampusSecuritySprites[i] = createSprite("atlas/security_geese.atlas", "walking", 500, 500, 2*BOB_WIDTH, 2*BOB_HEIGHT, 10, CampusSecurity::new);
             }
             created = true;
             }
@@ -354,7 +452,7 @@ public class MazeGame extends ApplicationAdapter {
 
         // Checks for collision with CampusSecurity & resets player to start if so
         if (created){
-            for (CampusSecurity sec : test){
+            for (CampusSecurity sec : allCampusSecuritySprites){
                 campusSecurityReturnData = sec.collision(bob);
                 if (campusSecurityReturnData.containsKey("Reset Player Position")){
                     if (campusSecurityReturnData.get("Reset Player Position")){

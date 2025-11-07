@@ -31,6 +31,7 @@ public class Bob extends CollidableEntity {
     // Used to control animation time
     float stateTime = 0f;
     private String animationOverride = "";
+    private boolean reset = false;
 
     public Bob(Sprite sprite, float speed){
         super(sprite, speed);
@@ -104,6 +105,13 @@ public class Bob extends CollidableEntity {
         this.collisionBox.setY(this.sprite.getY() - collision__size_change);
 
         // Sets bob sprite to run the animation configured above
+        if (animationOverride.equals("Squash")){
+            if (!reset){
+                reset = true;
+                stateTime = 0f;
+            }
+            current_animation = bob_animations.get("Squash").getKeyFrame(stateTime, true);
+        }
         sprite.setRegion(current_animation);
     }
 
@@ -126,7 +134,7 @@ public class Bob extends CollidableEntity {
         bob_animations.put("Front", new Animation<TextureRegion>(0.5f, frontFrames));
         bob_animations.put("Right", new Animation<TextureRegion>(0.5f, rightFrames));
         bob_animations.put("Up", new Animation<TextureRegion>(0.5f, upFrames));
-        bob_animations.put("Squash", new Animation<TextureRegion>(0.5f, squashFrames));
+        bob_animations.put("Squash", new Animation<TextureRegion>(5f, squashFrames));
         bob_animations.put("RocketLeft", new Animation<TextureRegion>(0.2f, rocketFrames));
 
         // Flips right into left frames
