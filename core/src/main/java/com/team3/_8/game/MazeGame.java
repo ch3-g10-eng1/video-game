@@ -76,6 +76,10 @@ public class MazeGame extends ApplicationAdapter {
     //Evil bob collidable entity
     private EvilBob evilBob;
 
+    //tutorial image texture and sprite
+    private Texture tutorial_texture;
+    private Sprite tutorial_sprite;
+
     // Map
     private Maze maze;
 
@@ -129,6 +133,11 @@ public class MazeGame extends ApplicationAdapter {
         keycardSprite.setPosition(20,20);
         keycardSprite.setSize(BOB_WIDTH * 2, BOB_HEIGHT * 2);
         keycard = new CollectableEntity(keycardSprite, 0, "Keycard");
+        tutorial_texture = new Texture("tutorial_img.png");
+        tutorial_sprite  = new Sprite(tutorial_texture);
+        tutorial_sprite.setSize(310, 180);
+        tutorial_sprite.setPosition(-150, -100);
+
 
 
         // Making the camera and the viewport
@@ -268,7 +277,8 @@ public class MazeGame extends ApplicationAdapter {
         camera.update();
 
         batch.begin();
-
+        tutorial_sprite.draw(batch);
+        font.draw(batch, "Press ESC to go back", -100, 100);;
 
         batch.end();
 
