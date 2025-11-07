@@ -10,7 +10,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Timer;
+import java.util.HashMap;
+
+import java.util.Random;
 
 public class EvilBob extends InteractableEntity {
     private TextureAtlas atlas;
@@ -29,7 +31,17 @@ public class EvilBob extends InteractableEntity {
     private String[] script = {"You dare\nenter my realm", "With a stolen\nkeycard", "Give it to me\nor face the\nconsequence", "Y: Give Keycard\nN: Keep Keycard"};
     
     // Used to control animation time
-    float stateTime = 0f;
+    private float stateTime = 0f;
+
+    private CampusSecurity test[] = new CampusSecurity[5];
+    boolean created;
+
+    private int tempX;
+    private int tempY;
+    private Boolean hasKeycard = false;
+
+    HashMap<String, Boolean> returnData = new HashMap<>();
+
 
     public EvilBob(Sprite sprite, float speed) {
         super(sprite, speed);
@@ -38,43 +50,57 @@ public class EvilBob extends InteractableEntity {
     }
 
     @Override
-    public void startInteraction() {
+    public HashMap<String, Boolean> startInteraction() {
         boolean skip = false;
         if (!textBubbleVisible){
             textBubbleVisible = textBubble.hideShow();
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.E) || (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && conversationPointer > 0) && !reset){
-            textBubble.setText(script[conversationPointer]);
-            conversationPointer += 1;
-            
-            if (conversationPointer > 3) {
-                conversationPointer = 0;
-                reset = true;
-                skip = true;
+            if (hasKeycard){
+                textBubble.setText(script[conversationPointer]);
+                conversationPointer += 1;
+                
+                if (conversationPointer > 3) {
+                    conversationPointer = 0;
+                    reset = true;
+                    skip = true;
+                }
+            }
+            else{
+                textBubble.setText("Go Away!\nYou're missing\nmy keycard");
             }
         }
 
         if (reset && !skip){ 
             if (Gdx.input.isKeyJustPressed(Input.Keys.Y)){
                 textBubble.setText("Get out of here!");
+                returnData.put("Enable Rocket Bob", true);
+                returnData.put("Remove Keycard", true);
+                setHasKeycard(false);
                 reset = false;
             }
             else if (Gdx.input.isKeyJustPressed(Input.Keys.N)){
                 textBubble.setText("Release Security!");
+
+                returnData.put("Create Campus Security", true);
                 reset = false;
             }
         }
 
+        return returnData;
+
     }
 
     @Override
-    public void stopInteraction() {
+    public HashMap<String, Boolean> stopInteraction() {
         if (textBubbleVisible){
             conversationPointer = 0;
             textBubble.setText("Interact: E");
             textBubbleVisible = textBubble.hideShow();
         }
+
+        return returnData;
     }
 
     public void draw(SpriteBatch batch, float x, float y) {
@@ -114,7 +140,7 @@ public class EvilBob extends InteractableEntity {
     /**
      * loads the animation files from atlas into the animation variables
      */
-    public void loadTextures(){
+    private void loadTextures(){
         // Loads sprites from Texture atlas
         atlas = new TextureAtlas(Gdx.files.internal("assets\\atlas\\bob.atlas"));
 
@@ -123,6 +149,10 @@ public class EvilBob extends InteractableEntity {
 
         // Creates animation object
         this.evilBob = new Animation<TextureRegion>(0.5f, frames);
+    }
+
+    public void setHasKeycard(Boolean hasKeycard){
+        this.hasKeycard = hasKeycard;
     }
 
     @Override

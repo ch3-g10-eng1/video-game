@@ -30,6 +30,7 @@ public class Bob extends CollidableEntity {
 
     // Used to control animation time
     float stateTime = 0f;
+    private String animationOverride = "";
 
     public Bob(Sprite sprite, float speed){
         super(sprite, speed);
@@ -63,13 +64,24 @@ public class Bob extends CollidableEntity {
               && !movement_halter[0]) {
             this.sprite.translateX(this.speed * delta);
             // Sets sprite animation to right
-            current_animation = bob_animations.get("Right").getKeyFrame(stateTime, true);
+            if (animationOverride.length() == 0){
+                current_animation = bob_animations.get("Right").getKeyFrame(stateTime, true);
+            }
+            else {
+                current_animation = bob_animations.get("RocketRight").getKeyFrame(stateTime, true);
+            }
         }
         else if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) ||
                   (Gdx.input.isKeyPressed(Input.Keys.A)))
                    && !movement_halter[2]) {
             this.sprite.translateX(-speed * delta);
-            current_animation = bob_animations.get("Left").getKeyFrame(stateTime, true);
+
+            if (animationOverride.length() == 0){
+                current_animation = bob_animations.get("Left").getKeyFrame(stateTime, true);
+            }
+            else {
+                current_animation = bob_animations.get("RocketLeft").getKeyFrame(stateTime, true);
+            }
         }
 
         //Y-axis
@@ -79,6 +91,7 @@ public class Bob extends CollidableEntity {
             this.sprite.translateY(speed * delta);
             current_animation = bob_animations.get("Up").getKeyFrame(stateTime, true);
         }
+
         else if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) ||
                 (Gdx.input.isKeyPressed(Input.Keys.S)))
                 && !movement_halter[1]) {
@@ -114,16 +127,14 @@ public class Bob extends CollidableEntity {
         bob_animations.put("Right", new Animation<TextureRegion>(0.5f, rightFrames));
         bob_animations.put("Up", new Animation<TextureRegion>(0.5f, upFrames));
         bob_animations.put("Squash", new Animation<TextureRegion>(0.5f, squashFrames));
-        bob_animations.put("Rocket", new Animation<TextureRegion>(0.5f, rocketFrames));
+        bob_animations.put("RocketLeft", new Animation<TextureRegion>(0.2f, rocketFrames));
 
         // Flips right into left frames
-        Array<TextureRegion> leftFrames = new Array<>();
-        for (TextureRegion frame: rightFrames){
-            TextureRegion temp_frame = new TextureRegion(frame);
-            temp_frame.flip(true, false);
-            leftFrames.add(temp_frame);
-        }
+        Array<TextureRegion> leftFrames = flipFrames(rightFrames, true, false);
         bob_animations.put("Left", new Animation<TextureRegion>(0.5f, leftFrames));
+
+        Array<TextureRegion> RocketRight = flipFrames(rocketFrames, true, false);
+        bob_animations.put("RocketRight", new Animation<TextureRegion>(0.5f, RocketRight));
     }
 
     /**
@@ -146,5 +157,24 @@ public class Bob extends CollidableEntity {
 
     public Set<String> getInventory(){
         return this.inventory;
+    }
+
+    public void setAnimation(String animationName){
+        this.animationOverride = animationName;
+    }
+
+    public void setSpeed(Integer speed){
+        this.speed = speed;
+    }
+
+    private Array<TextureRegion> flipFrames(Array<TextureAtlas.AtlasRegion> frameArray, Boolean flipX, Boolean flipY){
+        // Flips frames
+        Array<TextureRegion> frames = new Array<>();
+        for (TextureRegion frame: frameArray){
+            TextureRegion temp_frame = new TextureRegion(frame);
+            temp_frame.flip(flipX, flipY);
+            frames.add(temp_frame);
+        }
+        return frames;
     }
 }

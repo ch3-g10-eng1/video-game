@@ -1,6 +1,8 @@
 package com.team3._8.game;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import java.util.HashMap;
+
 
 /**
  * An object to create an entity which can be interacted with on collision
@@ -13,27 +15,30 @@ abstract class InteractableEntity extends CollidableEntity{
      * @param speed
      */
 
+    HashMap<String, Boolean> returnData = new HashMap<>();
+
     public InteractableEntity(Sprite sprite, float speed) {
         super(sprite, speed);
     }
 
-    public boolean collision(Bob bob){
+    public HashMap<String, Boolean> collision(Bob bob){
         /**
          * Used to check for collision & runs interaction based on collision
          */
         if (bob.getCollisionBox().overlaps(this.collisionBox)) {
-            // System.out.println("Collision");
-            startInteraction();
-            return true;
+            // Returns any data from the interaction back to the call instance
+            returnData = startInteraction();
+            // return true;
         }
         else {
-            stopInteraction();
-            return false;
+            returnData = stopInteraction();
+            // return false;
         }
+        return returnData;
     }
 
-    public abstract void startInteraction();
-    public abstract void stopInteraction();
+    public abstract HashMap<String, Boolean> startInteraction();
+    public abstract HashMap<String, Boolean> stopInteraction();
     
     public abstract void draw();
 
