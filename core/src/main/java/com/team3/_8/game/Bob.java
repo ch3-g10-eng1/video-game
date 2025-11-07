@@ -90,14 +90,26 @@ public class Bob extends CollidableEntity {
              (Gdx.input.isKeyPressed(Input.Keys.W)))
               && !movement_halter[3]) {
             this.sprite.translateY(speed * delta);
-            current_animation = bob_animations.get("Up").getKeyFrame(stateTime, true);
+
+            if (animationOverride.length() == 0){
+                current_animation = bob_animations.get("Up").getKeyFrame(stateTime, true);
+            }
+            else {
+                current_animation = bob_animations.get("RocketUp").getKeyFrame(stateTime, true);
+            }
         }
 
         else if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) ||
                 (Gdx.input.isKeyPressed(Input.Keys.S)))
                 && !movement_halter[1]) {
             this.sprite.translateY(-speed * delta);
-            current_animation = bob_animations.get("Front").getKeyFrame(stateTime, true);
+
+            if (animationOverride.length() == 0){
+                current_animation = bob_animations.get("Front").getKeyFrame(stateTime, true);
+            }
+            else {
+                current_animation = bob_animations.get("RocketDown").getKeyFrame(stateTime, true);
+            }
         }
 
         // Sets the collision box of bob after he moves
@@ -128,21 +140,26 @@ public class Bob extends CollidableEntity {
         Array<TextureAtlas.AtlasRegion> rightFrames = atlas.findRegions("side-bob");
         Array<TextureAtlas.AtlasRegion> upFrames = atlas.findRegions("up-bob");
         Array<TextureAtlas.AtlasRegion> squashFrames = atlas.findRegions("squash-bob");
-        Array<TextureAtlas.AtlasRegion> rocketFrames = atlas.findRegions("rocket-bob");
+        Array<TextureAtlas.AtlasRegion> rocketSideFrames = atlas.findRegions("rocket-side-bob");
+        Array<TextureAtlas.AtlasRegion> rocketUpFrames = atlas.findRegions("rocket-up-bob");
 
         // Creates animation object
         bob_animations.put("Front", new Animation<TextureRegion>(0.5f, frontFrames));
         bob_animations.put("Right", new Animation<TextureRegion>(0.5f, rightFrames));
         bob_animations.put("Up", new Animation<TextureRegion>(0.5f, upFrames));
         bob_animations.put("Squash", new Animation<TextureRegion>(5f, squashFrames));
-        bob_animations.put("RocketLeft", new Animation<TextureRegion>(0.2f, rocketFrames));
+        bob_animations.put("RocketLeft", new Animation<TextureRegion>(0.2f, rocketSideFrames));
+        bob_animations.put("RocketUp", new Animation<TextureRegion>(0.2f, rocketUpFrames));
 
         // Flips right into left frames
         Array<TextureRegion> leftFrames = flipFrames(rightFrames, true, false);
         bob_animations.put("Left", new Animation<TextureRegion>(0.5f, leftFrames));
 
-        Array<TextureRegion> RocketRight = flipFrames(rocketFrames, true, false);
+        Array<TextureRegion> RocketRight = flipFrames(rocketSideFrames, true, false);
         bob_animations.put("RocketRight", new Animation<TextureRegion>(0.5f, RocketRight));
+
+        Array<TextureRegion> RocketDown = flipFrames(rocketUpFrames, false, true);
+        bob_animations.put("RocketDown", new Animation<TextureRegion>(0.5f, RocketDown));
     }
 
     /**
