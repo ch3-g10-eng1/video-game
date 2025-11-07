@@ -111,7 +111,7 @@ public class MazeGame extends ApplicationAdapter {
         // bob = createSprite("atlas/bob.atlas", "front-bob", 100, 500, BOB_WIDTH, BOB_HEIGHT, Bob::new);
         atlas = new TextureAtlas("atlas/bob.atlas");
         bobSprite = new Sprite(atlas.findRegion("front-bob"));
-        bobSprite.setPosition(1000,1000);
+        bobSprite.setPosition(100,500);
         bobSprite.setSize(BOB_WIDTH, BOB_HEIGHT);
         bob = new Bob(bobSprite, 60, -3); //The actual creation of Bob, he has arrived
 
@@ -296,7 +296,7 @@ public class MazeGame extends ApplicationAdapter {
                 campusSecurityReturnData = sec.collision(bob);
                 if (campusSecurityReturnData.containsKey("Reset Player Position")){
                     if (campusSecurityReturnData.get("Reset Player Position")){
-                        bobSprite.setPosition(1000, 1000);
+                        bobSprite.setPosition(100, 500);
                     }
                 };
             }

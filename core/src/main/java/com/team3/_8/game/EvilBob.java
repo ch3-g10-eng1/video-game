@@ -28,7 +28,9 @@ public class EvilBob extends InteractableEntity {
 
     private int conversationPointer = 0;
     private boolean reset = false;
-    private String[] script = {"You dare\nenter my realm", "With a stolen\nkeycard", "Give it to me\nor face the\nconsequence", "Y: Give Keycard\nN: Keep Keycard"};
+    private String[] script = {"You dare\nenter my realm\nNext: E", "With a stolen\nkeycard\n" + //
+                "Next: E", "Give it to me\nor face the\nconsequence\n" + //
+                                        "Next: E", "Y: Give Keycard\nN: Keep Keycard"};
     
     // Used to control animation time
     private float stateTime = 0f;
