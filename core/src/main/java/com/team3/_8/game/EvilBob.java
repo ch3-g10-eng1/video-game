@@ -158,10 +158,4 @@ public class EvilBob extends InteractableEntity {
         this.hasKeycard = hasKeycard;
     }
 
-    @Override
-    public void draw() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'draw'");
-    }
-
 }
