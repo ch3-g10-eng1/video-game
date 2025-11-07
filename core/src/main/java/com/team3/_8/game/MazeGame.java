@@ -160,6 +160,9 @@ public class MazeGame extends ApplicationAdapter {
         else if (active_screen == 1) {
             gameScreenRender();
         }
+        else if (active_screen == 2) {
+            tutorialScreenRender();
+        }
     }
 
     /**
@@ -235,10 +238,32 @@ public class MazeGame extends ApplicationAdapter {
         batch.begin();
         font.draw(batch, "This is a game.", 0, 30);;
         font.draw(batch, "Press space to start", 0, 0);;
+        font.draw(batch, "Press T to see turorial", 0, -30);;
+
         batch.end();
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             active_screen = 1;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.T)) {
+            active_screen = 2;
+        }
+    }
+
+    private void tutorialScreenRender() {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clears the screen
+        batch.setProjectionMatrix(camera.combined);
+
+        camera.position.set(0,0,0);
+        camera.update();
+
+        batch.begin();
+
+
+        batch.end();
+
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            active_screen = 0;
         }
     }
 
