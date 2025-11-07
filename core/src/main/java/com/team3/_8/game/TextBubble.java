@@ -14,7 +14,7 @@ public class TextBubble {
     private float width;
     private float height;
 
-    public TextBubble(Texture bubbleTexture, BitmapFont font, float height, float width){
+    public TextBubble(Texture bubbleTexture, BitmapFont font, float width, float height){
         this.bubbleSprite = new Sprite(bubbleTexture);
         this.font = font;
         this.width = width;
@@ -33,11 +33,11 @@ public class TextBubble {
 
     public void draw(SpriteBatch batch, float x, float y){
         if (visible) {
-            bubbleSprite.setPosition(x-40, y-25);
-            bubbleSprite.setSize(width+10, height+10);
+            bubbleSprite.setPosition(x, y);
+            bubbleSprite.setSize(width, height);
             bubbleSprite.draw(batch);
             font.setColor(Color.BLACK);
-            font.draw(batch, text, x+7, y+89);
+            font.draw(batch, text, x+(width * (30f/170f)), y+(height * (95f/120f)));
             font.setColor(Color.WHITE);
         }
     }

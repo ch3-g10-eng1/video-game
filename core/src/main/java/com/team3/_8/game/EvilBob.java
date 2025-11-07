@@ -2,6 +2,7 @@ package com.team3._8.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -12,8 +13,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Array;
 import java.util.HashMap;
 import java.util.Map;
-
-import java.util.Random;
 
 public class EvilBob extends InteractableEntity {
     private TextureAtlas atlas;
@@ -29,9 +28,7 @@ public class EvilBob extends InteractableEntity {
 
     private int conversationPointer = 0;
     private boolean reset = false;
-    private String[] script = {"You dare\nenter my realm\nNext: E", "With a stolen\nkeycard\n" + //
-                "Next: E", "Give it to me\nor face the\nconsequence\n" + //
-                                        "Next: E", "Y: Give Keycard\nN: Keep Keycard"};
+    private String[] script = {"You dare\nenter my realm", "With a stolen\nkeycard", "Give it to me\nor face the\nconsequence", "Y: Give Keycard\nN: Keep Keycard"};
 
     // Used to control animation time
     private float stateTime = 0f;
@@ -120,7 +117,11 @@ public class EvilBob extends InteractableEntity {
             this.y = y;
         }
 
-        textBubble.draw(batch, 1000+10, 1050+10);
+        if (conversationPointer > 0){
+            font.setColor(Color.WHITE);
+            font.draw(batch, "Next: E", 1105,1085);
+        }
+        textBubble.draw(batch, 985, 1055);
         sprite.draw(batch);
     }
 
@@ -135,7 +136,7 @@ public class EvilBob extends InteractableEntity {
         font =  new BitmapFont();
 
         bubble = new Texture("speech_bubble.png");
-        textBubble = new TextBubble(bubble, font, 150, 190);
+        textBubble = new TextBubble(bubble, font, 170, 120);
         textBubble.setText("Interact: E");
     }
 
