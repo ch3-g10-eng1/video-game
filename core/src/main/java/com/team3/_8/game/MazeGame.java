@@ -23,8 +23,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class MazeGame extends ApplicationAdapter {
-    //PLACEHOLDERS!!!!!!!!!!!!!!!!!!!
-    private Texture image;
 
     // constants in arbitrary units for the camera
     static final int WORLD_WIDTH = 200;
