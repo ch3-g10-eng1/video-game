@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.MapObject;
 // import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -30,6 +31,7 @@ public class Map {
 	// index of every map layer, set to its own index if it should be visible. 
 	// layer 0 must always be visible
 	// needs to be int[] because the MapRenderer.render method is shit
+	private MapObject win_layer;
 
     /**
      * constructor for map that defines a map, renderer, visible layers and its collision objects
@@ -37,7 +39,7 @@ public class Map {
 	 * @param visible_layer_names of the layers to be made visible
      * @param collision_layer name of the object layer where collision items are found
      */
-	public Map(String filename, String[] visible_layer_names, String[] collision_layers) {
+	public Map(String filename, String[] visible_layer_names, String[] collision_layers, String progress_layer) {
 		map = new TmxMapLoader().load(filename);
 		visible_layers = new int[map.getLayers().getCount()];		
 		map_render = new OrthogonalTiledMapRenderer(map);
@@ -50,6 +52,7 @@ public class Map {
 			// add every collision layer to the list
 			collidable_objects.add((map.getLayers().get(layer)).getObjects());
 		}
+		win_layer = map.getLayers().get(progress_layer).getObjects().get(0);
 	}
 
 	/**
@@ -58,8 +61,8 @@ public class Map {
      * @param filename that the map is stored under
      * @param collision_layer name of the object layer where collision items are found
      */
-	public Map(String filename, String[] collision_layers) {
-		this(filename, new String[0], collision_layers);
+	public Map(String filename, String[] collision_layers, String progress_layer) {
+		this(filename, new String[0], collision_layers, progress_layer);
 		for (int index = 0; index < visible_layers.length; index++) {
 			visible_layers[index] = index;
 		}
@@ -171,5 +174,16 @@ public class Map {
 			visible_layers[layer_index] = 0;
 			return true;
 		}
+	}
+
+	public boolean HitsWinLayer(CollidableEntity player) {
+		Rectangle wall_collision = ((RectangleMapObject) win_layer).getRectangle();
+		if (Intersector.overlaps(wall_collision, player.collisionBox)) {
+			return true;
+		}
+		return false;
+	}
+	public void dispose() {
+		map.dispose();
 	}
 }
