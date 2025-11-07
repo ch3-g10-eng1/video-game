@@ -51,7 +51,7 @@ public class CampusSecurity extends InteractableEntity {
      */
     private void loadTextures(){
         // Loads sprites from Texture atlas
-        atlas = new TextureAtlas(Gdx.files.internal("assets\\atlas\\security_geese.atlas"));
+        atlas = new TextureAtlas(Gdx.files.internal("atlas/security_geese.atlas"));
 
         // Loads animation frames
         Array<TextureAtlas.AtlasRegion> frames = atlas.findRegions("walking");
@@ -92,7 +92,7 @@ public class CampusSecurity extends InteractableEntity {
         this.collisionBox.setX(this.sprite.getX());
         this.collisionBox.setY(this.sprite.getY());
     }
-    
+
     private void move(boolean up){
         float delta = Gdx.graphics.getDeltaTime();
 
