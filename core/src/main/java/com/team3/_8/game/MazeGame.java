@@ -41,6 +41,9 @@ public class MazeGame extends ApplicationAdapter {
     private boolean isEnded = false; // Variable to see if the game has ended
     private boolean paused = false; //Variable to see if the game is paused
 
+    // Events counter
+    private int events;
+
     // Timer
     private float timer;
     private BitmapFont font;
@@ -70,6 +73,7 @@ public class MazeGame extends ApplicationAdapter {
 
     // Evil bob sprite
     private Sprite evilBobSprite;
+
     //Evil bob collidable entity
     private EvilBob evilBob;
 
@@ -79,30 +83,32 @@ public class MazeGame extends ApplicationAdapter {
     HashMap<String, Boolean> evilBobReturnData = new HashMap<>();
     HashMap<String, Boolean> campusSecurityReturnData = new HashMap<>();
 
+    // Atlas for the campus security geese
     private TextureAtlas geeseAtlas;
+
     // Campus security sprite
     private Sprite campusSecuritySprite;
+
     // Campus security entity
     private CampusSecurity campusSecurityEntity;
 
+    // Animation for campus security
     private Animation<TextureRegion> campusSecurity;
     private CampusSecurity test[] = new CampusSecurity[5];
     boolean created;
 
     // Boolean array to see if Bob has hit a wall, and what wall he has hit
-    // Unused?
     private boolean[] movement_halter;
 
     @Override
     public void create() {
 
-        //Placeholder Textures!!!
-        image = new Texture("libgdx.png");
-
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
         timer = 0f; // The timer variable
+
+        events = 0;
 
         String[] collidable_layers = {"Collision", "Doors"};
         maze = new Map("Map/CSE_map.tmx", collidable_layers);
@@ -124,7 +130,6 @@ public class MazeGame extends ApplicationAdapter {
         keycardSprite.setPosition(20,20);
         keycardSprite.setSize(BOB_WIDTH * 2, BOB_HEIGHT * 2);
         keycard = new CollectableEntity(keycardSprite, 0, "Keycard");
-        // System.out.println(keycard.collisionBox.width+ ","+ keycard.collisionBox.height);
 
 
         // Making the camera and the viewport
@@ -145,11 +150,11 @@ public class MazeGame extends ApplicationAdapter {
 
         batch = new SpriteBatch();
 
-        
+
 
         //Creation of the HUD
         HUDBatch = new SpriteBatch();
-        hud = new HUD(HUDBatch);
+        hud = new HUD(HUDBatch, events);
     }
 
     @Override
@@ -163,7 +168,7 @@ public class MazeGame extends ApplicationAdapter {
     }
 
     /**
-     * runs the code for the game screen every frame 
+     * runs the code for the game screen every frame
      */
     private void gameScreenRender() {
         paused = gameController.handleInput(camera, paused);// The input for the zoom in and out
@@ -192,7 +197,7 @@ public class MazeGame extends ApplicationAdapter {
 
         // Sprite batch drawing
         maze.renderMap(camera);
-        
+
         batch.begin();
         evilBob.draw(batch, 1000, 1050);
         bob.draw(batch);
@@ -250,9 +255,11 @@ public class MazeGame extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
-        image.dispose();
         bob.dispose();
         evilBob.dispose();
+        for (int i = 0; i<test.length; ++i){
+            if (created){test[i].dispose();}
+        }
     }
 
     private <T> T createSprite(String atlas, String regionName, Integer xPos, Integer yPos, Integer xSize, Integer ySize, Integer speed, java.util.function.BiFunction<Sprite,Integer,T> constructorType){

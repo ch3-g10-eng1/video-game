@@ -31,7 +31,7 @@ public class EvilBob extends InteractableEntity {
     private String[] script = {"You dare\nenter my realm\nNext: E", "With a stolen\nkeycard\n" + //
                 "Next: E", "Give it to me\nor face the\nconsequence\n" + //
                                         "Next: E", "Y: Give Keycard\nN: Keep Keycard"};
-    
+
     // Used to control animation time
     private float stateTime = 0f;
 
@@ -62,7 +62,7 @@ public class EvilBob extends InteractableEntity {
             if (hasKeycard){
                 textBubble.setText(script[conversationPointer]);
                 conversationPointer += 1;
-                
+
                 if (conversationPointer > 3) {
                     conversationPointer = 0;
                     reset = true;
@@ -74,7 +74,7 @@ public class EvilBob extends InteractableEntity {
             }
         }
 
-        if (reset && !skip){ 
+        if (reset && !skip){
             if (Gdx.input.isKeyJustPressed(Input.Keys.Y)){
                 textBubble.setText("Get out of here!");
                 returnData.put("Enable Rocket Bob", true);
@@ -138,13 +138,13 @@ public class EvilBob extends InteractableEntity {
         textBubble.setText("Interact: E");
     }
 
-    
+
     /**
      * loads the animation files from atlas into the animation variables
      */
     private void loadTextures(){
         // Loads sprites from Texture atlas
-        atlas = new TextureAtlas(Gdx.files.internal("assets\\atlas\\bob.atlas"));
+        atlas = new TextureAtlas(Gdx.files.internal("atlas/bob.atlas"));
 
         // Loads animation frames
         Array<TextureAtlas.AtlasRegion> frames = atlas.findRegions("evil-bob");
@@ -162,5 +162,5 @@ public class EvilBob extends InteractableEntity {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'draw'");
     }
-    
+
 }

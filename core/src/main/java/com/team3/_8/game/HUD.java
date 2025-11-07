@@ -18,9 +18,11 @@ public class HUD {
 
     private Batch HUDbatch;
     private Texture keycard, pause;
+    private int events;
 
-    public HUD(Batch HUDbatch) {
+    public HUD(Batch HUDbatch, int events) {
         this.HUDbatch = HUDbatch;
+        this.events = events;
         this.keycard = new Texture("keycard.png");
         this.pause = new Texture("libgdx.png");
     }
@@ -64,6 +66,10 @@ public class HUD {
         font.draw(this.HUDbatch, "PAUSED",340 , 375);
         this.HUDbatch.draw(this.pause, (float) viewport.getScreenX() / 2, (float) viewport.getScreenY() / 2, 100, 100);
         this.HUDbatch.end();
+    }
+
+    private void viewTutorialScreen(){
+
     }
 
 }
