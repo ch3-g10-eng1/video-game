@@ -39,13 +39,7 @@ public class CampusSecurity extends InteractableEntity {
         returnData.put("Reset Player Position", false);
         return returnData;
     }
-
-    @Override
-    public void draw() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'draw'");
-    }
-
+    
     /**
      * loads the animation files from atlas into the animation variables
      */

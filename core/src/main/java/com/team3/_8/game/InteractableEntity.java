@@ -22,11 +22,16 @@ abstract class InteractableEntity extends CollidableEntity{
         super(sprite, speed);
     }
 
-    public Map<String, Boolean> collision(Bob bob){
+    /**
+     * measures if this is colliding with another entity 
+     * @param entity the other entity to be considered in the collision
+     * @return a map of any event IDs and whether or not they are triggered
+     */
+    public Map<String, Boolean> collision(CollidableEntity entity){
         /**
          * Used to check for collision & runs interaction based on collision
          */
-        if (bob.getCollisionBox().overlaps(this.collisionBox)) {
+        if (entity.getCollisionBox().overlaps(this.collisionBox)) {
             // Returns any data from the interaction back to the call instance
             returnData = startInteraction();
             // return true;
@@ -40,13 +45,16 @@ abstract class InteractableEntity extends CollidableEntity{
 
     /**
      * starts the interaction for when the player intereacts with the entity 
-     * @return Map
+     * @return Map of eventIDs and whether or not it is triggered 
      */
     public abstract Map<String, Boolean> startInteraction();
+
+    /**
+     * stops the interaction with entity if the interaction can be stopped early 
+     * @return map of eventIDs and whether or not they have been stopped
+     */
     public abstract Map<String, Boolean> stopInteraction();
     
-    public abstract void draw();
-
     @Override
     public void move(boolean[] movement_halter) {
         // Not currently implemented, but useful if you want the entity to move
