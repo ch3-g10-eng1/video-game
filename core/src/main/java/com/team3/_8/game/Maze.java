@@ -19,10 +19,10 @@ import java.util.HashSet;
 
 
 /**
- * Class defines a Map object that renders background map
+ * Class defines a Maze object that renders background map
  * @author Isaac M
  */
-public class Map {
+public class Maze {
 	
 	private TiledMap map; // the map
 	private TiledMapRenderer map_render; // the rendere 
@@ -39,7 +39,7 @@ public class Map {
 	 * @param visible_layer_names of the layers to be made visible
      * @param collision_layer name of the object layer where collision items are found
      */
-	public Map(String filename, String[] visible_layer_names, String[] collision_layers, String progress_layer) {
+	public Maze(String filename, String[] visible_layer_names, String[] collision_layers, String progress_layer) {
 		map = new TmxMapLoader().load(filename);
 		visible_layers = new int[map.getLayers().getCount()];		
 		map_render = new OrthogonalTiledMapRenderer(map);
@@ -61,7 +61,7 @@ public class Map {
      * @param filename that the map is stored under
      * @param collision_layer name of the object layer where collision items are found
      */
-	public Map(String filename, String[] collision_layers, String progress_layer) {
+	public Maze(String filename, String[] collision_layers, String progress_layer) {
 		this(filename, new String[0], collision_layers, progress_layer);
 		for (int index = 0; index < visible_layers.length; index++) {
 			visible_layers[index] = index;

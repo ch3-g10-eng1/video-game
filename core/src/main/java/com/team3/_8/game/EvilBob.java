@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Array;
 import java.util.HashMap;
+import java.util.Map;
 
 import java.util.Random;
 
@@ -52,7 +53,7 @@ public class EvilBob extends InteractableEntity {
     }
 
     @Override
-    public HashMap<String, Boolean> startInteraction() {
+    public Map<String, Boolean> startInteraction() {
         boolean skip = false;
         if (!textBubbleVisible){
             textBubbleVisible = textBubble.hideShow();
@@ -95,7 +96,7 @@ public class EvilBob extends InteractableEntity {
     }
 
     @Override
-    public HashMap<String, Boolean> stopInteraction() {
+    public Map<String, Boolean> stopInteraction() {
         if (textBubbleVisible){
             conversationPointer = 0;
             textBubble.setText("Interact: E");

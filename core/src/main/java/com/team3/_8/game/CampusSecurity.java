@@ -1,5 +1,6 @@
 package com.team3._8.game;
 
+import java.util.Map;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
@@ -20,7 +21,7 @@ public class CampusSecurity extends InteractableEntity {
     private boolean intialisePos = true;
     private boolean up = false;
 
-    HashMap<String, Boolean> returnData = new HashMap<>();
+    Map<String, Boolean> returnData = new HashMap<>();
 
     public CampusSecurity(Sprite sprite, float speed) {
         super(sprite, speed);
@@ -28,13 +29,13 @@ public class CampusSecurity extends InteractableEntity {
     }
 
     @Override
-    public HashMap<String, Boolean> startInteraction() {
+    public Map<String, Boolean> startInteraction() {
         returnData.put("Reset Player Position", true);
         return returnData;
     }
 
     @Override
-    public HashMap<String, Boolean> stopInteraction() {
+    public Map<String, Boolean> stopInteraction() {
         returnData.put("Reset Player Position", false);
         return returnData;
     }

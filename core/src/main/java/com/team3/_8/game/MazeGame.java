@@ -1,6 +1,7 @@
 package com.team3._8.game;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -74,10 +75,10 @@ public class MazeGame extends ApplicationAdapter {
     private EvilBob evilBob;
 
     // Map
-    private Map maze;
+    private Maze maze;
 
-    HashMap<String, Boolean> evilBobReturnData = new HashMap<>();
-    HashMap<String, Boolean> campusSecurityReturnData = new HashMap<>();
+    Map<String, Boolean> evilBobReturnData = new HashMap<>();
+    Map<String, Boolean> campusSecurityReturnData = new HashMap<>();
 
     private TextureAtlas geeseAtlas;
     // Campus security sprite
@@ -105,7 +106,7 @@ public class MazeGame extends ApplicationAdapter {
         timer = 0f; // The timer variable
 
         String[] collidable_layers = {"Collision", "Doors"};
-        maze = new Map("Map/CSE_map.tmx", collidable_layers, "WinDoors");
+        maze = new Maze("Map/CSE_map.tmx", collidable_layers, "WinDoors");
 
         // Start of Bob's creation - the birth of Bob
         // bob = createSprite("atlas/bob.atlas", "front-bob", 100, 500, BOB_WIDTH, BOB_HEIGHT, Bob::new);

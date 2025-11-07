@@ -2,6 +2,7 @@ package com.team3._8.game;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -15,13 +16,13 @@ abstract class InteractableEntity extends CollidableEntity{
      * @param speed
      */
 
-    HashMap<String, Boolean> returnData = new HashMap<>();
+    Map<String, Boolean> returnData = new HashMap<>();
 
     public InteractableEntity(Sprite sprite, float speed) {
         super(sprite, speed);
     }
 
-    public HashMap<String, Boolean> collision(Bob bob){
+    public Map<String, Boolean> collision(Bob bob){
         /**
          * Used to check for collision & runs interaction based on collision
          */
@@ -37,8 +38,12 @@ abstract class InteractableEntity extends CollidableEntity{
         return returnData;
     }
 
-    public abstract HashMap<String, Boolean> startInteraction();
-    public abstract HashMap<String, Boolean> stopInteraction();
+    /**
+     * starts the interaction for when the player intereacts with the entity 
+     * @return Map
+     */
+    public abstract Map<String, Boolean> startInteraction();
+    public abstract Map<String, Boolean> stopInteraction();
     
     public abstract void draw();
 
