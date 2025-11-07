@@ -183,4 +183,7 @@ public class Map {
 		}
 		return false;
 	}
+	public void dispose() {
+		map.dispose();
+	}
 }

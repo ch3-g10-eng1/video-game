@@ -297,6 +297,8 @@ public class MazeGame extends ApplicationAdapter {
         image.dispose();
         bob.dispose();
         evilBob.dispose();
+        font.dispose();
+        maze.dispose();
     }
 
     private <T> T createSprite(String atlas, String regionName, Integer xPos, Integer yPos, Integer xSize, Integer ySize, Integer speed, java.util.function.BiFunction<Sprite,Integer,T> constructorType){
