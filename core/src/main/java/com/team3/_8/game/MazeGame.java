@@ -192,7 +192,7 @@ public class MazeGame extends ApplicationAdapter {
         paused = gameController.handleInput(camera, paused);// The input for the zoom in and out
 
         if (keycard.collected(bob)) {
-            evilBob.setHasKeycard(true);
+            evilBob.setPlayerHasKeycard(true);
             maze.removeCollisionLayer("Doors");
             maze.removeVisibleLayer("ClosedDoors");
         }
