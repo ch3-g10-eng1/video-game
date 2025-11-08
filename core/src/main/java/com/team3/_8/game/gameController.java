@@ -37,17 +37,20 @@ public class gameController {
      * this includes: camera zooming and pausing
      * @param camera Orthographic camera: The camera that can zoom in and out
      * @param paused boolean: The paused state of the game (true if paused)
+     * @param zoom boolean: whether or not the function should allow zooming 
+     * (true for zooming enabled)
      * @return the paused state of the game
      */
-    public static boolean handleInput(OrthographicCamera camera, boolean paused) {
-        //When Q is pressed, the camera is zoomed in, and zoomed out when E is pressed
-        if (Gdx.input.isKeyPressed(Input.Keys.MINUS) && developerMode) {
-            camera.zoom += 0.02f;
+    public static boolean handleInput(OrthographicCamera camera, boolean paused, boolean zoom) {
+        if (zoom) {
+            //When Q is pressed, the camera is zoomed in, and zoomed out when E is pressed
+            if (Gdx.input.isKeyPressed(Input.Keys.MINUS) && developerMode) {
+                camera.zoom += 0.02f;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.EQUALS) && developerMode) {
+                camera.zoom -= 0.02f;
+            }
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.EQUALS) && developerMode) {
-            camera.zoom -= 0.02f;
-        }
-
         //This is to pause the game
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             paused = !paused;

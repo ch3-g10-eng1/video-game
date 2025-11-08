@@ -24,6 +24,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class MazeGame extends ApplicationAdapter {
+    // development modes
+    private boolean dev_zoom = false;
 
     // constants in arbitrary units for the camera
     static final int WORLD_WIDTH = 200;
@@ -191,7 +193,7 @@ public class MazeGame extends ApplicationAdapter {
      * runs the code for the game screen every frame
      */
     private void gameScreenRender() {
-        paused = gameController.handleInput(camera, paused);// The input for the zoom in and out
+        paused = gameController.handleInput(camera, paused, dev_zoom);// The input for the zoom in and out
 
         if (keycard.collected(bob)) {
             evilBob.setHasKeycard(true);
