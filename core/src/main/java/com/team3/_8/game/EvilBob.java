@@ -169,7 +169,7 @@ public class EvilBob extends InteractableEntity {
     /**
      * Updates the collision box to the placement of the sprite
      */
-    private void updateCollisionBox(){
+    protected void updateCollisionBox(){
         // Sets the collision box of bob
         this.collisionBox.setX(this.sprite.getX());
         this.collisionBox.setY(this.sprite.getY());
