@@ -201,7 +201,7 @@ public class MazeGame extends ApplicationAdapter {
 
         if (keycard.collected(bob)) {
             eventTriggered("Positive");
-            evilBob.setHasKeycard(true);
+            evilBob.setPlayerHasKeycard(true);
             maze.removeCollisionLayer("Doors");
             maze.removeVisibleLayer("ClosedDoors");
         }
