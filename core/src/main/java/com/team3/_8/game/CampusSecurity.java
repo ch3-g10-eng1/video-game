@@ -81,12 +81,10 @@ public class CampusSecurity extends InteractableEntity {
         sprite.draw(batch);
     }
 
-    private void updateCollisionBox(){
-        // Sets the collision box of bob
-        this.collisionBox.setX(this.sprite.getX());
-        this.collisionBox.setY(this.sprite.getY());
-    }
-
+    /**
+     * gives the campus security instructions to move 
+     * @param up tells them which direction they should be moving
+     */
     private void move(boolean up){
         float delta = Gdx.graphics.getDeltaTime();
 

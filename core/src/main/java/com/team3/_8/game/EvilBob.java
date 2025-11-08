@@ -125,12 +125,6 @@ public class EvilBob extends InteractableEntity {
         sprite.draw(batch);
     }
 
-    private void updateCollisionBox(){
-        // Sets the collision box of bob
-        this.collisionBox.setX(this.sprite.getX());
-        this.collisionBox.setY(this.sprite.getY());
-    }
-
     private void create(){
         // Things for the text for the timer and other strings
         font =  new BitmapFont();

@@ -112,9 +112,7 @@ public class Bob extends CollidableEntity {
             }
         }
 
-        // Sets the collision box of bob after he moves
-        this.collisionBox.setX(this.sprite.getX() - collision__size_change);
-        this.collisionBox.setY(this.sprite.getY() - collision__size_change);
+        updateCollisionBox(collision__size_change);
 
         // Sets bob sprite to run the animation configured above
         if (animationOverride.equals("Squash")){
@@ -192,7 +190,8 @@ public class Bob extends CollidableEntity {
         this.speed = speed;
     }
 
-    private Array<TextureRegion> flipFrames(Array<TextureAtlas.AtlasRegion> frameArray, Boolean flipX, Boolean flipY){
+    private Array<TextureRegion> flipFrames(Array<TextureAtlas.AtlasRegion> frameArray, 
+            Boolean flipX, Boolean flipY){
         // Flips frames
         Array<TextureRegion> frames = new Array<>();
         for (TextureRegion frame: frameArray){

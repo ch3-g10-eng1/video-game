@@ -70,3 +70,10 @@ Useful Gradle tasks and flags:
 
 Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
 For example, `core:clean` removes `build` folder only from the `core` project.
+
+## Where to start
+
+the controller class of the game is MazeGame which inherits from applicationAdapter to access the libgdx framework
+this then calls every other class and controls them as the game goes on in render
+some helper functions are also found within gameController
+most complex methods are class methods within their respective classes 

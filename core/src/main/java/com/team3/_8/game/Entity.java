@@ -38,6 +38,11 @@ abstract class Entity {
         this.sprite.getTexture().dispose();
     }
 
+    /**
+     * This method controls the movement of the entity
+     * @param movement_halter the directions that bob cannot move, false allowing movement
+     *      0-left, 1-top, 2-right, 3-bottom
+     */
     public abstract void move(boolean[] movement_halter);
 
     public Sprite getEntity() {
