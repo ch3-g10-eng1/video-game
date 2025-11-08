@@ -53,10 +53,12 @@ public class HUD {
         bobInventory = bob.getInventory();
 
         for (String item : bobInventory){
-            switch (item){ // Switch so that more items can efficiently be added, although its just keycard rn
+            switch (item){ // Switch so that more items can efficiently be added, 
+                           //although its just keycard rn
                 case "Keycard":
                     this.HUDbatch.draw(this.keycard, 10, 325, 50, 50);
-                    if (isPaused){font.draw(this.HUDbatch, "This keycard can be used to unlock something...", 10, 325);}
+                    if (isPaused){font.draw(this.HUDbatch, 
+                        "This keycard can be used to unlock something...", 10, 325);}
                     break;
                 default:
 //                    System.out.println("Nothing");
@@ -68,7 +70,8 @@ public class HUD {
     public void pauseScreen(BitmapFont font, Viewport viewport){
         this.HUDbatch.begin();
         font.draw(this.HUDbatch, "PAUSED",340 , 375);
-        this.HUDbatch.draw(this.pause, (float) viewport.getScreenX() / 2, (float) viewport.getScreenY() / 2, 100, 100);
+        this.HUDbatch.draw(this.pause, (float) viewport.getScreenX() / 2, 
+            (float) viewport.getScreenY() / 2, 100, 100);
         this.HUDbatch.end();
     }
 }

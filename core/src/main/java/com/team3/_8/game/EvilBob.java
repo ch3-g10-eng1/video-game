@@ -77,7 +77,9 @@ public class EvilBob extends InteractableEntity {
         }
         System.out.println(skipChoice + " " + conversationPointer);
         // Handles interaction as player presses E
-        if (Gdx.input.isKeyJustPressed(Input.Keys.E) || (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && conversationPointer > 0) && !conversationReset){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E) || 
+           (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && conversationPointer > 0)
+            && !conversationReset){
             if (playerHasKeycard){
                 // Loads each line of the interaction text
                 textBubble.setText(script[conversationPointer]);
@@ -89,7 +91,7 @@ public class EvilBob extends InteractableEntity {
                     skipChoice = true;
                 }
             }
-            else{
+            else {
                 // Message to player if they don't have the keycard needed for this
                 textBubble.setText("Go Away!\nYou're missing\nmy keycard");
             }

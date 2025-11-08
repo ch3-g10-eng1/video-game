@@ -62,6 +62,10 @@ public class gameController {
         return paused;
     }
 
+    /**
+     * sets the events map with intial values of 0
+     * @return the events map of event type to number of events triggered 
+     */
     public static Map<String, Integer> setEventMap() {
         Map<String, Integer> event_map = new HashMap<String, Integer>();
         event_map.put("Positive", 0);
