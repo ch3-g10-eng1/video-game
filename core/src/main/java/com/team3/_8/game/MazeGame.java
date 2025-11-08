@@ -24,6 +24,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class MazeGame extends ApplicationAdapter {
+    // development modes
+    private boolean dev_zoom = false;
 
     // constants in arbitrary units for the camera
     static final int WORLD_WIDTH = 200;
@@ -118,7 +120,8 @@ public class MazeGame extends ApplicationAdapter {
         maze = new Maze("Map/CSE_map.tmx", collidable_layers, "WinDoors");
 
         // Start of Bob's creation - the birth of Bob
-        // bob = createSprite("atlas/bob.atlas", "front-bob", 100, 500, BOB_WIDTH, BOB_HEIGHT, Bob::new);
+        // bob = createSprite("atlas/bob.atlas", "front-bob", 100, 500,
+        //                     BOB_WIDTH, BOB_HEIGHT, Bob::new);
         atlas = new TextureAtlas("atlas/bob.atlas");
         bobSprite = new Sprite(atlas.findRegion("front-bob"));
         bobSprite.setPosition(100,500);
@@ -126,7 +129,8 @@ public class MazeGame extends ApplicationAdapter {
         bob = new Bob(bobSprite, 60, -3); //The actual creation of Bob, he has arrived
 
         // Creation of evil bob character
-        evilBob = createSprite("atlas/bob.atlas", "evil-bob", 500, 500, 2*BOB_WIDTH, 2*BOB_HEIGHT, 0, EvilBob::new);
+        evilBob = createSprite("atlas/bob.atlas", "evil-bob", 500, 500, 
+            2*BOB_WIDTH, 2*BOB_HEIGHT, 0, EvilBob::new);
 
         // Creation of the keycard
         keycardTexture = new Texture("keycard.png");
@@ -189,7 +193,7 @@ public class MazeGame extends ApplicationAdapter {
      * runs the code for the game screen every frame
      */
     private void gameScreenRender() {
-        paused = gameController.handleInput(camera, paused);// The input for the zoom in and out
+        paused = gameController.handleInput(camera, paused, dev_zoom);// The input for the zoom in and out
 
         if (keycard.collected(bob)) {
             evilBob.setPlayerHasKeycard(true);
@@ -199,7 +203,8 @@ public class MazeGame extends ApplicationAdapter {
 
         if (!paused){
             movement_halter = maze.hitsWall(bob, Gdx.graphics.getDeltaTime());
-            evilBobReturnData = evilBob.collision(bob); // Add return value to movement halter to holt player movement of character
+            evilBobReturnData = evilBob.collision(bob); 
+            // Add return value to movement halter to holt player movement of character
             handleInteraction();
             bob.move(movement_halter);
             timer += Gdx.graphics.getDeltaTime();
@@ -224,7 +229,8 @@ public class MazeGame extends ApplicationAdapter {
         if (created){
             int mod = 0;
             for (int i = 0; i < 5; i++){
-                allCampusSecuritySprites[i].draw(batch, 870+ mod, 1150, maze.hitsWall(allCampusSecuritySprites[i], Gdx.graphics.getDeltaTime()));
+                allCampusSecuritySprites[i].draw(batch, 870+ mod, 1150, 
+                    maze.hitsWall(allCampusSecuritySprites[i], Gdx.graphics.getDeltaTime()));
                 mod += 35;
             }
         }
@@ -338,7 +344,8 @@ public class MazeGame extends ApplicationAdapter {
         Map<String, Float> layoutValues = positionText(textLayout, false, false);
 
         // centre the bob sprite
-        bobSprite.setPosition(layoutValues.get("centreX") - bobSprite.getWidth() / 2f, (layoutValues.get("centreY") + 20f) - bobSprite.getHeight() / 2f);
+        bobSprite.setPosition(layoutValues.get("centreX") - bobSprite.getWidth() / 2f, 
+            (layoutValues.get("centreY") + 20f) - bobSprite.getHeight() / 2f);
         bobSprite.setSize(2*BOB_WIDTH, 2*BOB_HEIGHT);
         bob.setAnimation("Squash");
 
@@ -415,7 +422,9 @@ public class MazeGame extends ApplicationAdapter {
         }
     }
 
-    private <T> T createSprite(String atlas, String regionName, Integer xPos, Integer yPos, Integer xSize, Integer ySize, Integer speed, java.util.function.BiFunction<Sprite,Integer,T> constructorType){
+    private <T> T createSprite(String atlas, String regionName, Integer xPos, Integer yPos, 
+            Integer xSize, Integer ySize, Integer speed, 
+            java.util.function.BiFunction<Sprite,Integer,T> constructorType) {
         // Creation atlas
         TextureAtlas tempAtlas = new TextureAtlas(atlas);
         // Loaded to get size
@@ -431,7 +440,8 @@ public class MazeGame extends ApplicationAdapter {
         if (evilBobReturnData.containsKey("Create Campus Security")){
             if (evilBobReturnData.get("Create Campus Security") && !created){
                 for (int i = 0; i < allCampusSecuritySprites.length; i++){
-                allCampusSecuritySprites[i] = createSprite("atlas/security_geese.atlas", "walking", 500, 500, 2*BOB_WIDTH, 2*BOB_HEIGHT, 10, CampusSecurity::new);
+                allCampusSecuritySprites[i] = createSprite("atlas/security_geese.atlas", 
+                "walking", 500, 500, 2*BOB_WIDTH, 2*BOB_HEIGHT, 10, CampusSecurity::new);
             }
             created = true;
             }
