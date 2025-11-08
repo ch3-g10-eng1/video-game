@@ -38,7 +38,9 @@ public class EvilBob extends InteractableEntity {
     private Boolean playerHasKeycard = false;
     
     // Conversation script for the character to use
-    private String[] script = {"You dare\nenter my realm", "With a stolen\nkeycard", "Give it to me\nor face the\nconsequence", "Y: Give Keycard\nN: Keep Keycard"};
+    private String[] script = {"You dare\nenter my realm", "With a stolen\nkeycard", 
+        "Give it to me\nor face the\nconsequence", 
+        "Y: Give Keycard\nN: Keep Keycard"};
 
     // Used to control animation time
     private float stateTime = 0f;
@@ -73,16 +75,15 @@ public class EvilBob extends InteractableEntity {
         if (!textBubbleVisible){
             textBubbleVisible = textBubble.hideShow();
         }
-
+        System.out.println(skipChoice + " " + conversationPointer);
         // Handles interaction as player presses E
         if (Gdx.input.isKeyJustPressed(Input.Keys.E) || (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && conversationPointer > 0) && !conversationReset){
             if (playerHasKeycard){
                 // Loads each line of the interaction text
                 textBubble.setText(script[conversationPointer]);
                 conversationPointer += 1;
-
                 // Resets conversation if end reached
-                if (conversationPointer > script.length) {
+                if (conversationPointer > script.length -1) {
                     conversationPointer = 0;
                     conversationReset = true;
                     skipChoice = true;
