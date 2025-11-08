@@ -45,8 +45,6 @@ public class EvilBob extends InteractableEntity {
     // Used to control animation time
     private float stateTime = 0f;
 
-    private Boolean hasKeycard = false;
-
     HashMap<String, Boolean> returnData = new HashMap<>();
 
     /**

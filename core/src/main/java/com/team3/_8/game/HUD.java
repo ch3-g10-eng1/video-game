@@ -61,12 +61,15 @@ public class HUD {
                         "This keycard can be used to unlock something...", 10, 325);}
                     break;
                 default:
-//                    System.out.println("Nothing");
             }
         }
     }
 
-
+    /**
+     * draws pause screen onto the current active window
+     * @param font the font of any text on the pause screen to be used
+     * @param viewport the current viewport of the game 
+     */
     public void pauseScreen(BitmapFont font, Viewport viewport){
         this.HUDbatch.begin();
         font.draw(this.HUDbatch, "PAUSED",340 , 375);
