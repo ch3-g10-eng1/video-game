@@ -14,6 +14,10 @@ import com.badlogic.gdx.utils.Array;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * defines the evil bob character used in the suprise event 
+ * @author Henry
+ */
 public class EvilBob extends InteractableEntity {
     private TextureAtlas atlas;
     private Animation<TextureRegion> evilBob;
@@ -28,16 +32,13 @@ public class EvilBob extends InteractableEntity {
 
     private int conversationPointer = 0;
     private boolean reset = false;
-    private String[] script = {"You dare\nenter my realm", "With a stolen\nkeycard", "Give it to me\nor face the\nconsequence", "Y: Give Keycard\nN: Keep Keycard"};
+    private String[] script = {"You dare\nenter my realm", "With a stolen\nkeycard", 
+        "Give it to me\nor face the\nconsequence", 
+        "Y: Give Keycard\nN: Keep Keycard"};
 
     // Used to control animation time
     private float stateTime = 0f;
 
-    private CampusSecurity test[] = new CampusSecurity[5];
-    boolean created;
-
-    private int tempX;
-    private int tempY;
     private Boolean hasKeycard = false;
 
     HashMap<String, Boolean> returnData = new HashMap<>();
@@ -103,6 +104,12 @@ public class EvilBob extends InteractableEntity {
         return returnData;
     }
 
+    /**
+     * new draw function also draw speach box if necessary 
+     * @param batch the sprite batch being drawn in
+     * @param x the x position of the sprite being drawn
+     * @param y the y position of the sprite being drawn 
+     */
     public void draw(SpriteBatch batch, float x, float y) {
         // Timer for animation
         stateTime += Gdx.graphics.getDeltaTime();

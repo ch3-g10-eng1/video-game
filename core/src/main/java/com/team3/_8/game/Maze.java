@@ -32,6 +32,8 @@ public class Maze {
 	// layer 0 must always be visible
 	// needs to be int[] because the MapRenderer.render method is shit
 	private MapObject win_layer;
+	private MapObject event_layer;
+	private boolean event_triggered;
 
     /**
      * constructor for map that defines a map, renderer, visible layers and its collision objects
@@ -39,7 +41,8 @@ public class Maze {
 	 * @param visible_layer_names of the layers to be made visible
      * @param collision_layer name of the object layer where collision items are found
      */
-	public Maze(String filename, String[] visible_layer_names, String[] collision_layers, String progress_layer) {
+	public Maze(String filename, String[] visible_layer_names, String[] collision_layers, 
+				String progress_layer, String event_trigger_layer) {
 		map = new TmxMapLoader().load(filename);
 		visible_layers = new int[map.getLayers().getCount()];		
 		map_render = new OrthogonalTiledMapRenderer(map);
@@ -53,6 +56,8 @@ public class Maze {
 			collidable_objects.add((map.getLayers().get(layer)).getObjects());
 		}
 		win_layer = map.getLayers().get(progress_layer).getObjects().get(0);
+		event_layer = map.getLayers().get(event_trigger_layer).getObjects().get(0);
+		event_triggered = false;
 	}
 
 	/**
@@ -61,8 +66,9 @@ public class Maze {
      * @param filename that the map is stored under
      * @param collision_layer name of the object layer where collision items are found
      */
-	public Maze(String filename, String[] collision_layers, String progress_layer) {
-		this(filename, new String[0], collision_layers, progress_layer);
+	public Maze(String filename, String[] collision_layers, String progress_layer, 
+				String event_trigger_layer) {
+		this(filename, new String[0], collision_layers, progress_layer, event_trigger_layer);
 		for (int index = 0; index < visible_layers.length; index++) {
 			visible_layers[index] = index;
 		}
@@ -176,6 +182,11 @@ public class Maze {
 		}
 	}
 
+	/**
+	 * determines if the win layer has been hit
+	 * @param player entity that is being tracked
+	 * @return true if the win layer was hit
+	 */
 	public boolean HitsWinLayer(CollidableEntity player) {
 		Rectangle wall_collision = ((RectangleMapObject) win_layer).getRectangle();
 		if (Intersector.overlaps(wall_collision, player.collisionBox)) {
@@ -183,7 +194,26 @@ public class Maze {
 		}
 		return false;
 	}
+	
+	/**
+	 * determines if the event layer has been hit
+	 * @param player entity that is being tracked
+	 * @return true if the event layer was hit
+	 */
+	public boolean HitsEventLayer(CollidableEntity player) {
+		if (event_triggered) {
+			return false;
+		}
+		Rectangle wall_collision = ((RectangleMapObject) event_layer).getRectangle();
+		if (Intersector.overlaps(wall_collision, player.collisionBox)) {
+			event_triggered = true;
+			return true;
+		}
+		return false;
+	}
+	
 	public void dispose() {
 		map.dispose();
 	}
+
 }

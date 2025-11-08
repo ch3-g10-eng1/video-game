@@ -5,6 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
+import java.util.Map;
+import java.util.HashMap;
+
 /**
  * This class will be for all the static methods that influence the game
  * and are currently taking up space
@@ -57,6 +60,14 @@ public class gameController {
         }
 
         return paused;
+    }
+
+    public static Map<String, Integer> setEventMap() {
+        Map<String, Integer> event_map = new HashMap<String, Integer>();
+        event_map.put("Positive", 0);
+        event_map.put("Negative", 0);
+        event_map.put("Suprise", 0);
+        return event_map;
     }
 
 }

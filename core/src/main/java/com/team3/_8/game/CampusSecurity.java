@@ -11,6 +11,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
+/**
+ * defines the campus security that can be used for events
+ * @author Henry
+ */
 public class CampusSecurity extends InteractableEntity {
     private TextureAtlas atlas;
     private Animation<TextureRegion> campusSecurity;

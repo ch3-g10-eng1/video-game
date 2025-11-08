@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+/**
+ * class for a text bubble that can be spawed by events 
+ * @author Henry 
+ */
 public class TextBubble {
     private final Sprite bubbleSprite;
     private final BitmapFont font;

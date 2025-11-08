@@ -7,22 +7,21 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.Set;
+import java.util.Map;
 /**
  * This class creates the HUD of the game. The idea is that you pass textures that will be rendered
  * through to the class and then you can have all the decision-making in here, to clean up the code
  * and to avoid lots of passing textures through
- *
+ * 
  * @author Lenny
  */
 public class HUD {
 
     private Batch HUDbatch;
     private Texture keycard, pause;
-    private int events;
 
     public HUD(Batch HUDbatch, int events) {
         this.HUDbatch = HUDbatch;
-        this.events = events;
         this.keycard = new Texture("keycard.png");
         this.pause = new Texture("libgdx.png");
     }
@@ -33,9 +32,14 @@ public class HUD {
      * @param timer String: The formatted string of the timer
      * @param bob Bob: The Bob character, to extract the contents of his inventory from
      */
-    public void draw(BitmapFont font, String timer, Bob bob, boolean isPaused){
+    public void draw(BitmapFont font, String timer, Map<String, Integer> events, 
+                     Bob bob, boolean isPaused){
         this.HUDbatch.begin();
         font.draw(this.HUDbatch, timer,550, 370);
+        font.draw(this.HUDbatch, "Positive: " + events.get("Positive"), 550, 350);
+        font.draw(this.HUDbatch, "Negative: " + events.get("Negative"), 550, 330);
+        font.draw(this.HUDbatch, "Suprise: " + events.get("Suprise"), 550, 310);
+
         this.drawTextures(bob, font, isPaused);
         this.HUDbatch.end();
     }
@@ -67,9 +71,4 @@ public class HUD {
         this.HUDbatch.draw(this.pause, (float) viewport.getScreenX() / 2, (float) viewport.getScreenY() / 2, 100, 100);
         this.HUDbatch.end();
     }
-
-    private void viewTutorialScreen(){
-
-    }
-
 }

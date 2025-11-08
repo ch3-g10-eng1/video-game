@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="100" height="60" tilewidth="20" tileheight="20" infinite="0" nextlayerid="9" nextobjectid="217">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="100" height="60" tilewidth="20" tileheight="20" infinite="0" nextlayerid="10" nextobjectid="218">
  <tileset firstgid="1" source="inside_tileset.tsx"/>
  <tileset firstgid="161" source="Outside_tileset.tsx"/>
  <layer id="1" name="Map" width="100" height="60">
@@ -304,6 +304,9 @@
   <object id="203" x="1240.75" y="300" width="50.25" height="39"/>
   <object id="204" x="1260.25" y="280" width="43.75" height="56"/>
   <object id="205" x="1428" y="-484"/>
+ </objectgroup>
+ <objectgroup id="9" name="EventTrigger">
+  <object id="217" x="720.333" y="630" width="18.3333" height="59.3333"/>
  </objectgroup>
  <objectgroup id="8" name="WinDoors">
   <object id="215" x="1699.67" y="437" width="20" height="47"/>

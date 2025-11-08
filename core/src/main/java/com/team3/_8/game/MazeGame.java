@@ -106,6 +106,9 @@ public class MazeGame extends ApplicationAdapter {
     // Boolean array to see if Bob has hit a wall, and what wall he has hit
     private boolean[] movement_halter;
 
+    // Map that keeps track of event completion
+    private Map<String, Integer> event_tracker;
+
     @Override
     public void create() {
 
@@ -117,7 +120,8 @@ public class MazeGame extends ApplicationAdapter {
         events = 0;
 
         String[] collidable_layers = {"Collision", "Doors"};
-        maze = new Maze("Map/CSE_map.tmx", collidable_layers, "WinDoors");
+        maze = new Maze("Map/CSE_map.tmx", collidable_layers,
+            "WinDoors", "EventTrigger");
 
         // Start of Bob's creation - the birth of Bob
         // bob = createSprite("atlas/bob.atlas", "front-bob", 100, 500,
@@ -163,7 +167,7 @@ public class MazeGame extends ApplicationAdapter {
 
         batch = new SpriteBatch();
 
-
+        event_tracker = gameController.setEventMap();
 
         //Creation of the HUD
         HUDBatch = new SpriteBatch();
@@ -196,6 +200,7 @@ public class MazeGame extends ApplicationAdapter {
         paused = gameController.handleInput(camera, paused, dev_zoom);// The input for the zoom in and out
 
         if (keycard.collected(bob)) {
+            eventTriggered("Positive");
             evilBob.setHasKeycard(true);
             maze.removeCollisionLayer("Doors");
             maze.removeVisibleLayer("ClosedDoors");
@@ -238,13 +243,16 @@ public class MazeGame extends ApplicationAdapter {
         batch.end();
 
         // The drawing of the HUD of the game
-        hud.draw(font, gameController.formatTime(timer), bob, paused);
+        hud.draw(font, gameController.formatTime(timer), event_tracker, bob, paused);
 
         if (paused){
             hud.pauseScreen(font, viewport);
         }
         if (maze.HitsWinLayer(bob)) {
             active_screen = 3;
+        }
+        if (maze.HitsEventLayer(bob)) {
+            eventTriggered("Negative");
         }
         // The code to check if the game has ended
         if (timer >= 300){
@@ -438,7 +446,8 @@ public class MazeGame extends ApplicationAdapter {
 
     private void handleInteraction() {
         if (evilBobReturnData.containsKey("Create Campus Security")){
-            if (evilBobReturnData.get("Create Campus Security") && !created){
+            if (evilBobReturnData.get("Create Campus Security") && !created){            
+                eventTriggered("Suprise");
                 for (int i = 0; i < allCampusSecuritySprites.length; i++){
                 allCampusSecuritySprites[i] = createSprite("atlas/security_geese.atlas", 
                 "walking", 500, 500, 2*BOB_WIDTH, 2*BOB_HEIGHT, 10, CampusSecurity::new);
@@ -456,7 +465,9 @@ public class MazeGame extends ApplicationAdapter {
 
         if (evilBobReturnData.containsKey("Remove Keycard")){
             if (evilBobReturnData.get("Remove Keycard")){
-                bob.removeInventory("Keycard");
+                if (bob.removeInventory("Keycard")) {
+                    eventTriggered("Suprise");
+                }
             }
         }
 
@@ -471,5 +482,9 @@ public class MazeGame extends ApplicationAdapter {
                 };
             }
         }
+    }
+
+    private void eventTriggered(String event_name) {
+        event_tracker.put(event_name, event_tracker.get(event_name) + 1);
     }
 }
