@@ -10,13 +10,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -73,9 +71,6 @@ public class MazeGame extends ApplicationAdapter {
     // The creation of the keycard entity
     private CollectableEntity keycard;
 
-    // Evil bob sprite
-    private Sprite evilBobSprite;
-
     //Evil bob collidable entity
     private EvilBob evilBob;
 
@@ -89,17 +84,6 @@ public class MazeGame extends ApplicationAdapter {
     Map<String, Boolean> evilBobReturnData = new HashMap<>();
     Map<String, Boolean> campusSecurityReturnData = new HashMap<>();
 
-    // Atlas for the campus security geese
-    private TextureAtlas geeseAtlas;
-
-    // Campus security sprite
-    private Sprite campusSecuritySprite;
-
-    // Campus security entity
-    private CampusSecurity campusSecurityEntity;
-
-    // Animation for campus security
-    private Animation<TextureRegion> campusSecurity;
     private CampusSecurity allCampusSecuritySprites[] = new CampusSecurity[5];
     boolean created;
 
