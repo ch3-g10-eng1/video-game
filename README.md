@@ -40,6 +40,8 @@ Names:
 - Ida K
 - Viktor B
 
+- These names are in LICENCE that need will need updating.
+
 -----------------------------------------------------------------------
 
 # Maze Game
