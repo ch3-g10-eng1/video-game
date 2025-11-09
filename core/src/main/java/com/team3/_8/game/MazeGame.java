@@ -34,11 +34,8 @@ public class MazeGame extends ApplicationAdapter {
     static final int BOB_HEIGHT = 15;
 
     // Screen manager
-    private int active_screen = 0;
+    private int activeScreen = 0;
 
-    // Booleans for the game
-    private boolean isWon = false; //Variable to see if the game has been won
-    private boolean isEnded = false; // Variable to see if the game has ended
     private boolean paused = false; //Variable to see if the game is paused
 
     // Events counter
@@ -84,16 +81,20 @@ public class MazeGame extends ApplicationAdapter {
     // Map
     private Maze maze;
 
-    //Event related variables
-    private Map<String, Boolean> evilBobReturnData = new HashMap<>();
-    private Map<String, Boolean> campusSecurityReturnData = new HashMap<>();
+    // Map to store return data for interactable entities
+    // The data can be used to control other objects in this program
+    Map<String, Boolean> evilBobReturnData = new HashMap<>();
+    Map<String, Boolean> campusSecurityReturnData = new HashMap<>();
+
+    // Holds created campusSecuirty sprites and tracks if they exist
     private CampusSecurity allCampusSecuritySprites[] = new CampusSecurity[5];
-    boolean created;
+    boolean campusSecurityCreated;
 
     // Boolean array to see if Bob has hit a wall, and what wall he has hit
     private boolean[] movement_halter;
 
-
+    // Map that keeps track of event completion
+    private Map<String, Integer> eventTracker;
 
     @Override
     public void create() {
@@ -105,6 +106,7 @@ public class MazeGame extends ApplicationAdapter {
 
         events = 0;
 
+        // Collidable layers of map and creates maze
         String[] collidable_layers = {"Collision", "Doors"};
         maze = new Maze("Map/CSE_map.tmx", collidable_layers,
             "WinDoors", "EventTrigger");
@@ -133,8 +135,6 @@ public class MazeGame extends ApplicationAdapter {
         tutorial_sprite.setSize(310, 180);
         tutorial_sprite.setPosition(-150, -100);
 
-
-
         // Making the camera and the viewport
         camera = new OrthographicCamera(30, 30 * (w/h));
         camera.position.set(bob.getEntity().getX() - ((float) BOB_WIDTH / 2),
@@ -153,38 +153,44 @@ public class MazeGame extends ApplicationAdapter {
 
         batch = new SpriteBatch();
 
-        event_tracker = gameController.setEventMap();
+        // Used to track game events
+        eventTracker = gameController.setEventMap();
 
         //Creation of the HUD
         HUDBatch = new SpriteBatch();
         hud = new HUD(HUDBatch, events);
     }
 
+    /**
+     * Renders different screens based on activeScreen configuration
+     */
     @Override
     public void render() {
-        if (active_screen == 0) {
+        if (activeScreen == 0) {
             titleScreenRender();
         }
-        else if (active_screen == 1) {
+        else if (activeScreen == 1) {
             gameScreenRender();
         }
-        else if (active_screen == 2) {
+        else if (activeScreen == 2) {
             tutorialScreenRender();
         }
-        else if (active_screen == 3) {
+        else if (activeScreen == 3) {
             winScreenRender();
         }
-        else if (active_screen == 4) {
+        else if (activeScreen == 4) {
             loseScreenRender();
         }
     }
 
     /**
-     * runs the code for the game screen every frame
+     * Runs the code for the game screen every frame
      */
     private void gameScreenRender() {
-        paused = gameController.handleInput(camera, paused, dev_zoom);// The input for the zoom in and out
+        // The input for the zoom in and out
+        paused = gameController.handleInput(camera, paused, dev_zoom);
 
+        // Configures game if player collects keycard
         if (keycard.collected(bob)) {
             eventTriggered("Positive");
             evilBob.setPlayerHasKeycard(true);
@@ -194,9 +200,13 @@ public class MazeGame extends ApplicationAdapter {
 
         if (!paused){
             movement_halter = maze.hitsWall(bob, Gdx.graphics.getDeltaTime());
-            evilBobReturnData = evilBob.collision(bob); 
-            // Add return value to movement halter to holt player movement of character
+
+            // Checks for collision with evilBob
+            evilBobReturnData = evilBob.collision(bob);
+            // Handles interaction with characters
             handleInteraction();
+
+            // Moves bob in player direction (if not hitting a wall)
             bob.move(movement_halter);
             timer += Gdx.graphics.getDeltaTime();
         }
@@ -217,7 +227,7 @@ public class MazeGame extends ApplicationAdapter {
         bob.draw(batch);
         keycard.draw(batch);
 
-        if (created){
+        if (campusSecurityCreated){
             int mod = 0;
             for (int i = 0; i < 5; i++){
                 allCampusSecuritySprites[i].draw(batch, 870+ mod, 1150, 
@@ -229,22 +239,22 @@ public class MazeGame extends ApplicationAdapter {
         batch.end();
 
         // The drawing of the HUD of the game
-        hud.draw(font, gameController.formatTime(timer), event_tracker, bob, paused);
+        hud.draw(font, gameController.formatTime(timer), eventTracker, bob, paused);
 
+        // Sets rendered screens based on game state
         if (paused){
             hud.pauseScreen(font, viewport);
         }
         if (maze.HitsWinLayer(bob)) {
-            active_screen = 3;
+            activeScreen = 3;
         }
         if (maze.HitsEventLayer(bob)) {
             eventTriggered("Negative");
         }
         // The code to check if the game has ended
         if (timer >= 300){
-            active_screen = 4;
+            activeScreen = 4;
             paused = true;
-            isEnded = true;
         }
 
 
@@ -276,10 +286,10 @@ public class MazeGame extends ApplicationAdapter {
         batch.end();
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            active_screen = 1;
+            activeScreen = 1;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.T)) {
-            active_screen = 2;
+            activeScreen = 2;
         }
     }
 
@@ -304,7 +314,7 @@ public class MazeGame extends ApplicationAdapter {
         batch.end();
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            active_screen = 0;
+            activeScreen = 0;
         }
     }
 
@@ -328,7 +338,7 @@ public class MazeGame extends ApplicationAdapter {
 
         batch.begin();
 
-        // draw centered text
+        // Draws centered text
         font.draw(batch, topLayout, layoutValues.get("x1"), layoutValues.get("y1"));
         font.draw(batch, bottomLayout, layoutValues.get("x2"), layoutValues.get("y2"));
         batch.end();
@@ -351,7 +361,7 @@ public class MazeGame extends ApplicationAdapter {
         GlyphLayout[] textLayout = {topLayout, bottomLayout};
         Map<String, Float> layoutValues = positionText(textLayout, false, false);
 
-        // centre the bob sprite
+        // Centres the bob sprite
         bobSprite.setPosition(layoutValues.get("centreX") - bobSprite.getWidth() / 2f, 
             (layoutValues.get("centreY") + 20f) - bobSprite.getHeight() / 2f);
         bobSprite.setSize(2*BOB_WIDTH, 2*BOB_HEIGHT);
@@ -366,7 +376,7 @@ public class MazeGame extends ApplicationAdapter {
             bob.draw(batch);
         }
 
-        // draw centered text
+        // Draws centered text
         font.draw(batch, topLayout, layoutValues.get("x1"), layoutValues.get("y1"));
         font.draw(batch, bottomLayout, layoutValues.get("x2"), layoutValues.get("y2"));
         
@@ -382,11 +392,15 @@ public class MazeGame extends ApplicationAdapter {
      * @return map x,y values for positioning. Accessed via x1, x2 etc.
      */
     private Map<String, Float> positionText(GlyphLayout textLayout[], boolean top, boolean bottom){
+        // Holds position values to return
         Map<String, Float> returnValues = new HashMap<>();
+        // Used to evenly space lines
         int numLines = textLayout.length;
+        // Spacing between lines
         float spacing = 20f;
-
         float offset;
+        
+        // Offsets text based on positioning on screen
         if (top){
             offset = 120f;
         }
@@ -397,12 +411,13 @@ public class MazeGame extends ApplicationAdapter {
             offset = (numLines-1)*spacing;
         }
 
-        // centre of the screen in world coordinates
+        // Centre of the screen in world coordinates
         float centerX = camera.position.x;
         float centerY = camera.position.y;
         returnValues.put("centreX", centerX);
         returnValues.put("centreY", centerY);
 
+        // Positions each line and store position values
         for (int i = 1; i <= numLines; i++){
             float x = centerX - textLayout[i-1].width / 2f;
             float y = centerY - i*spacing + offset;
@@ -426,10 +441,24 @@ public class MazeGame extends ApplicationAdapter {
         font.dispose();
         maze.dispose();
         for (int i = 0; i<allCampusSecuritySprites.length; ++i){
-            if (created){allCampusSecuritySprites[i].dispose();}
+            if (campusSecurityCreated){allCampusSecuritySprites[i].dispose();}
         }
     }
 
+    /**
+     * Allows for a sprite with a texture to be created
+     * @param <T> type of entity
+     * @param atlas atlas to get textures from
+     * @param regionName name of region in atlas to get textures from
+     * @param xPos x-position to create sprite
+     * @param yPos y-position to create sprite
+     * @param xSize x-size of sprite
+     * @param ySize y-size of sprite
+     * @param speed speed of sprite
+     * @param constructorType type of entity
+     * 
+     * @return constructed entity of specified type
+     */
     private <T> T createSprite(String atlas, String regionName, Integer xPos, Integer yPos, 
             Integer xSize, Integer ySize, Integer speed, 
             java.util.function.BiFunction<Sprite,Integer,T> constructorType) {
@@ -440,22 +469,27 @@ public class MazeGame extends ApplicationAdapter {
         tempSprite.setPosition(xPos,yPos);
         tempSprite.setSize(xSize, ySize);
 
-        // Returns created sprite of type passed
+        // Returns campusSecurityCreated sprite of type passed
         return constructorType.apply(tempSprite, speed);
     }
 
+    /**
+     * Handles the interactions for interactable entities
+     */
     private void handleInteraction() {
+        // Creates campus security if the command has been set to true
         if (evilBobReturnData.containsKey("Create Campus Security")){
-            if (evilBobReturnData.get("Create Campus Security") && !created){            
-                eventTriggered("Suprise");
+            if (evilBobReturnData.get("Create Campus Security") && !campusSecurityCreated){            
+                eventTriggered("Hidden");
                 for (int i = 0; i < allCampusSecuritySprites.length; i++){
                 allCampusSecuritySprites[i] = createSprite("atlas/security_geese.atlas", 
                 "walking", 500, 500, 2*BOB_WIDTH, 2*BOB_HEIGHT, 10, CampusSecurity::new);
             }
-            created = true;
+            campusSecurityCreated = true;
             }
         }
 
+        // Sets rocketBob if the command has been set to true
         if (evilBobReturnData.containsKey("Enable Rocket Bob")){
             if (evilBobReturnData.get("Enable Rocket Bob")){
                 bob.setAnimation("Rocket");
@@ -463,16 +497,17 @@ public class MazeGame extends ApplicationAdapter {
             }
         }
 
+        // Removes the keycard if the command has been set to true
         if (evilBobReturnData.containsKey("Remove Keycard")){
             if (evilBobReturnData.get("Remove Keycard")){
                 if (bob.removeInventory("Keycard")) {
-                    eventTriggered("Suprise");
+                    eventTriggered("Hidden");
                 }
             }
         }
 
         // Checks for collision with CampusSecurity & resets player to start if so
-        if (created){
+        if (campusSecurityCreated){
             for (CampusSecurity sec : allCampusSecuritySprites){
                 campusSecurityReturnData = sec.collision(bob);
                 if (campusSecurityReturnData.containsKey("Reset Player Position")){
@@ -484,7 +519,11 @@ public class MazeGame extends ApplicationAdapter {
         }
     }
 
-    private void eventTriggered(String event_name) {
-        event_tracker.put(event_name, event_tracker.get(event_name) + 1);
+    /**
+     * Allows event to be added to eventTracker
+     * @param eventName - name of event
+     */
+    private void eventTriggered(String eventName) {
+        eventTracker.put(eventName, eventTracker.get(eventName) + 1);
     }
 }

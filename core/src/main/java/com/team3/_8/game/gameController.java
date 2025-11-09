@@ -70,7 +70,7 @@ public class gameController {
         Map<String, Integer> event_map = new HashMap<String, Integer>();
         event_map.put("Positive", 0);
         event_map.put("Negative", 0);
-        event_map.put("Suprise", 0);
+        event_map.put("Hidden", 0);
         return event_map;
     }
 
