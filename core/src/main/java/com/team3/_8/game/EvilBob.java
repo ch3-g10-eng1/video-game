@@ -45,6 +45,7 @@ public class EvilBob extends InteractableEntity {
     // Used to control animation time
     private float stateTime = 0f;
 
+    // Return data map used to send data to calling instance
     HashMap<String, Boolean> returnData = new HashMap<>();
 
     /**
@@ -73,7 +74,6 @@ public class EvilBob extends InteractableEntity {
         if (!textBubbleVisible){
             textBubbleVisible = textBubble.hideShow();
         }
-        System.out.println(skipChoice + " " + conversationPointer);
         // Handles interaction as player presses E
         if (Gdx.input.isKeyJustPressed(Input.Keys.E) || 
            (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && conversationPointer > 0)
@@ -195,7 +195,7 @@ public class EvilBob extends InteractableEntity {
 
 
     /**
-     * Loads the animation files from atlas into the animation variables
+     * Loads the animation textures from atlas into the animation variables
      */
     private void loadTextures(){
         // Loads sprites from Texture atlas

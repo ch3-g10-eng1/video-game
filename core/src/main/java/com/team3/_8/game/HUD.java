@@ -38,7 +38,7 @@ public class HUD {
         font.draw(this.HUDbatch, timer,550, 370);
         font.draw(this.HUDbatch, "Positive: " + events.get("Positive"), 550, 350);
         font.draw(this.HUDbatch, "Negative: " + events.get("Negative"), 550, 330);
-        font.draw(this.HUDbatch, "Suprise: " + events.get("Suprise"), 550, 310);
+        font.draw(this.HUDbatch, "Hidden: " + events.get("Hidden"), 550, 310);
 
         this.drawTextures(bob, font, isPaused);
         this.HUDbatch.end();

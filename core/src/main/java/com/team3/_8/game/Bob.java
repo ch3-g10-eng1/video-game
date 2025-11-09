@@ -149,7 +149,7 @@ public class Bob extends CollidableEntity {
         bob_animations.put("RocketLeft", new Animation<TextureRegion>(0.2f, rocketSideFrames));
         bob_animations.put("RocketUp", new Animation<TextureRegion>(0.2f, rocketUpFrames));
 
-        // Flips right into left frames
+        // Flips textures into to change direction
         Array<TextureRegion> leftFrames = flipFrames(rightFrames, true, false);
         bob_animations.put("Left", new Animation<TextureRegion>(0.5f, leftFrames));
 
