@@ -16,21 +16,20 @@
 
 package com.team3._8.game.lwjgl3;
 
+import static org.lwjgl.system.JNI.invokePPP;
+import static org.lwjgl.system.JNI.invokePPZ;
+import static org.lwjgl.system.macosx.ObjCRuntime.objc_getClass;
+import static org.lwjgl.system.macosx.ObjCRuntime.sel_getUid;
+
 import com.badlogic.gdx.Version;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3NativesLoader;
-import org.lwjgl.system.macosx.LibC;
-import org.lwjgl.system.macosx.ObjCRuntime;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
-
-import static org.lwjgl.system.JNI.invokePPP;
-import static org.lwjgl.system.JNI.invokePPZ;
-import static org.lwjgl.system.macosx.ObjCRuntime.objc_getClass;
-import static org.lwjgl.system.macosx.ObjCRuntime.sel_getUid;
+import org.lwjgl.system.macosx.LibC;
+import org.lwjgl.system.macosx.ObjCRuntime;
 
 /**
  * Adds some utilities to ensure that the JVM was started with the
@@ -77,12 +76,12 @@ public class StartupHelper {
         String osName = System.getProperty("os.name").toLowerCase();
         if (!osName.contains("mac")) {
             if (osName.contains("windows")) {
-// Here, we are trying to work around an issue with how LWJGL3 loads its extracted .dll files.
-// By default, LWJGL3 extracts to the directory specified by "java.io.tmpdir", which is usually the user's home.
-// If the user's name has non-ASCII (or some non-alphanumeric) characters in it, that would fail.
-// By extracting to the relevant "ProgramData" folder, which is usually "C:\ProgramData", we avoid this.
-// We also temporarily change the "user.name" property to one without any chars that would be invalid.
-// We revert our changes immediately after loading LWJGL3 natives.
+                // Here, we are trying to work around an issue with how LWJGL3 loads its extracted .dll files.
+                // By default, LWJGL3 extracts to the directory specified by "java.io.tmpdir", which is usually the user's home.
+                // If the user's name has non-ASCII (or some non-alphanumeric) characters in it, that would fail.
+                // By extracting to the relevant "ProgramData" folder, which is usually "C:\ProgramData", we avoid this.
+                // We also temporarily change the "user.name" property to one without any chars that would be invalid.
+                // We revert our changes immediately after loading LWJGL3 natives.
                 String programData = System.getenv("ProgramData");
                 if(programData == null) programData = "C:\\Temp\\"; // if ProgramData isn't set, try some fallback.
                 String prevTmpDir = System.getProperty("java.io.tmpdir", programData);
