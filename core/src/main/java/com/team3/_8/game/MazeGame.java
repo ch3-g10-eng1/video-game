@@ -43,7 +43,10 @@ public class MazeGame extends ApplicationAdapter {
 
     // Events counter
     private int events;
-
+    
+    // Map that keeps track of event completion
+    private Map<String, Integer> event_tracker;
+    
     // Timer
     private float timer;
     private BitmapFont font;
@@ -81,17 +84,16 @@ public class MazeGame extends ApplicationAdapter {
     // Map
     private Maze maze;
 
-    Map<String, Boolean> evilBobReturnData = new HashMap<>();
-    Map<String, Boolean> campusSecurityReturnData = new HashMap<>();
-
+    //Event related variables
+    private Map<String, Boolean> evilBobReturnData = new HashMap<>();
+    private Map<String, Boolean> campusSecurityReturnData = new HashMap<>();
     private CampusSecurity allCampusSecuritySprites[] = new CampusSecurity[5];
     boolean created;
 
     // Boolean array to see if Bob has hit a wall, and what wall he has hit
     private boolean[] movement_halter;
 
-    // Map that keeps track of event completion
-    private Map<String, Integer> event_tracker;
+
 
     @Override
     public void create() {
@@ -248,6 +250,9 @@ public class MazeGame extends ApplicationAdapter {
 
     }
 
+    /**
+     * runs the code for the title screen every frame
+     */
     private void titleScreenRender() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clears the screen
         batch.setProjectionMatrix(camera.combined);
@@ -278,6 +283,9 @@ public class MazeGame extends ApplicationAdapter {
         }
     }
 
+    /**
+     * runs code for the tutorial screen every frame
+     */
     private void tutorialScreenRender() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clears the screen
         batch.setProjectionMatrix(camera.combined);
@@ -300,6 +308,10 @@ public class MazeGame extends ApplicationAdapter {
         }
     }
 
+    /**
+     * runs code for win screen every frame
+     * currently inescapable
+     */
     private void winScreenRender() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clears the screen
         batch.setProjectionMatrix(camera.combined);
@@ -322,6 +334,10 @@ public class MazeGame extends ApplicationAdapter {
         batch.end();
     }
 
+    /**
+     * runs code for lose screen every frame
+     * currently inescapable
+     */
     private void loseScreenRender() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clears the screen
         batch.setProjectionMatrix(camera.combined);
