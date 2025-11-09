@@ -15,7 +15,7 @@ import java.util.Map;
  * through to the class and then you can have all the decision-making in here, to clean up the code
  * and to avoid lots of passing textures through
  * 
- * @author Lenny
+ * @author Lenny, Henry
  */
 public class HUD {
 
@@ -28,41 +28,55 @@ public class HUD {
         this.pause = new Texture("libgdx.png");
     }
 
-    /**
-     * The method to draw the HUD
-     * @param font BitmapFont: The font used to render the timer String
-     * @param timer String: The formatted string of the timer
-     * @param bob Bob: The Bob character, to extract the contents of his inventory from
-     */
+     /**
+      * Draws the HUD data, such as time left & items collected
+      * @param font BitmapFont: The font used to render the timer String
+      * @param timer String: The formatted string of the timer
+      * @param events Map: Contains data to display the event status
+      * @param bob Bob: The Bob character, to extract the contents of his inventory from
+      * @param isPaused boolean: Used to check if the paused HUD should be shown
+      * @param viewport Viewport: Used to get the windows size for arranging text
+      */
     public void draw(BitmapFont font, String timer, Map<String, Integer> events, 
                      Bob bob, boolean isPaused, Viewport viewport){
-
-        float X = viewport.getScreenX();
-        float Y = viewport.getScreenY();
-        float W = viewport.getScreenWidth();
-        float H = viewport.getScreenHeight();
-
+        
+        // Gets screen size to arrange text
+        float windowX = viewport.getScreenX();
+        float windowY = viewport.getScreenY();
+        float windowWidth = viewport.getScreenWidth();
+        float windowHeight = viewport.getScreenHeight();
+        
+        // Backs up old HUDbatch settings to restore later
         Matrix4 previous = this.HUDbatch.getProjectionMatrix().cpy();
-        Matrix4 ortho = new Matrix4().setToOrtho2D(0, 0, W, H);
-        this.HUDbatch.setProjectionMatrix(ortho);
-        GlyphLayout layout = new GlyphLayout();
 
+        // Changes HUDbatch to use screen co-ordinates not game one
+        Matrix4 ortho = new Matrix4().setToOrtho2D(0, 0, windowWidth, windowHeight);
+        this.HUDbatch.setProjectionMatrix(ortho);
+
+        GlyphLayout layout = new GlyphLayout();
         String[] HUDText = {timer, "Positive: " + events.get("Positive"), "Negative: " + events.get("Negative"), "Hidden: " + events.get("Hidden")};
-        float y = H - 10f - font.getCapHeight();
-        font.getData().setScale((0.0015625f)*W);
+        float y = windowHeight - 10f - font.getCapHeight();
+        // Sets textscale based on window width
+        // 0.0015625 is just a scaling factor that
+        // equates to 1 at initial screen render size (640)
+        font.getData().setScale((0.0015625f)*windowWidth);
         
         this.HUDbatch.begin();
+        
+        // Draws each line of text
         for (String text : HUDText){
             layout.setText(font, text);
-            float x = W - 10f - layout.width;
+            float x = windowWidth - 10f - layout.width;
 
-            font.draw(this.HUDbatch, text, X + x, Y + y);
+            font.draw(this.HUDbatch, text, windowX + x, windowY + y);
             y -= font.getLineHeight();
         }
 
+        // Restores settings & draws textures
         this.HUDbatch.setProjectionMatrix(previous);
         font.getData().setScale(1);
         this.drawTextures(bob, font, isPaused);
+
         this.HUDbatch.end();
     }
 
