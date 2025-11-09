@@ -49,21 +49,21 @@ public class HUD {
 
         String[] HUDText = {timer, "Positive: " + events.get("Positive"), "Negative: " + events.get("Negative"), "Hidden: " + events.get("Hidden")};
         float y = H - 10f - font.getCapHeight();
+        font.getData().setScale((0.0015625f)*W);
         
         this.HUDbatch.begin();
         for (String text : HUDText){
             layout.setText(font, text);
             float x = W - 10f - layout.width;
 
-            font.getData().setScale((0.0015625f)*W);
             font.draw(this.HUDbatch, text, X + x, Y + y);
             y -= font.getLineHeight();
         }
 
+        this.HUDbatch.setProjectionMatrix(previous);
+        font.getData().setScale(1);
         this.drawTextures(bob, font, isPaused);
         this.HUDbatch.end();
-
-        this.HUDbatch.setProjectionMatrix(previous);
     }
 
     /**
