@@ -4,6 +4,8 @@ package com.team3._8.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.Set;
@@ -33,15 +35,35 @@ public class HUD {
      * @param bob Bob: The Bob character, to extract the contents of his inventory from
      */
     public void draw(BitmapFont font, String timer, Map<String, Integer> events, 
-                     Bob bob, boolean isPaused){
+                     Bob bob, boolean isPaused, Viewport viewport){
+
+        float X = viewport.getScreenX();
+        float Y = viewport.getScreenY();
+        float W = viewport.getScreenWidth();
+        float H = viewport.getScreenHeight();
+
+        Matrix4 previous = this.HUDbatch.getProjectionMatrix().cpy();
+        Matrix4 ortho = new Matrix4().setToOrtho2D(0, 0, W, H);
+        this.HUDbatch.setProjectionMatrix(ortho);
+        GlyphLayout layout = new GlyphLayout();
+
+        String[] HUDText = {timer, "Positive: " + events.get("Positive"), "Negative: " + events.get("Negative"), "Hidden: " + events.get("Hidden")};
+        float y = H - 10f - font.getCapHeight();
+        
         this.HUDbatch.begin();
-        font.draw(this.HUDbatch, timer,550, 370);
-        font.draw(this.HUDbatch, "Positive: " + events.get("Positive"), 550, 350);
-        font.draw(this.HUDbatch, "Negative: " + events.get("Negative"), 550, 330);
-        font.draw(this.HUDbatch, "Hidden: " + events.get("Hidden"), 550, 310);
+        for (String text : HUDText){
+            layout.setText(font, text);
+            float x = W - 10f - layout.width;
+
+            font.getData().setScale((0.0015625f)*W);
+            font.draw(this.HUDbatch, text, X + x, Y + y);
+            y -= font.getLineHeight();
+        }
 
         this.drawTextures(bob, font, isPaused);
         this.HUDbatch.end();
+
+        this.HUDbatch.setProjectionMatrix(previous);
     }
 
     /**

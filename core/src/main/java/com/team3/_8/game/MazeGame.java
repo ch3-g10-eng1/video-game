@@ -41,9 +41,6 @@ public class MazeGame extends ApplicationAdapter {
     // Events counter
     private int events;
     
-    // Map that keeps track of event completion
-    private Map<String, Integer> event_tracker;
-    
     // Timer
     private float timer;
     private BitmapFont font;
@@ -239,7 +236,7 @@ public class MazeGame extends ApplicationAdapter {
         batch.end();
 
         // The drawing of the HUD of the game
-        hud.draw(font, gameController.formatTime(timer), eventTracker, bob, paused);
+        hud.draw(font, gameController.formatTime(timer), eventTracker, bob, paused, viewport);
 
         // Sets rendered screens based on game state
         if (paused){
