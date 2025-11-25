@@ -29,7 +29,9 @@ public class Bob extends CollidableEntity {
   private String animationOverride = "";
   private boolean reset = false;
 
-  public Bob(Sprite sprite, float speed) {
+    final float VERTICAL_SPEED_MULTIPLIER = 1.2f;
+
+    public Bob(Sprite sprite, float speed) {
     super(sprite, speed);
     loadTextures();
   }
@@ -79,7 +81,7 @@ public class Bob extends CollidableEntity {
     // Y-axis
     if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W)))
         && !movement_halter[3]) {
-      this.sprite.translateY(speed * delta);
+      this.sprite.translateY(speed * delta * VERTICAL_SPEED_MULTIPLIER);
 
       if (animationOverride.isEmpty()) {
         current_animation = bob_animations.get("Up").getKeyFrame(stateTime, true);
@@ -88,7 +90,7 @@ public class Bob extends CollidableEntity {
       }
     } else if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S)))
         && !movement_halter[1]) {
-      this.sprite.translateY(-speed * delta);
+      this.sprite.translateY(-speed * delta * VERTICAL_SPEED_MULTIPLIER);
 
       if (animationOverride.isEmpty()) {
         current_animation = bob_animations.get("Front").getKeyFrame(stateTime, true);
