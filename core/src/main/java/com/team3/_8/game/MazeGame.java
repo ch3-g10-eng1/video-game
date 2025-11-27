@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -56,6 +57,18 @@ public class MazeGame extends ApplicationAdapter {
 
   // The creation of the keycard entity
   private CollectableEntity keycard;
+  private CollectableEntity speedBoost;
+  private CollectableEntity timeOrb;
+  private CollectableEntity shield;
+  private CollectableEntity sizePotion;
+
+  private boolean speedBoostActive = false;
+  private float speedBoostTimer = 0f;
+  private boolean invincibilityActive = false;
+  private float invincibilityTimer = 0f;
+  private boolean sizeChangeActive = false;
+  private float sizeChangeTimer = 0f;
+  private int originalSpeed = 60;
 
   // Evil bob collidable entity
   private EvilBob evilBob;
@@ -86,6 +99,11 @@ public class MazeGame extends ApplicationAdapter {
     createEvilBob();
 
     createKeycard();
+
+    createSpeedBoost();
+    createTimeOrb();
+    createShield();
+    createSizePotion();
 
     createTutorial();
 
@@ -145,6 +163,54 @@ public class MazeGame extends ApplicationAdapter {
     keycard = new CollectableEntity(keycardSprite, 0, "Keycard");
   }
 
+  private void createSpeedBoost() {
+    Pixmap pixmap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
+    pixmap.setColor(0, 1, 0, 1);
+    pixmap.fill();
+    Texture texture = new Texture(pixmap);
+    pixmap.dispose();
+    Sprite sprite = new Sprite(texture);
+    sprite.setPosition(300, 150);
+    sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
+    speedBoost = new CollectableEntity(sprite, 0, "SpeedBoost");
+  }
+
+  private void createTimeOrb() {
+    Pixmap pixmap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
+    pixmap.setColor(1, 1, 0, 1);
+    pixmap.fill();
+    Texture texture = new Texture(pixmap);
+    pixmap.dispose();
+    Sprite sprite = new Sprite(texture);
+    sprite.setPosition(600, 300);
+    sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
+    timeOrb = new CollectableEntity(sprite, 0, "TimeOrb");
+  }
+
+  private void createShield() {
+    Pixmap pixmap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
+    pixmap.setColor(0, 0.5f, 1, 1);
+    pixmap.fill();
+    Texture texture = new Texture(pixmap);
+    pixmap.dispose();
+    Sprite sprite = new Sprite(texture);
+    sprite.setPosition(800, 450);
+    sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
+    shield = new CollectableEntity(sprite, 0, "Shield");
+  }
+
+  private void createSizePotion() {
+    Pixmap pixmap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
+    pixmap.setColor(0.8f, 0, 0.8f, 1);
+    pixmap.fill();
+    Texture texture = new Texture(pixmap);
+    pixmap.dispose();
+    Sprite sprite = new Sprite(texture);
+    sprite.setPosition(400, 700);
+    sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
+    sizePotion = new CollectableEntity(sprite, 0, "SizePotion");
+  }
+
   private void createEvilBob() {
     evilBob =
         createSprite(
@@ -190,7 +256,6 @@ public class MazeGame extends ApplicationAdapter {
     boolean dev_zoom = false;
     paused = GameController.handleInput(camera, paused, dev_zoom);
 
-    // Configures game if player collects keycard
     if (keycard.collected(bob)) {
       eventTriggered("Positive");
       evilBob.setPlayerHasKeycard(true);
@@ -198,7 +263,55 @@ public class MazeGame extends ApplicationAdapter {
       maze.removeVisibleLayer("ClosedDoors");
     }
 
+    if (speedBoost.collected(bob)) {
+      eventTriggered("Positive");
+      speedBoostActive = true;
+      speedBoostTimer = 0f;
+      originalSpeed = (int)bob.speed;
+      bob.setSpeed(originalSpeed + 60);
+    }
+
+    if (timeOrb.collected(bob)) {
+      eventTriggered("Positive");
+      timer -= 60f;
+    }
+
+    if (shield.collected(bob)) {
+      eventTriggered("Positive");
+      invincibilityActive = true;
+      invincibilityTimer = 0f;
+    }
+
+    if (sizePotion.collected(bob)) {
+      eventTriggered("Positive");
+      sizeChangeActive = true;
+      sizeChangeTimer = 0f;
+      bobSprite.setScale(0.5f);
+    }
+
     if (!paused) {
+      if (speedBoostActive) {
+        speedBoostTimer += Gdx.graphics.getDeltaTime();
+        if (speedBoostTimer > 10f) {
+          speedBoostActive = false;
+          bob.setSpeed(originalSpeed);
+        }
+      }
+
+      if (invincibilityActive) {
+        invincibilityTimer += Gdx.graphics.getDeltaTime();
+        if (invincibilityTimer > 8f) {
+          invincibilityActive = false;
+        }
+      }
+
+      if (sizeChangeActive) {
+        sizeChangeTimer += Gdx.graphics.getDeltaTime();
+        if (sizeChangeTimer > 12f) {
+          sizeChangeActive = false;
+          bobSprite.setScale(1f);
+        }
+      }
       movement_halter = maze.hitsWall(bob, Gdx.graphics.getDeltaTime());
 
       // Checks for collision with evilBob
@@ -229,6 +342,10 @@ public class MazeGame extends ApplicationAdapter {
     evilBob.draw(batch, 1000, 1050);
     bob.draw(batch);
     keycard.draw(batch);
+    speedBoost.draw(batch);
+    timeOrb.draw(batch);
+    shield.draw(batch);
+    sizePotion.draw(batch);
 
     if (campusSecurityCreated) {
       int mod = 0;
@@ -513,12 +630,11 @@ public class MazeGame extends ApplicationAdapter {
       }
     }
 
-    // Checks for collision with CampusSecurity & resets player to start if so
     if (campusSecurityCreated) {
       for (CampusSecurity sec : allCampusSecuritySprites) {
         campusSecurityReturnData = sec.collision(bob);
         if (campusSecurityReturnData.containsKey("Reset Player Position")) {
-          if (campusSecurityReturnData.get("Reset Player Position")) {
+          if (campusSecurityReturnData.get("Reset Player Position") && !invincibilityActive) {
             bobSprite.setPosition(100, 500);
           }
         }
