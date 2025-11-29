@@ -58,12 +58,15 @@ public class MazeGame extends ApplicationAdapter {
   // The creation of the keycard entity
   private CollectableEntity keycard;
   private CollectableEntity speedBoost;
+  private CollectableEntity speedBoost2;
   private CollectableEntity timeOrb;
   private CollectableEntity shield;
   private CollectableEntity sizePotion;
 
   private boolean speedBoostActive = false;
   private float speedBoostTimer = 0f;
+  private boolean speedBoost2Active = false;
+  private float speedBoost2Timer = 0f;
   private boolean invincibilityActive = false;
   private float invincibilityTimer = 0f;
   private boolean sizeChangeActive = false;
@@ -101,6 +104,7 @@ public class MazeGame extends ApplicationAdapter {
     createKeycard();
 
     createSpeedBoost();
+    createSpeedBoost2();
     createTimeOrb();
     createShield();
     createSizePotion();
@@ -164,49 +168,41 @@ public class MazeGame extends ApplicationAdapter {
   }
 
   private void createSpeedBoost() {
-    Pixmap pixmap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
-    pixmap.setColor(0, 1, 0, 1);
-    pixmap.fill();
-    Texture texture = new Texture(pixmap);
-    pixmap.dispose();
+    Texture texture = new Texture("speed_boost.png");
     Sprite sprite = new Sprite(texture);
-    sprite.setPosition(300, 150);
+    sprite.setPosition(176, 656);
     sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
     speedBoost = new CollectableEntity(sprite, 0, "SpeedBoost");
   }
 
-  private void createTimeOrb() {
-    Pixmap pixmap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
-    pixmap.setColor(1, 1, 0, 1);
-    pixmap.fill();
-    Texture texture = new Texture(pixmap);
-    pixmap.dispose();
+  private void createSpeedBoost2() {
+    Texture texture = new Texture("speed_boost2.png");
     Sprite sprite = new Sprite(texture);
-    sprite.setPosition(600, 300);
+    sprite.setPosition(912, 160);
+    sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
+    speedBoost2 = new CollectableEntity(sprite, 0, "SpeedBoost2");
+  }
+
+  private void createTimeOrb() {
+    Texture texture = new Texture("time_orb.png");
+    Sprite sprite = new Sprite(texture);
+    sprite.setPosition(1408, 480);
     sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
     timeOrb = new CollectableEntity(sprite, 0, "TimeOrb");
   }
 
   private void createShield() {
-    Pixmap pixmap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
-    pixmap.setColor(0, 0.5f, 1, 1);
-    pixmap.fill();
-    Texture texture = new Texture(pixmap);
-    pixmap.dispose();
+    Texture texture = new Texture("shield.png");
     Sprite sprite = new Sprite(texture);
-    sprite.setPosition(800, 450);
+    sprite.setPosition(1008, 1008);
     sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
     shield = new CollectableEntity(sprite, 0, "Shield");
   }
 
   private void createSizePotion() {
-    Pixmap pixmap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
-    pixmap.setColor(0.8f, 0, 0.8f, 1);
-    pixmap.fill();
-    Texture texture = new Texture(pixmap);
-    pixmap.dispose();
+    Texture texture = new Texture("size_potion.png");
     Sprite sprite = new Sprite(texture);
-    sprite.setPosition(400, 700);
+    sprite.setPosition(448, 944);
     sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
     sizePotion = new CollectableEntity(sprite, 0, "SizePotion");
   }
@@ -271,6 +267,14 @@ public class MazeGame extends ApplicationAdapter {
       bob.setSpeed(originalSpeed + 60);
     }
 
+    if (speedBoost2.collected(bob)) {
+      eventTriggered("Positive");
+      speedBoost2Active = true;
+      speedBoost2Timer = 0f;
+      originalSpeed = (int)bob.speed;
+      bob.setSpeed(originalSpeed + 60);
+    }
+
     if (timeOrb.collected(bob)) {
       eventTriggered("Positive");
       timer -= 60f;
@@ -294,6 +298,14 @@ public class MazeGame extends ApplicationAdapter {
         speedBoostTimer += Gdx.graphics.getDeltaTime();
         if (speedBoostTimer > 10f) {
           speedBoostActive = false;
+          bob.setSpeed(originalSpeed);
+        }
+      }
+
+      if (speedBoost2Active) {
+        speedBoost2Timer += Gdx.graphics.getDeltaTime();
+        if (speedBoost2Timer > 20f) {
+          speedBoost2Active = false;
           bob.setSpeed(originalSpeed);
         }
       }
@@ -343,6 +355,7 @@ public class MazeGame extends ApplicationAdapter {
     bob.draw(batch);
     keycard.draw(batch);
     speedBoost.draw(batch);
+    speedBoost2.draw(batch);
     timeOrb.draw(batch);
     shield.draw(batch);
     sizePotion.draw(batch);
