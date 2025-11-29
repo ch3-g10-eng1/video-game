@@ -63,7 +63,10 @@ public class HUD {
     this.HUDbatch.setProjectionMatrix(ortho);
 
     GlyphLayout layout = new GlyphLayout();
+    int gridX = (int)(bob.getX() / 16);
+    int gridY = (int)(bob.getY() / 16);
     String[] HUDText = {
+      "Grid: (" + gridX + ", " + gridY + ")",
       timer,
       "Positive: " + events.get("Positive"),
       "Negative: " + events.get("Negative"),
