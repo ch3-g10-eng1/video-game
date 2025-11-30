@@ -666,6 +666,23 @@ public class MazeGame extends ApplicationAdapter {
             }
         }
 
+        if (puzzleEventReturnData.containsKey("Enable Rocket Bob")) {
+            if (puzzleEventReturnData.get("Enable Rocket Bob")) {
+                bob.setAnimation("Rocket");
+                bob.setSpeed(150);
+                puzzleEventReturnData.remove("Enable Rocket Bob");
+                eventTriggered("Hidden");
+            }
+        }
+
+        if (puzzleEventReturnData.containsKey("Time penalty")) {
+            if (puzzleEventReturnData.get("Time penalty")) {
+                timer += 30;
+                puzzleEventReturnData.remove("Time penalty");
+                eventTriggered("Hidden");
+            }
+        }
+
         if (campusSecurityCreated) {
             for (CampusSecurity sec : allCampusSecuritySprites) {
                 campusSecurityReturnData = sec.collision(bob);

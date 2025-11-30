@@ -95,19 +95,4 @@ public class PuzzleEventLogic {
     public int getAnswer(){
         return answer;
     }
-
-
-    /**
-     * Get the index of the correct answer in the options list
-     *
-     * @return answer index or -1 if error
-     */
-    public int getAnswerIndex(){
-        for(int i = 0; i < 4; i++){
-            if (options[i] == answer){
-                return i;
-            }
-        }
-        return -1;
-    }
 }

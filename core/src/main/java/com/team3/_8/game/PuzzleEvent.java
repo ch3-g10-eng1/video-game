@@ -10,6 +10,15 @@ import com.badlogic.gdx.utils.Array;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Implements PuzzleEventLogic and creates a hidden event where the player can choose to solve an equation for a reward
+ * The puzzle is in the format:
+ *    a * b +- c
+ * If the puzzle is solved the player gains the rocket boost
+ * If the player chooses the incorrect answer a 30 second time penalty is added
+ *
+ * @author Oliver
+ */
 public class PuzzleEvent extends InteractableEntity{
     final HashMap<String, Boolean> returnData = new HashMap<>();
     private final String[] script = {
@@ -28,9 +37,15 @@ public class PuzzleEvent extends InteractableEntity{
     private int conversationPointer = 0;
     private boolean conversationReset = false;
     private boolean isSolved = false;
-    private boolean drawNext = false;
+    private boolean drawNext = true;
     private BitmapFont font;
 
+    /**
+     * Creates PuzzleEvent, loads evilBob texture as placeholder (is invisible anyways), creates puzzle logic and sets relevant vars
+     *
+     * @param sprite redundant sprite param, is made invisible anyways
+     * @param speed speed param, always 0f as the hidden event does not move
+     */
     public PuzzleEvent(Sprite sprite, float speed){
         super(sprite, speed);
         loadTextures();
@@ -41,23 +56,30 @@ public class PuzzleEvent extends InteractableEntity{
         answer = thisPuzzle.getAnswer();
     }
 
+    /**
+     * Handles player interaction with the event
+     *
+     * @return map of commands & their state for the calling class to use useful to control effects
+     *         etc. based on interaction
+     */
     @Override
     public Map<String, Boolean> startInteraction(){
         if (isSolved) { return returnData; }
-        drawNext = true;
         boolean skipChoice = false;
         if (!textBubbleVisible) {
             textBubbleVisible = textBubble.hideShow();
+            drawNext = true;
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.E) || (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && conversationPointer > 0) && !conversationReset){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)  && !conversationReset|| (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && conversationPointer > 0) && !conversationReset){
+            drawNext = true;
             textBubble.setText(script[conversationPointer]);
             conversationPointer += 1;
 
             if (conversationPointer > script.length - 1){
-                conversationPointer = 0;
                 conversationReset = true;
                 skipChoice = true;
+                drawNext = false;
             }
         }
 
@@ -68,26 +90,98 @@ public class PuzzleEvent extends InteractableEntity{
                     + "\n" + "3:  " + options[2]
                     + "    " + "4:  " + options[3]);
             }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)){
+                if(options[0] == answer){
+                    returnData.put("Enable Rocket Bob", true);
+                    isSolved = true;
+                    textBubbleVisible = textBubble.hideShow();
+                    drawNext = false;
+                }
+                else{
+                    returnData.put("Time penalty", true);
+                    isSolved = true;
+                    textBubbleVisible = textBubble.hideShow();
+                    drawNext = false;
+                }
+            }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)){
+                if(options[1] == answer){
+                    returnData.put("Enable Rocket Bob", true);
+                    isSolved = true;
+                    textBubbleVisible = textBubble.hideShow();
+                    drawNext = false;
+                }
+                else{
+                    returnData.put("Time penalty", true);
+                    isSolved = true;
+                    textBubbleVisible = textBubble.hideShow();
+                    drawNext = false;
+                }
+            }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)){
+                if(options[2] == answer){
+                    returnData.put("Enable Rocket Bob", true);
+                    isSolved = true;
+                    textBubbleVisible = textBubble.hideShow();
+                    drawNext = false;
+                }
+                else{
+                    returnData.put("Time penalty", true);
+                    isSolved = true;
+                    textBubbleVisible = textBubble.hideShow();
+                    drawNext = false;
+                }
+            }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)){
+                if(options[3] == answer){
+                    returnData.put("Enable Rocket Bob", true);
+                    isSolved = true;
+                    textBubbleVisible = textBubble.hideShow();
+                    drawNext = false;
+                }
+                else{
+                    returnData.put("Time penalty", true);
+                    isSolved = true;
+                    textBubbleVisible = textBubble.hideShow();
+                    drawNext = false;
+                }
+            }
         }
 
         return returnData;
     }
 
+    /**
+     * Handles destruction/reset of interaction after finishing
+     *
+     * @return map of commands & their state for the calling class to use useful to control effects
+     *         etc. based on interaction
+     */
     @Override
     public Map<String, Boolean> stopInteraction() {
         if (isSolved) { return returnData; }
+        drawNext = false;
         if (textBubbleVisible) {
             textBubble.setText(script[0]);
             conversationPointer = 1;
 
             textBubbleVisible = textBubble.hideShow();
+            drawNext = true;
         }
-        drawNext = false;
         return returnData;
     }
 
+
+    /**
+     * Draws invisible sprite and text bubble
+     *
+     * @param batch batch for calling class
+     * @param x x-position of sprite
+     * @param y y-position of sprite
+     */
     public void draw(SpriteBatch batch, float x, float y) {
         sprite.setPosition(x, y);
+        sprite.setColor(0f, 0f, 0f, 0f);
 
         // If character has moved update collision box
         if (x != this.x || y != this.y) {
@@ -105,11 +199,13 @@ public class PuzzleEvent extends InteractableEntity{
         sprite.draw(batch);
     }
 
+    /** Updates the collision box to the placement of the sprite */
     protected void updateCollisionBox() {
         this.collisionBox.setX(this.sprite.getX());
         this.collisionBox.setY(this.sprite.getY());
     }
 
+    /** Creates TextBubble */
     private void createTextBubble() {
         font = new BitmapFont();
         Texture bubble = new Texture("speech_bubble.png");
