@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.utils.Array;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +31,6 @@ public class PuzzleEvent extends InteractableEntity{
     private float x = 0;
     private float y = 0;
     private TextBubble textBubble;
-    private Animation<TextureRegion> puzzleEvent;
     private boolean textBubbleVisible = false;
     private int conversationPointer = 0;
     private boolean conversationReset = false;
@@ -48,7 +46,6 @@ public class PuzzleEvent extends InteractableEntity{
      */
     public PuzzleEvent(Sprite sprite, float speed){
         super(sprite, speed);
-        loadTextures();
         createTextBubble();
         PuzzleEventLogic thisPuzzle = new PuzzleEventLogic();
         options = thisPuzzle.getOptions();
@@ -100,66 +97,50 @@ public class PuzzleEvent extends InteractableEntity{
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)){
                 if(options[0] == answer){
                     returnData.put("Enable Rocket Bob", true);
-                    isSolved = true;
-                    textBubbleVisible = textBubble.hideShow();
-                    drawNext = false;
-                    returnData.put("Suspend", false);
                 }
                 else{
                     returnData.put("Time penalty", true);
-                    isSolved = true;
-                    textBubbleVisible = textBubble.hideShow();
-                    drawNext = false;
-                    returnData.put("Suspend", false);
                 }
+                isSolved = true;
+                textBubbleVisible = textBubble.hideShow();
+                drawNext = false;
+                returnData.put("Suspend", false);
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)){
                 if(options[1] == answer){
                     returnData.put("Enable Rocket Bob", true);
-                    isSolved = true;
-                    textBubbleVisible = textBubble.hideShow();
-                    drawNext = false;
-                    returnData.put("Suspend", false);
                 }
                 else{
                     returnData.put("Time penalty", true);
-                    isSolved = true;
-                    textBubbleVisible = textBubble.hideShow();
-                    drawNext = false;
-                    returnData.put("Suspend", false);
                 }
+                isSolved = true;
+                textBubbleVisible = textBubble.hideShow();
+                drawNext = false;
+                returnData.put("Suspend", false);
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)){
                 if(options[2] == answer){
                     returnData.put("Enable Rocket Bob", true);
-                    isSolved = true;
-                    textBubbleVisible = textBubble.hideShow();
-                    drawNext = false;
-                    returnData.put("Suspend", false);
                 }
                 else{
                     returnData.put("Time penalty", true);
-                    isSolved = true;
-                    textBubbleVisible = textBubble.hideShow();
-                    drawNext = false;
-                    returnData.put("Suspend", false);
                 }
+                isSolved = true;
+                textBubbleVisible = textBubble.hideShow();
+                drawNext = false;
+                returnData.put("Suspend", false);
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)){
                 if(options[3] == answer){
                     returnData.put("Enable Rocket Bob", true);
-                    isSolved = true;
-                    textBubbleVisible = textBubble.hideShow();
-                    drawNext = false;
-                    returnData.put("Suspend", false);
                 }
                 else{
                     returnData.put("Time penalty", true);
-                    isSolved = true;
-                    textBubbleVisible = textBubble.hideShow();
-                    drawNext = false;
-                    returnData.put("Suspend", false);
                 }
+                isSolved = true;
+                textBubbleVisible = textBubble.hideShow();
+                drawNext = false;
+                returnData.put("Suspend", false);
             }
         }
 
@@ -228,15 +209,4 @@ public class PuzzleEvent extends InteractableEntity{
         textBubble.setText(script[0]);
         conversationPointer += 1;
     }
-
-    private void loadTextures() {
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("atlas/bob.atlas"));
-
-        // Loads animation frames
-        Array<TextureAtlas.AtlasRegion> frames = atlas.findRegions("evil-bob");
-
-        // Creates animation object
-        this.puzzleEvent = new Animation<TextureRegion>(0.5f, frames);
-    }
-
 }
