@@ -666,6 +666,10 @@ public class MazeGame extends ApplicationAdapter {
             }
         }
 
+        if (puzzleEventReturnData.containsKey("Suspend")) {
+            bob.setSuspension(puzzleEventReturnData.get("Suspend"));
+        }
+
         if (puzzleEventReturnData.containsKey("Enable Rocket Bob")) {
             if (puzzleEventReturnData.get("Enable Rocket Bob")) {
                 bob.setAnimation("Rocket");

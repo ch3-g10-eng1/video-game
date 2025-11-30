@@ -65,6 +65,7 @@ public class PuzzleEvent extends InteractableEntity{
     @Override
     public Map<String, Boolean> startInteraction(){
         if (isSolved) { return returnData; }
+        returnData.put("Suspend", true);
         boolean skipChoice = false;
         if (!textBubbleVisible) {
             textBubbleVisible = textBubble.hideShow();
@@ -90,18 +91,26 @@ public class PuzzleEvent extends InteractableEntity{
                     + "\n" + "3:  " + options[2]
                     + "    " + "4:  " + options[3]);
             }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.N)){
+                isSolved = true;
+                textBubbleVisible = textBubble.hideShow();
+                drawNext = false;
+                returnData.put("Suspend", false);
+            }
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)){
                 if(options[0] == answer){
                     returnData.put("Enable Rocket Bob", true);
                     isSolved = true;
                     textBubbleVisible = textBubble.hideShow();
                     drawNext = false;
+                    returnData.put("Suspend", false);
                 }
                 else{
                     returnData.put("Time penalty", true);
                     isSolved = true;
                     textBubbleVisible = textBubble.hideShow();
                     drawNext = false;
+                    returnData.put("Suspend", false);
                 }
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)){
@@ -110,12 +119,14 @@ public class PuzzleEvent extends InteractableEntity{
                     isSolved = true;
                     textBubbleVisible = textBubble.hideShow();
                     drawNext = false;
+                    returnData.put("Suspend", false);
                 }
                 else{
                     returnData.put("Time penalty", true);
                     isSolved = true;
                     textBubbleVisible = textBubble.hideShow();
                     drawNext = false;
+                    returnData.put("Suspend", false);
                 }
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)){
@@ -124,12 +135,14 @@ public class PuzzleEvent extends InteractableEntity{
                     isSolved = true;
                     textBubbleVisible = textBubble.hideShow();
                     drawNext = false;
+                    returnData.put("Suspend", false);
                 }
                 else{
                     returnData.put("Time penalty", true);
                     isSolved = true;
                     textBubbleVisible = textBubble.hideShow();
                     drawNext = false;
+                    returnData.put("Suspend", false);
                 }
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)){
@@ -138,12 +151,14 @@ public class PuzzleEvent extends InteractableEntity{
                     isSolved = true;
                     textBubbleVisible = textBubble.hideShow();
                     drawNext = false;
+                    returnData.put("Suspend", false);
                 }
                 else{
                     returnData.put("Time penalty", true);
                     isSolved = true;
                     textBubbleVisible = textBubble.hideShow();
                     drawNext = false;
+                    returnData.put("Suspend", false);
                 }
             }
         }
