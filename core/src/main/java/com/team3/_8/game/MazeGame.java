@@ -65,6 +65,7 @@ public class MazeGame extends ApplicationAdapter {
     private CollectableEntity sizePotion;
     private CollectableEntity confusedDebuff;
     private CollectableEntity hiddenLightsOut;
+    private CollectableEntity tomato;
 
     private boolean speedBoostActive = false;
     private float speedBoostTimer = 0f;
@@ -78,9 +79,15 @@ public class MazeGame extends ApplicationAdapter {
     private float lightsOutTimer = 30f;
     private boolean confusedActive = false;
     private float confusedTimer = 0f;
+    private float tomatoTimer = 0f;
+    private boolean tomatoActive = false;
+    private float tomatoAlpha = 1f;
+    private float tomatoFade = 0.1f;
 
     private boolean areLightsOut = false;
     private Sprite lightsOutSprite;
+
+    private Sprite tomatoSplatSprite;
 
     // Evil bob collidable entity
     private EvilBob evilBob;
@@ -120,11 +127,13 @@ public class MazeGame extends ApplicationAdapter {
 
         createSpeedBoost();
         createSpeedBoost2();
+        createTomato();
         createTimeOrb();
         createShield();
         createSizePotion();
         createConfusedDebuff();
         createLightsOutOverlay();
+        createTomatoSplat();
 
         createTutorial();
 
@@ -160,6 +169,14 @@ public class MazeGame extends ApplicationAdapter {
 
         lightsOutSprite = new Sprite(lightsOutOverlay);
         lightsOutSprite.setSize(WORLD_WIDTH*2, WORLD_WIDTH*2);
+    }
+
+    private void createTomatoSplat(){
+        Texture texture = new Texture ("tomatoSplat.png");
+        tomatoSplatSprite = new Sprite(texture);
+
+        tomatoSplatSprite.setSize(WORLD_WIDTH * 1.5f, WORLD_HEIGHT);
+        tomatoAlpha = 1f;
     }
 
     private void createHUD() {
@@ -211,6 +228,14 @@ public class MazeGame extends ApplicationAdapter {
         sprite.setPosition(176, 656);
         sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
         speedBoost = new CollectableEntity(sprite, 0, "SpeedBoost");
+    }
+
+    private void createTomato(){
+        Texture texture = new Texture("tomato.png");
+        Sprite sprite = new Sprite(texture);
+        sprite.setPosition(561, 532);
+        sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
+        tomato = new CollectableEntity(sprite, 0, "Tomato");
     }
 
     private void createSpeedBoost2() {
@@ -324,6 +349,11 @@ public class MazeGame extends ApplicationAdapter {
             areLightsOut = true;
         }
 
+        if (tomato.collected(bob)){
+            eventTriggered("Negative");
+            tomatoActive = true;
+        }
+
         if (speedBoost.collected(bob)) {
             eventTriggered("Positive");
             speedBoostActive = true;
@@ -396,6 +426,12 @@ public class MazeGame extends ApplicationAdapter {
                     bobSprite.setScale(1f);
                 }
             }
+
+            if (tomatoActive){
+                tomatoSplatSprite.setColor(1f, 1f, 1f, tomatoAlpha);
+
+                tomatoSplatSprite.setPosition(camera.position.x - tomatoSplatSprite.getWidth() / 2, camera.position.y - tomatoSplatSprite.getHeight() / 2);
+            }
             movement_halter = maze.hitsWall(bob, Gdx.graphics.getDeltaTime());
 
             // Checks for collision with evilBob
@@ -422,6 +458,14 @@ public class MazeGame extends ApplicationAdapter {
                     bob.setConfused(false);
                 }
             }
+            if (tomatoActive){
+                tomatoAlpha -= (tomatoFade * Gdx.graphics.getDeltaTime());
+                tomatoTimer += Gdx.graphics.getDeltaTime();
+                if (tomatoTimer >= 15f){
+                    tomatoActive = false;
+                    tomatoAlpha = 0f;
+                }
+            }
         }
 
         // Centres the camera on Bob and then updates it
@@ -436,12 +480,12 @@ public class MazeGame extends ApplicationAdapter {
 
         // Sprite batch drawing
         maze.renderMap(camera);
-
         batch.begin();
         evilBob.draw(batch, 1000, 1050);
         puzzleEvent.draw(batch, 345, 600);
         bob.draw(batch);
         keycard.draw(batch);
+        tomato.draw(batch);
         speedBoost.draw(batch);
         speedBoost2.draw(batch);
         timeOrb.draw(batch);
@@ -461,6 +505,9 @@ public class MazeGame extends ApplicationAdapter {
             }
         }
 
+        if(tomatoActive){
+            tomatoSplatSprite.draw(batch);
+        }
         batch.end();
 
         if(areLightsOut){
