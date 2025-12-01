@@ -40,6 +40,8 @@ public class HUD {
    * @param bob Bob: The Bob character, to extract the contents of his inventory from
    * @param isPaused boolean: Whether to draw paused HUD
    * @param viewport Viewport: Used to get the windows size for arranging text
+   * @param isLightsOut boolean: Used to determine whether to draw the lights out timer
+   * @param lightsOutTimer String: The formatted lights out timer string
    */
   public void draw(
       BitmapFont font,
