@@ -63,6 +63,7 @@ public class MazeGame extends ApplicationAdapter {
     private CollectableEntity timeOrb;
     private CollectableEntity shield;
     private CollectableEntity sizePotion;
+    private CollectableEntity confusedDebuff;
     private CollectableEntity hiddenLightsOut;
 
     private boolean speedBoostActive = false;
@@ -75,6 +76,8 @@ public class MazeGame extends ApplicationAdapter {
     private float sizeChangeTimer = 0f;
     private int originalSpeed = 60;
     private float lightsOutTimer = 30f;
+    private boolean confusedActive = false;
+    private float confusedTimer = 0f;
 
     private boolean areLightsOut = false;
     private Sprite lightsOutSprite;
@@ -120,6 +123,7 @@ public class MazeGame extends ApplicationAdapter {
         createTimeOrb();
         createShield();
         createSizePotion();
+        createConfusedDebuff();
         createLightsOutOverlay();
 
         createTutorial();
@@ -241,6 +245,14 @@ public class MazeGame extends ApplicationAdapter {
         sizePotion = new CollectableEntity(sprite, 0, "SizePotion");
     }
 
+    private void createConfusedDebuff(){
+        Texture texture = new Texture("confused.png");
+        Sprite sprite = new Sprite(texture);
+        sprite.setPosition(350, 400);
+        sprite.setSize(BOB_WIDTH*1.5f, BOB_HEIGHT*1.5f);
+        confusedDebuff = new CollectableEntity(sprite, 0, "ConfusedDebuff");
+    }
+
     private void createEvilBob() {
         evilBob =
             createSprite(
@@ -346,6 +358,12 @@ public class MazeGame extends ApplicationAdapter {
             bobSprite.setScale(0.5f);
         }
 
+        if (confusedDebuff.collected(bob)){
+            eventTriggered("Negative");
+            confusedActive = true;
+            confusedTimer = 0f;
+        }
+
         if (!paused) {
             if (speedBoostActive) {
                 speedBoostTimer += Gdx.graphics.getDeltaTime();
@@ -421,6 +439,7 @@ public class MazeGame extends ApplicationAdapter {
         timeOrb.draw(batch);
         shield.draw(batch);
         sizePotion.draw(batch);
+        confusedDebuff.draw(batch);
 
         if (campusSecurityCreated) {
             int mod = 0;
