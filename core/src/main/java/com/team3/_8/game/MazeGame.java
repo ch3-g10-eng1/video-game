@@ -63,6 +63,7 @@ public class MazeGame extends ApplicationAdapter {
     private CollectableEntity timeOrb;
     private CollectableEntity shield;
     private CollectableEntity sizePotion;
+    private CollectableEntity hiddenLightsOut;
 
     private boolean speedBoostActive = false;
     private float speedBoostTimer = 0f;
@@ -73,6 +74,10 @@ public class MazeGame extends ApplicationAdapter {
     private boolean sizeChangeActive = false;
     private float sizeChangeTimer = 0f;
     private int originalSpeed = 60;
+    private float lightsOutTimer = 30f;
+
+    private boolean areLightsOut = false;
+    private Sprite lightsOutSprite;
 
     // Evil bob collidable entity
     private EvilBob evilBob;
@@ -108,11 +113,14 @@ public class MazeGame extends ApplicationAdapter {
 
         createKeycard();
 
+        createLightsOutEvent();
+
         createSpeedBoost();
         createSpeedBoost2();
         createTimeOrb();
         createShield();
         createSizePotion();
+        createLightsOutOverlay();
 
         createTutorial();
 
@@ -137,6 +145,17 @@ public class MazeGame extends ApplicationAdapter {
         tutorial_sprite = new Sprite(tutorial_texture);
         tutorial_sprite.setSize(310, 180);
         tutorial_sprite.setPosition(-150, -100);
+    }
+
+    private void createLightsOutOverlay(){
+        Pixmap pixmap = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Pixmap.Format.RGBA8888);
+        pixmap.setColor(0, 0, 0, 0.98f);
+        pixmap.fill();
+        Texture lightsOutOverlay = new Texture(pixmap);
+        pixmap.dispose();
+
+        lightsOutSprite = new Sprite(lightsOutOverlay);
+        lightsOutSprite.setSize(WORLD_WIDTH*2, WORLD_WIDTH*2);
     }
 
     private void createHUD() {
@@ -170,6 +189,16 @@ public class MazeGame extends ApplicationAdapter {
         keycardSprite.setPosition(20, 20);
         keycardSprite.setSize(BOB_WIDTH * 2, BOB_HEIGHT * 2);
         keycard = new CollectableEntity(keycardSprite, 0, "Keycard");
+    }
+
+    private void createLightsOutEvent(){
+        Texture lightsOutTexture = new Texture("keycard.png");
+        Sprite lightsOutEventSprite = new Sprite(lightsOutTexture);
+        // use keycard for placeholder, event is invisible anyways
+        lightsOutEventSprite.setPosition(1000, 950);
+        lightsOutEventSprite.setSize(BOB_WIDTH * 2, BOB_HEIGHT * 2);
+        hiddenLightsOut = new CollectableEntity(lightsOutEventSprite, 0, "Lights Out");
+        // i actually have no idea why this is invisible, but it is and its meant to be so i wont question it
     }
 
     private void createSpeedBoost() {
@@ -276,6 +305,11 @@ public class MazeGame extends ApplicationAdapter {
             evilBob.setPlayerHasKeycard(true);
             maze.removeCollisionLayer("Doors");
             maze.removeVisibleLayer("ClosedDoors");
+        }
+
+        if (hiddenLightsOut.collected(bob)) {
+            eventTriggered("Hidden");
+            areLightsOut = true;
         }
 
         if (speedBoost.collected(bob)) {
@@ -396,8 +430,15 @@ public class MazeGame extends ApplicationAdapter {
 
         batch.end();
 
+        if(areLightsOut){
+            batch.begin();
+            lightsOutSprite.setPosition(camera.position.x - (WORLD_WIDTH), camera.position.y - (WORLD_HEIGHT));
+            lightsOutSprite.draw(batch);
+            batch.end();
+        }
+
         // The drawing of the HUD of the game
-        hud.draw(font, GameController.formatTime(timer), eventTracker, bob, paused, viewport);
+        hud.draw(font, GameController.formatTime(timer), eventTracker, bob, paused, viewport, areLightsOut, GameController.formatTime(lightsOutTimer));
 
         // Sets rendered screens based on game state
         if (paused) {

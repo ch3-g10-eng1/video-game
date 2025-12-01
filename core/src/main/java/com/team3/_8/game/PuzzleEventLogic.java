@@ -25,7 +25,7 @@ public class PuzzleEventLogic {
 
         this.a = random.nextInt(2, 10);
         this.b = random.nextInt(2, 10);
-        this.c = random.nextInt(2, (a*b)/2);
+        this.c = random.nextInt(2, ((a*b)/2) + 1);
 
         this.operator = random.nextBoolean() ? '+' : '-';
 

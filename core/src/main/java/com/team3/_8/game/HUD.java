@@ -47,7 +47,9 @@ public class HUD {
       Map<String, Integer> events,
       Bob bob,
       boolean isPaused,
-      Viewport viewport) {
+      Viewport viewport,
+      boolean isLightsOut,
+      String lightsOutTimer) {
 
     // Gets screen size to arrange text
     float windowX = viewport.getScreenX();
@@ -66,11 +68,19 @@ public class HUD {
     int gridX = (int)(bob.getX() / 16);
     int gridY = (int)(bob.getY() / 16);
     String[] HUDText = {
-      "Grid: (" + gridX + ", " + gridY + ")",
-      timer,
-      "Positive: " + events.get("Positive"),
-      "Negative: " + events.get("Negative"),
-      "Hidden: " + events.get("Hidden")
+        "Grid: (" + gridX + ", " + gridY + ")",
+        timer,
+        "Positive: " + events.get("Positive"),
+        "Negative: " + events.get("Negative"),
+        "Hidden: " + events.get("Hidden")
+    };
+    String[] HUDTextLightsOut = {
+        "Grid: (" + gridX + ", " + gridY + ")",
+        timer,
+        "Positive: " + events.get("Positive"),
+        "Negative: " + events.get("Negative"),
+        "Hidden: " + events.get("Hidden"),
+        "Lights " + lightsOutTimer
     };
     float y = windowHeight - 10f - font.getCapHeight();
     // Sets text scale based on window width
@@ -79,13 +89,25 @@ public class HUD {
 
     this.HUDbatch.begin();
 
-    // Draws each line of text
-    for (String text : HUDText) {
-      layout.setText(font, text);
-      float x = windowWidth - 10f - layout.width;
+    if (isLightsOut){
+        // Draw lines of text including lights out timer
+        for (String text : HUDTextLightsOut) {
+            layout.setText(font, text);
+            float x = windowWidth - 10f - layout.width;
 
-      font.draw(this.HUDbatch, text, windowX + x, windowY + y);
-      y -= font.getLineHeight();
+            font.draw(this.HUDbatch, text, windowX + x, windowY + y);
+            y -= font.getLineHeight();
+        }
+    }
+    else{
+        // Draws each line of text
+        for (String text : HUDText) {
+            layout.setText(font, text);
+            float x = windowWidth - 10f - layout.width;
+
+            font.draw(this.HUDbatch, text, windowX + x, windowY + y);
+            y -= font.getLineHeight();
+        }
     }
 
     // Restores settings & draws textures
