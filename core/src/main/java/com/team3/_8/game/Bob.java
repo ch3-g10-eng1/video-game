@@ -23,7 +23,9 @@ public class Bob extends CollidableEntity {
   // Used to control animation time
   float stateTime = 0f;
   // Suspends movement input for certain events
-  private Boolean suspendMovement = false;
+  private boolean suspendMovement = false;
+  // Whether or not the player has the confused debuff (controls flipped)
+  private boolean isConfused = false;
   // Creates an inventory, which will be filled with String IDs
   private float collision__size_change; // offset for collision size, required for move()
   // Holds the name of the animation linked to the animation
@@ -61,44 +63,86 @@ public class Bob extends CollidableEntity {
 
     if(!suspendMovement) {
         // X-axis
-        if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D)))
-            && !movement_halter[0]) {
-            this.sprite.translateX(this.speed * delta);
-            // Sets sprite animation to right
-            if (animationOverride.isEmpty()) {
-                current_animation = bob_animations.get("Right").getKeyFrame(stateTime, true);
-            } else {
-                current_animation = bob_animations.get("RocketRight").getKeyFrame(stateTime, true);
+        if (((Gdx.input.isKeyPressed(Input.Keys.RIGHT)) || (Gdx.input.isKeyPressed(Input.Keys.D)))) {
+            if(!isConfused && !movement_halter[0]){
+                this.sprite.translateX(this.speed * delta);
+                // Sets sprite animation to right
+                if (animationOverride.isEmpty()) {
+                    current_animation = bob_animations.get("Right").getKeyFrame(stateTime, true);
+                } else {
+                    current_animation = bob_animations.get("RocketRight").getKeyFrame(stateTime, true);
+                }
             }
-        } else if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A)))
-            && !movement_halter[2]) {
-            this.sprite.translateX(-speed * delta);
+            else if (isConfused && !movement_halter[2]){
+                this.sprite.translateX(-speed * delta);
+                // Sets sprite animation to right
+                if (animationOverride.isEmpty()) {
+                    current_animation = bob_animations.get("Left").getKeyFrame(stateTime, true);
+                } else {
+                    current_animation = bob_animations.get("RocketLeft").getKeyFrame(stateTime, true);
+                }
+            }
+        } else if (((Gdx.input.isKeyPressed(Input.Keys.LEFT)) || (Gdx.input.isKeyPressed(Input.Keys.A)))) {
+            if(!isConfused && !movement_halter[2]){
+                this.sprite.translateX(-speed * delta);
 
-            if (animationOverride.isEmpty()) {
-                current_animation = bob_animations.get("Left").getKeyFrame(stateTime, true);
-            } else {
-                current_animation = bob_animations.get("RocketLeft").getKeyFrame(stateTime, true);
+                if (animationOverride.isEmpty()) {
+                    current_animation = bob_animations.get("Left").getKeyFrame(stateTime, true);
+                } else {
+                    current_animation = bob_animations.get("RocketLeft").getKeyFrame(stateTime, true);
+                }
+            }
+            else if(isConfused && !movement_halter[0]){
+                this.sprite.translateX(speed * delta);
+
+                if (animationOverride.isEmpty()) {
+                    current_animation = bob_animations.get("Right").getKeyFrame(stateTime, true);
+                } else {
+                    current_animation = bob_animations.get("RocketRight").getKeyFrame(stateTime, true);
+                }
             }
         }
 
         // Y-axis
-        if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W)))
-            && !movement_halter[3]) {
-            this.sprite.translateY(speed * delta * VERTICAL_SPEED_MULTIPLIER);
+        if (((Gdx.input.isKeyPressed(Input.Keys.UP)) || (Gdx.input.isKeyPressed(Input.Keys.W)))) {
+            if(!isConfused && !movement_halter[3]){
+                this.sprite.translateY(speed * delta * VERTICAL_SPEED_MULTIPLIER);
 
-            if (animationOverride.isEmpty()) {
-                current_animation = bob_animations.get("Up").getKeyFrame(stateTime, true);
-            } else {
-                current_animation = bob_animations.get("RocketUp").getKeyFrame(stateTime, true);
+                if (animationOverride.isEmpty()) {
+                    current_animation = bob_animations.get("Up").getKeyFrame(stateTime, true);
+                } else {
+                    current_animation = bob_animations.get("RocketUp").getKeyFrame(stateTime, true);
+                }
             }
-        } else if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S)))
-            && !movement_halter[1]) {
-            this.sprite.translateY(-speed * delta * VERTICAL_SPEED_MULTIPLIER);
+            else if(isConfused && !movement_halter[1]){
+                this.sprite.translateY(-speed * delta * VERTICAL_SPEED_MULTIPLIER);
 
-            if (animationOverride.isEmpty()) {
-                current_animation = bob_animations.get("Front").getKeyFrame(stateTime, true);
-            } else {
-                current_animation = bob_animations.get("RocketDown").getKeyFrame(stateTime, true);
+                if (animationOverride.isEmpty()) {
+                    current_animation = bob_animations.get("Front").getKeyFrame(stateTime, true);
+                } else {
+                    current_animation = bob_animations.get("RocketDown").getKeyFrame(stateTime, true);
+                }
+
+            }
+        } else if (((Gdx.input.isKeyPressed(Input.Keys.DOWN)) || (Gdx.input.isKeyPressed(Input.Keys.S)))) {
+            if(!isConfused && !movement_halter[1]){
+                this.sprite.translateY(-speed * delta * VERTICAL_SPEED_MULTIPLIER);
+
+                if (animationOverride.isEmpty()) {
+                    current_animation = bob_animations.get("Front").getKeyFrame(stateTime, true);
+                } else {
+                    current_animation = bob_animations.get("RocketDown").getKeyFrame(stateTime, true);
+                }
+            }
+            else if(isConfused && !movement_halter[3]){
+                this.sprite.translateY(speed * delta * VERTICAL_SPEED_MULTIPLIER);
+
+                if (animationOverride.isEmpty()) {
+                    current_animation = bob_animations.get("Up").getKeyFrame(stateTime, true);
+                } else {
+                    current_animation = bob_animations.get("RocketUp").getKeyFrame(stateTime, true);
+                }
+
             }
         }
     }
@@ -118,6 +162,8 @@ public class Bob extends CollidableEntity {
   public void setSuspension(boolean susp){
       suspendMovement = susp;
   }
+
+  public void setConfused(boolean conf){ isConfused = conf; }
 
   /** loads the animation files from atlas into the animation variables */
   public void loadTextures() {

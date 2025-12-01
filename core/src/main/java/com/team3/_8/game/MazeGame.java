@@ -362,6 +362,7 @@ public class MazeGame extends ApplicationAdapter {
             eventTriggered("Negative");
             confusedActive = true;
             confusedTimer = 0f;
+            bob.setConfused(true);
         }
 
         if (!paused) {
@@ -412,6 +413,13 @@ public class MazeGame extends ApplicationAdapter {
                 lightsOutTimer -= Gdx.graphics.getDeltaTime();
                 if (lightsOutTimer <= 0){
                     areLightsOut = false;
+                }
+            }
+            if (confusedActive){
+                confusedTimer += Gdx.graphics.getDeltaTime();
+                if (confusedTimer >= 20){
+                    confusedActive = false;
+                    bob.setConfused(false);
                 }
             }
         }
