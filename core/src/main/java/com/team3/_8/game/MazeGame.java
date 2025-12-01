@@ -390,6 +390,12 @@ public class MazeGame extends ApplicationAdapter {
             // Moves bob in player direction (if not hitting a wall)
             bob.move(movement_halter);
             timer += Gdx.graphics.getDeltaTime();
+            if(areLightsOut){
+                lightsOutTimer -= Gdx.graphics.getDeltaTime();
+                if (lightsOutTimer <= 0){
+                    areLightsOut = false;
+                }
+            }
         }
 
         // Centres the camera on Bob and then updates it
