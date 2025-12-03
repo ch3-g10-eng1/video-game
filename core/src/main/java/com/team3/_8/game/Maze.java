@@ -87,7 +87,7 @@ public class Maze {
    *
    * @param camera the view of the map is set to
    */
-  protected void renderMap(OrthographicCamera camera) {
+  public void renderMap(OrthographicCamera camera) {
     map_render.setView(camera);
     map_render.render(visible_layers);
   }

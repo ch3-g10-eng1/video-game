@@ -250,9 +250,9 @@ public class StartMenu extends BaseMenu {
         float centerX = screenW / 2f - btnW / 2f;
         float centerY = screenH / 2f;
 
-        buttons.get(0).bounds.set(centerX, centerY + 60, btnW, btnH); // Play
-        buttons.get(1).bounds.set(centerX, centerY - 30, btnW, btnH);      // Tutorial
-        buttons.get(2).bounds.set(centerX, centerY - 120, btnW, btnH); // Quit
+        buttons.get(0).bounds.set(centerX, centerY + 60, btnW, btnH);
+        buttons.get(1).bounds.set(centerX, centerY - 30, btnW, btnH);
+        buttons.get(2).bounds.set(centerX, centerY - 120, btnW, btnH);
     }
 
 

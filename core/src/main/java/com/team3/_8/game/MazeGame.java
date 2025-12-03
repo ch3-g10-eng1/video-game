@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.team3._8.game.menu.impl.GameMenu;
 import com.team3._8.game.menu.impl.StartMenu;
 import com.team3._8.game.menu.manager.MenuManager;
 import com.team3._8.game.menu.type.MenuType;
@@ -125,9 +126,24 @@ public class MazeGame extends ApplicationAdapter {
 //    createHUD();
   }
 
-  private void setupMenus() {
-      menuManager.registerMenu(MenuType.MAIN_MENU, new StartMenu(menuManager, batch, font, camera, viewport));
-  }
+    private void setupMenus() {
+        try {
+            System.out.println("Setting up menus...");
+
+            menuManager.registerMenu(MenuType.MAIN_MENU,
+                new StartMenu(menuManager, batch, font, camera, viewport));
+            System.out.println("Main menu registered");
+
+            menuManager.registerMenu(MenuType.GAME,
+                new GameMenu(menuManager, batch, font, camera, viewport));
+            System.out.println("Game menu registered");
+
+        } catch (Exception e) {
+            System.err.println("ERROR in setupMenus: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
   @Override
   public void render() {
