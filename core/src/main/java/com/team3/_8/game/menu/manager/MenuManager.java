@@ -86,6 +86,17 @@ public class MenuManager {
     }
 
     /**
+     * Get a menu class instance for the specified type
+     */
+    public BaseMenu getMenu(MenuType type) {
+        BaseMenu menu = menus.get(type);
+        if (menu == null) {
+            throw new IllegalStateException("Menu type not found: " + type);
+        }
+        return menu;
+    }
+
+    /**
      * Go back to the previous menu which was open
      */
     public void goBack() {

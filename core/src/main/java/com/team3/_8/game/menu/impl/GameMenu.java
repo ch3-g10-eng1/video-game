@@ -39,7 +39,7 @@ public class GameMenu extends BaseMenu {
     private final CampusSecurity[] allCampusSecuritySprites = new  CampusSecurity[5];
     private boolean campusSecurityCreated;
 
-    private boolean paused = false;
+    private boolean paused = false, intialised = false;
     private float timer = 0f;
     private int events =0;
     private boolean[] movement_halter;
@@ -129,10 +129,16 @@ public class GameMenu extends BaseMenu {
     @Override
     public void show() {
         super.show();
-        initialiseGame();
+
+        if (!intialised) {
+            initialiseGame();
+            intialised = true;
+        }
 
         gameViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         gameCamera.update();
+
+        paused = false;
     }
 
     @Override
@@ -199,11 +205,10 @@ public class GameMenu extends BaseMenu {
 
         spriteBatch.end();
 
-        hud.draw(font, GameController.formatTime(timer), eventTracker, bob, paused, gameViewport);
-
-        if (paused) {
-            hud.pauseScreen(font, gameViewport);
+        if (gameViewport.getScreenWidth() > 0 && gameViewport.getScreenHeight() > 0) {
+            hud.draw(font, GameController.formatTime(timer), eventTracker, bob, paused, gameViewport);
         }
+
     }
 
     @Override
@@ -316,6 +321,10 @@ public class GameMenu extends BaseMenu {
         tempSprite.setPosition(xPos, yPos);
         tempSprite.setSize(xSize, ySize);
         return constructorType.apply(tempSprite, speed);
+    }
+
+    public void setIntialised(boolean intialised) {
+        this.intialised = intialised;
     }
 
 }

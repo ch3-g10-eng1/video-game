@@ -91,7 +91,12 @@ public class StartMenu extends BaseMenu {
 
     private void createButtons() {
         buttons.add(new MenuButton("Play", 0, 0, 220, 70, idle, hover, play,
-            () -> menuManager.setMenu(MenuType.GAME)));
+            () -> {
+                GameMenu gameMenu = (GameMenu) menuManager.getMenu(MenuType.GAME);
+                gameMenu.setIntialised(false);
+                menuManager.setMenu(MenuType.GAME);
+            }
+            ));
 
         buttons.add(new MenuButton("Tutorial", 0, 0, 220, 70, idle, hover, play,
             () -> menuManager.setMenu(MenuType.TUTORIAL)));
