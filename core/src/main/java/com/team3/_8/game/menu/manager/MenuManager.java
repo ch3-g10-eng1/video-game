@@ -22,7 +22,7 @@ public class MenuManager {
     private final Map<MenuType, BaseMenu> menus;
 
     private BaseMenu currentMenu, prevMenu;
-    private MenuType currentType;
+    private MenuType currentType, prevType;
 
     private final SpriteBatch batch;;
     private final BitmapFont font;
@@ -78,6 +78,7 @@ public class MenuManager {
         if (currentMenu != null) {
             currentMenu.hide();
             prevMenu = currentMenu;
+            prevType = currentType;
         }
 
         currentType = type;
@@ -143,4 +144,5 @@ public class MenuManager {
     }
 
     public MenuType getCurrentType() {return currentType;}
+    public MenuType getPrevType() {return prevType;}
 }

@@ -1,0 +1,248 @@
+package com.team3._8.game.menu.impl;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.team3._8.game.menu.BaseMenu;
+import com.team3._8.game.menu.button.MenuButton;
+import com.team3._8.game.menu.manager.MenuManager;
+import com.team3._8.game.menu.type.MenuType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class WinMenu extends BaseMenu {
+
+    private OrthographicCamera uiCamera;
+    private Viewport uiViewport;
+
+    private final List<MenuButton> buttons = new ArrayList<>();
+    private final GlyphLayout glyphLayout = new GlyphLayout();
+    private final Vector3 touchPosition =  new Vector3();
+
+    private Texture buttonSheet;
+
+    private BitmapFont tittleFont, buttonFont, statsFont;
+
+    private TextureRegion idle, hover, play;
+
+    private float completionTime = 0f;
+    private List<Float> previousTimes = new ArrayList<>();
+
+
+    public WinMenu(final MenuManager menuManager,
+                   final SpriteBatch batch,
+                   final BitmapFont font,
+                   final OrthographicCamera camera,
+                   final Viewport viewport) {
+
+        super(menuManager, batch, font, camera, viewport);
+
+        this.uiCamera = new OrthographicCamera();
+        this.uiViewport = new ScreenViewport(uiCamera);
+
+        buttonSheet = new Texture("ui/buttons.png");
+        buttonSheet.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        TextureRegion[][] split = TextureRegion.split(buttonSheet, 104, 35);
+
+        idle = split[0][0];
+        hover = split[0][1];
+        play = split[0][2];
+
+        loadFonts();
+        createButtons();
+
+        initialiseDummyData();
+    }
+
+    private void loadFonts() {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/OpenSans-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter params =  new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        params.size = 40;
+        params.color = Color.GOLD;
+        params.shadowOffsetX = 3;
+        params.shadowOffsetY = 3;
+        params.shadowColor = new Color(0, 0, 0, 0.8f);
+        tittleFont = generator.generateFont(params);
+
+        params.size = 22;
+        params.shadowOffsetX = 1;
+        params.shadowOffsetY = 1;
+        params.color = Color.WHITE;
+        buttonFont = generator.generateFont(params);
+
+        params.size = 18;
+        params.color = Color.LIGHT_GRAY;
+        statsFont = generator.generateFont(params);
+
+        generator.dispose();
+    }
+
+    private void createButtons() {
+        buttons.add(new MenuButton("Play Again", 0, 0, 220, 70, idle, hover, play, () -> menuManager.setMenu(MenuType.GAME)));
+        buttons.add(new MenuButton("Title Screen",0, 0, 220, 70, idle, hover, play, () -> menuManager.setMenu(MenuType.MAIN_MENU)));
+        buttons.add(new MenuButton("Quit", 0, 0, 220, 70, idle, hover, play, () -> Gdx.app.exit()));
+
+        repositionButtons();
+    }
+
+    private void initialiseDummyData() {
+        previousTimes.clear();
+        previousTimes.add(45.2f);
+        previousTimes.add(52.8f);
+        previousTimes.add(61.3f);
+        previousTimes.add(89.7f);
+        previousTimes.add(125.4f);
+    }
+
+    public void setCompletionTime(float completionTime) {
+        this.completionTime = completionTime;
+    }
+
+
+    @Override
+    public void show() {
+        super.show();
+        uiViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        repositionButtons();
+    }
+
+    @Override
+    public void render(float delta) {
+
+        Gdx.gl.glClearColor(0.1f, 0.2f, 0.1f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        spriteBatch.setProjectionMatrix(uiCamera.combined);
+        spriteBatch.begin();
+
+        float screenW = uiViewport.getWorldWidth();
+        float screenH = uiViewport.getWorldHeight();
+
+        glyphLayout.setText(tittleFont, "You Won!");
+
+        float titleX = (screenW- glyphLayout.width) / 2f;
+        float titleY = screenH * 0.85f;
+        tittleFont.draw(spriteBatch, glyphLayout, titleX, titleY);
+
+        String timeText = String.format("Your time: %.2f seconds", completionTime);
+        glyphLayout.setText(statsFont, timeText);
+        statsFont.setColor(Color.YELLOW);
+        statsFont.draw(spriteBatch, glyphLayout, (screenW - glyphLayout.width) /2f, titleY - 60);
+
+        glyphLayout.setText(statsFont, "Previous Best Times:");
+        statsFont.setColor(Color.LIGHT_GRAY);
+        float timesY = titleY - 100;
+        statsFont.draw(spriteBatch, glyphLayout,
+            (screenW - glyphLayout.width) / 2f,
+            timesY);
+
+        timesY -= 30;
+        for (int i = 0; i < Math.min(5, previousTimes.size()); i++) {
+            String prevTime = String.format("%d. %.2f seconds", i + 1, previousTimes.get(i));
+            glyphLayout.setText(statsFont, prevTime);
+            statsFont.draw(spriteBatch, glyphLayout,
+                (screenW - glyphLayout.width) / 2f,
+                timesY - (i * 25));
+        }
+
+
+        for (MenuButton button : buttons) {
+            TextureRegion frame = button.getFrame();
+
+            spriteBatch.draw(frame, button.bounds.x, button.bounds.y,  button.bounds.width, button.bounds.height);
+
+            glyphLayout.setText(buttonFont, button.text);
+
+            buttonFont.draw(
+                spriteBatch,
+                glyphLayout,
+                button.bounds.x + (button.bounds.width - glyphLayout.width) / 2f,
+                button.bounds.y + (button.bounds.height + glyphLayout.height) / 2f);
+        }
+
+        spriteBatch.end();
+    }
+
+    @Override
+    public boolean handleInput() {
+
+        if (Gdx.input.justTouched()) {
+
+            touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            uiCamera.unproject(touchPosition);
+
+            for (MenuButton button : buttons) {
+                if (button.bounds.contains(touchPosition.x, touchPosition.y)) {
+                    button.onClick.run();
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        uiViewport.update(width, height, true);
+        repositionButtons();
+    }
+
+    private void repositionButtons() {
+        float screenW = uiViewport.getWorldWidth();
+        float screenH = uiViewport.getWorldHeight();
+
+        float btnW = 220;
+        float btnH = 70;
+        float spacing = 20;
+
+        float centerX = screenW / 2f - btnW / 2f;
+
+
+        float startY = screenH * 0.25f;
+
+        buttons.get(0).bounds.set(centerX, startY + btnH + spacing, btnW, btnH);
+        buttons.get(1).bounds.set(centerX, startY, btnW, btnH);
+        buttons.get(2).bounds.set(centerX, startY - btnH - spacing, btnW, btnH);
+    }
+
+    @Override
+    public void update(float delta) {
+        touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        uiCamera.unproject(touchPosition);
+
+        for (MenuButton b : buttons) {
+            b.hovered = b.bounds.contains(touchPosition.x, touchPosition.y);
+        }
+
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            for (MenuButton b : buttons) {
+                b.clicked = b.hovered;
+            }
+        } else {
+            for (MenuButton b : buttons) {
+                b.clicked = false;
+            }
+        }
+    }
+
+    @Override
+    public void dispose() {
+        if (buttonSheet != null) buttonSheet.dispose();
+        if (tittleFont != null) tittleFont.dispose();
+        if (buttonFont != null) buttonFont.dispose();
+        if (statsFont != null) statsFont.dispose();
+    }
+}

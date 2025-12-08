@@ -130,7 +130,10 @@ public class GameMenu extends BaseMenu {
     public void show() {
         super.show();
 
-        if (!intialised) {
+        MenuType prevMenuType = menuManager.getPrevType();
+        if (prevMenuType == MenuType.WIN || prevMenuType == MenuType.LOSE) {
+            resetGame();
+        }else if (!intialised) {
             initialiseGame();
             intialised = true;
         }
@@ -162,6 +165,12 @@ public class GameMenu extends BaseMenu {
             timer += delta;
 
             if (maze.HitsWinLayer(bob)) {
+                WinMenu winMenu = (WinMenu) menuManager.getMenu(MenuType.WIN);
+
+                if (winMenu != null) {
+                    winMenu.setCompletionTime(timer);
+                }
+
                 menuManager.setMenu(MenuType.WIN);
             }
 
@@ -308,6 +317,29 @@ public class GameMenu extends BaseMenu {
                 }
             }
         }
+    }
+
+    public void resetGame() {
+        timer = 0f;
+        events = 0;
+        paused = false;
+        campusSecurityCreated = false;
+
+
+        evilBobReturnData.clear();
+        campusSecurityReturnData.clear();
+
+        if (bobSprite != null) {
+            bobSprite.setPosition(100, 500);
+        }
+
+        createKeycard();
+
+        eventTracker = GameController.setEventMap();
+
+        initialiseGame();
+        intialised = true;
+
     }
 
 
