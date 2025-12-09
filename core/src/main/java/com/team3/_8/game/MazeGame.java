@@ -13,13 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.team3._8.game.menu.impl.*;
-import com.team3._8.game.menu.manager.MenuManager;
-import com.team3._8.game.menu.type.MenuType;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,14 +27,7 @@ public class MazeGame extends ApplicationAdapter {
   static final int BOB_WIDTH = 15;
   static final int BOB_HEIGHT = 15;
 
-    private MenuManager menuManager;
-    private SpriteBatch batch;
-    private BitmapFont font;
-    private OrthographicCamera camera;
-    private Viewport viewport;
-
-
-    // Holds created campusSecurity sprites and tracks if they exist
+  // Holds created campusSecurity sprites and tracks if they exist
   private final CampusSecurity[] allCampusSecuritySprites = new CampusSecurity[5];
 
   // Map to store return data for interactable entities
@@ -54,8 +41,12 @@ public class MazeGame extends ApplicationAdapter {
   private boolean paused = false; // Variable to see if the game is paused
   private int events;
   private float timer;
+  private BitmapFont font;
+  private OrthographicCamera camera;
+  private Viewport viewport;
 
   // The two sprite batches -> ones for the main game, and one for the HUD
+  private SpriteBatch batch;
   private HUD hud;
 
   private Sprite bobSprite;
@@ -82,93 +73,36 @@ public class MazeGame extends ApplicationAdapter {
 
   @Override
   public void create() {
+    float w = Gdx.graphics.getWidth();
+    float h = Gdx.graphics.getHeight();
 
-      batch = new SpriteBatch();
-      font = new BitmapFont();
+    timer = 0f;
+    events = 0;
 
-      camera = new OrthographicCamera();
-      viewport = new ScreenViewport(camera);
+    createLayers();
 
-      viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
-      camera.position.set(viewport.getWorldWidth() / 2f, viewport.getWorldHeight() /2f, 0);
-      camera.update();
+    createBob();
 
-      menuManager = MenuManager.initialise(batch, font, camera, viewport);
+    createEvilBob();
 
-      setupMenus();
+    createKeycard();
 
-      menuManager.setMenu(MenuType.MAIN_MENU);
-//    float w = Gdx.graphics.getWidth();
-//    float h = Gdx.graphics.getHeight();
-//
-//    timer = 0f;
-//    events = 0;
-//
-//    createLayers();
-//
-//    createBob();
-//
-//    createEvilBob();
-//
-//    createKeycard();
-//
-//    createTutorial();
-//
-//    createCamera(w, h);
-//
-//    loadFonts();
-//
-//
-//    // Used to track game events
-//    eventTracker = GameController.setEventMap();
-//
-//    createHUD();
+    createTutorial();
+
+    createCamera(w, h);
+
+    loadFonts();
+
+    // We are using a Fill Viewport, since the entire screen is covered. Aspect ratio is maintained.
+    viewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
+
+    batch = new SpriteBatch();
+
+    // Used to track game events
+    eventTracker = GameController.setEventMap();
+
+    createHUD();
   }
-
-    private void setupMenus() {
-        try {
-            menuManager.registerMenu(MenuType.MAIN_MENU,
-                new StartMenu(menuManager, batch, font, camera, viewport));
-
-            menuManager.registerMenu(MenuType.GAME,
-                new GameMenu(menuManager, batch, font, camera, viewport));
-
-            menuManager.registerMenu(MenuType.PAUSE, new PauseMenu(menuManager, batch, font, camera, viewport));
-
-            menuManager.registerMenu(MenuType.WIN, new WinMenu(menuManager, batch, font, camera, viewport));
-
-            menuManager.registerMenu(MenuType.LOSE, new LoseMenu(menuManager, batch, font, camera, viewport));
-
-        } catch (Exception e) {
-            System.err.println("ERROR in setupMenus: " + e.getMessage());
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
-  @Override
-  public void render() {
-      final float delta = Gdx.graphics.getDeltaTime();
-
-      menuManager.update(delta);
-      menuManager.render(delta);
-  }
-
-  @Override
-  public void resize(int width, int height) {
-      viewport.update(width, height, true);
-      camera.position.set(viewport.getWorldWidth() / 2f, viewport.getWorldHeight() /2f, 0);
-      camera.update();
-
-      menuManager.resize(width, height);
-  }
-
-    @Override
-    public void dispose() {
-        menuManager.dispose();
-        batch.dispose();
-        font.dispose();
-    }
 
   private void createTutorial() {
     // Tutorial image texture and sprite
@@ -233,21 +167,21 @@ public class MazeGame extends ApplicationAdapter {
     bob = new Bob(bobSprite, 60, -3);
   }
 
-//  /** Renders different screens based on activeScreen configuration */
-//  @Override
-//  public void render() {
-//    if (activeScreen == 0) {
-//      titleScreenRender();
-//    } else if (activeScreen == 1) {
-//      gameScreenRender();
-//    } else if (activeScreen == 2) {
-//      tutorialScreenRender();
-//    } else if (activeScreen == 3) {
-//      winScreenRender();
-//    } else if (activeScreen == 4) {
-//      loseScreenRender();
-//    }
-//  }
+  /** Renders different screens based on activeScreen configuration */
+  @Override
+  public void render() {
+    if (activeScreen == 0) {
+      titleScreenRender();
+    } else if (activeScreen == 1) {
+      gameScreenRender();
+    } else if (activeScreen == 2) {
+      tutorialScreenRender();
+    } else if (activeScreen == 3) {
+      winScreenRender();
+    } else if (activeScreen == 4) {
+      loseScreenRender();
+    }
+  }
 
   /** Runs the code for the game screen every frame */
   private void gameScreenRender() {
@@ -487,24 +421,24 @@ public class MazeGame extends ApplicationAdapter {
     return returnValues;
   }
 
-//  @Override
-//  public void resize(int width, int height) {
-//    viewport.update(width, height, true); // Changes the viewport's size to the sizes passed
-//  }
-//
-//  @Override
-//  public void dispose() {
-//    batch.dispose();
-//    bob.dispose();
-//    evilBob.dispose();
-//    font.dispose();
-//    maze.dispose();
-//    for (CampusSecurity campusSecuritySprite : allCampusSecuritySprites) {
-//      if (campusSecurityCreated) {
-//        campusSecuritySprite.dispose();
-//      }
-//    }
-//  }
+  @Override
+  public void resize(int width, int height) {
+    viewport.update(width, height, true); // Changes the viewport's size to the sizes passed
+  }
+
+  @Override
+  public void dispose() {
+    batch.dispose();
+    bob.dispose();
+    evilBob.dispose();
+    font.dispose();
+    maze.dispose();
+    for (CampusSecurity campusSecuritySprite : allCampusSecuritySprites) {
+      if (campusSecurityCreated) {
+        campusSecuritySprite.dispose();
+      }
+    }
+  }
 
   /**
    * Allows for a sprite with a texture to be created
