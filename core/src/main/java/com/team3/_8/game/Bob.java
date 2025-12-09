@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -224,6 +225,20 @@ public class Bob extends CollidableEntity {
 
   public void setAnimation(String animationName) {
     this.animationOverride = animationName;
+  }
+
+  public TextureRegion getCurrentRegion() {
+    return new TextureRegion(
+            sprite.getTexture(),
+            sprite.getRegionX(),
+            sprite.getRegionY(),
+            sprite.getRegionWidth(),
+            sprite.getRegionHeight()
+    );
+}
+
+  public TextureRegion getAnimation(String animationName) {
+    return bob_animations.get(animationName).getKeyFrame(stateTime, true);
   }
 
   public void setSpeed(Integer speed) {

@@ -15,6 +15,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.team3._8.game.Bob;
 
 public class BobTests extends AbstractHeadlessGdxTest {
@@ -74,7 +76,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
         float initialY = bobSprite.getY();
         float deltaTime = 0.016f;
 
-        // Simulate RIGHT key pressed
+        // Simulate LEFT key pressed
         when(mockInput.isKeyPressed(Input.Keys.LEFT)).thenReturn(true);
 
         bob.move(movementHalter);
@@ -112,7 +114,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
         float initialY = bobSprite.getY();
         float deltaTime = 0.016f;
 
-        // Simulate RIGHT key pressed
+        // Simulate UP key pressed
         when(mockInput.isKeyPressed(Input.Keys.UP)).thenReturn(true);
 
         bob.move(movementHalter);
@@ -131,7 +133,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
         float initialY = bobSprite.getY();
         float deltaTime = 0.016f;
 
-        // Simulate RIGHT key pressed
+        // Simulate DOWN key pressed
         when(mockInput.isKeyPressed(Input.Keys.DOWN)).thenReturn(true);
 
         bob.move(movementHalter);
@@ -150,7 +152,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
         float initialY = bobSprite.getY();
         float deltaTime = 0.016f;
 
-        // Simulate RIGHT key pressed
+        // Simulate LEFT key pressed
         when(mockInput.isKeyPressed(Input.Keys.LEFT)).thenReturn(true);
 
         bob.move(movementHalter);
@@ -170,7 +172,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
         float deltaTime = 0.016f;
 
         // Simulate RIGHT key pressed
-        when(mockInput.isKeyPressed(Input.Keys.LEFT)).thenReturn(true);
+        when(mockInput.isKeyPressed(Input.Keys.RIGHT)).thenReturn(true);
 
         bob.move(movementHalter);
 
@@ -188,8 +190,8 @@ public class BobTests extends AbstractHeadlessGdxTest {
         float initialY = bobSprite.getY();
         float deltaTime = 0.016f;
 
-        // Simulate RIGHT key pressed
-        when(mockInput.isKeyPressed(Input.Keys.LEFT)).thenReturn(true);
+        // Simulate UP key pressed
+        when(mockInput.isKeyPressed(Input.Keys.UP)).thenReturn(true);
 
         bob.move(movementHalter);
 
@@ -207,8 +209,8 @@ public class BobTests extends AbstractHeadlessGdxTest {
         float initialY = bobSprite.getY();
         float deltaTime = 0.016f;
 
-        // Simulate RIGHT key pressed
-        when(mockInput.isKeyPressed(Input.Keys.LEFT)).thenReturn(true);
+        // Simulate DOWN key pressed
+        when(mockInput.isKeyPressed(Input.Keys.DOWN)).thenReturn(true);
 
         bob.move(movementHalter);
 
@@ -219,7 +221,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
     @Test
     public void testSetSuspension() {
     bob.setSuspension(true);
-    // This wont throw an exception when calling move()
     boolean[] movementHalter = {false, false, false, false};
     assertDoesNotThrow(() -> bob.move(movementHalter));
     }
@@ -231,12 +232,117 @@ public class BobTests extends AbstractHeadlessGdxTest {
     }
 
     @Test
+    public void testCollisionBox() {
+        Rectangle box = bob.getCollisionBox();
+
+        float spriteX = bobSprite.getX();
+        float spriteY = bobSprite.getY();
+        float spriteW = bobSprite.getWidth();
+        float spriteH = bobSprite.getHeight();
+
+        float offset = 3;
+
+        assertEquals(spriteX + offset, box.getX(), 0.001);
+        assertEquals(spriteY + offset, box.getY(), 0.001);
+        assertEquals(spriteW - offset * 2, box.getWidth(), 0.001);
+        assertEquals(spriteH - offset * 2, box.getHeight(), 0.001);
+    }
+
+    // Texture tests
+
+    @Test
     public void testSetAnimationOverride() {
         bob.setAnimation("Squash");
-        // Just make sure it doesn't crash
         boolean[] movementHalter = {false, false, false, false};
+        // Ensure game does not crash when moving (right as example)
+        when(mockInput.isKeyPressed(Input.Keys.RIGHT)).thenReturn(true);
         assertDoesNotThrow(() -> bob.move(movementHalter));
     }
+
+    @Test
+    public void testRightMoveAnimation() {
+        bob.setSuspension(false);
+        bob.setConfused(false);
+
+        boolean[] movementHalter = {false, false, false, false};
+
+        // Simulate RIGHT key pressed
+        when(mockInput.isKeyPressed(Input.Keys.RIGHT)).thenReturn(true);
+
+        bob.move(movementHalter);
+        TextureRegion expected = bob.getAnimation("Right");
+        TextureRegion actual = bob.getCurrentRegion();
+
+        assertEquals(expected.getTexture(), actual.getTexture());
+        assertEquals(expected.getRegionX(), actual.getRegionX());
+        assertEquals(expected.getRegionY(), actual.getRegionY());
+        assertEquals(expected.getRegionWidth(), actual.getRegionWidth());
+        assertEquals(expected.getRegionHeight(), actual.getRegionHeight());
+    }
+
+    @Test
+    public void testLeftMoveAnimation() {
+        bob.setSuspension(false);
+        bob.setConfused(false);
+
+        boolean[] movementHalter = {false, false, false, false};
+
+        // Simulate LEFT key pressed
+        when(mockInput.isKeyPressed(Input.Keys.LEFT)).thenReturn(true);
+
+        bob.move(movementHalter);
+        TextureRegion expected = bob.getAnimation("Left");
+        TextureRegion actual = bob.getCurrentRegion();
+
+        assertEquals(expected.getTexture(), actual.getTexture());
+        assertEquals(expected.getRegionX(), actual.getRegionX());
+        assertEquals(expected.getRegionY(), actual.getRegionY());
+        assertEquals(expected.getRegionWidth(), actual.getRegionWidth());
+        assertEquals(expected.getRegionHeight(), actual.getRegionHeight());
+    }
+
+    @Test
+    public void testUpMoveAnimation() {
+        bob.setSuspension(false);
+        bob.setConfused(false);
+
+        boolean[] movementHalter = {false, false, false, false};
+
+        // Simulate UP key pressed
+        when(mockInput.isKeyPressed(Input.Keys.UP)).thenReturn(true);
+
+        bob.move(movementHalter);
+        TextureRegion expected = bob.getAnimation("Up");
+        TextureRegion actual = bob.getCurrentRegion();
+
+        assertEquals(expected.getTexture(), actual.getTexture());
+        assertEquals(expected.getRegionX(), actual.getRegionX());
+        assertEquals(expected.getRegionY(), actual.getRegionY());
+        assertEquals(expected.getRegionWidth(), actual.getRegionWidth());
+        assertEquals(expected.getRegionHeight(), actual.getRegionHeight());
+    }
+
+    @Test
+    public void testDownMoveAnimation() {
+        bob.setSuspension(false);
+        bob.setConfused(false);
+
+        boolean[] movementHalter = {false, false, false, false};
+
+        // Simulate DOWN key pressed
+        when(mockInput.isKeyPressed(Input.Keys.DOWN)).thenReturn(true);
+
+        bob.move(movementHalter);
+        TextureRegion expected = bob.getAnimation("Front");
+        TextureRegion actual = bob.getCurrentRegion();
+
+        assertEquals(expected.getTexture(), actual.getTexture());
+        assertEquals(expected.getRegionX(), actual.getRegionX());
+        assertEquals(expected.getRegionY(), actual.getRegionY());
+        assertEquals(expected.getRegionWidth(), actual.getRegionWidth());
+        assertEquals(expected.getRegionHeight(), actual.getRegionHeight());
+    }
 }
+
 
 
