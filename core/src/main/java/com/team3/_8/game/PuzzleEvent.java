@@ -63,7 +63,11 @@ public class PuzzleEvent extends InteractableEntity{
      */
     @Override
     public Map<String, Boolean> startInteraction(){
-        if (isSolved) { return returnData; }
+        if (isSolved) {
+            returnData.remove("Enable Rocket Bob");
+            returnData.remove("Time penalty");
+            return returnData;
+        }
         returnData.put("Suspend", true);
         boolean skipChoice = false;
         if (!textBubbleVisible) {
