@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +63,11 @@ public class PuzzleEvent extends InteractableEntity{
      */
     @Override
     public Map<String, Boolean> startInteraction(){
-        if (isSolved) { return returnData; }
+        if (isSolved) {
+            returnData.remove("Enable Rocket Bob");
+            returnData.remove("Time penalty");
+            return returnData;
+        }
         returnData.put("Suspend", true);
         boolean skipChoice = false;
         if (!textBubbleVisible) {

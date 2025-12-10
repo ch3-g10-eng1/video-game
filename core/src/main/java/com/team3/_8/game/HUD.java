@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -87,7 +88,8 @@ public class HUD {
     float y = windowHeight - 10f - font.getCapHeight();
     // Sets text scale based on window width
     // 0.0015625 is just a scaling factor that equates to 1 at initial screen render size (640)
-    font.getData().setScale((0.0015625f) * windowWidth);
+    float scale = Math.max(0.5f, (0.0015625f) * windowWidth);
+    font.getData().setScale(scale);
 
     this.HUDbatch.begin();
 

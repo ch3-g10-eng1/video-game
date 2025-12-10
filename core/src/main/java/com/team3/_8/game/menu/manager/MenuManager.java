@@ -22,7 +22,7 @@ public class MenuManager {
     private final Map<MenuType, BaseMenu> menus;
 
     private BaseMenu currentMenu, prevMenu;
-    private MenuType currentType;
+    private MenuType currentType, prevType;
 
     private final SpriteBatch batch;;
     private final BitmapFont font;
@@ -78,11 +78,23 @@ public class MenuManager {
         if (currentMenu != null) {
             currentMenu.hide();
             prevMenu = currentMenu;
+            prevType = currentType;
         }
 
         currentType = type;
         currentMenu = menus.get(type);
         currentMenu.show();
+    }
+
+    /**
+     * Get a menu class instance for the specified type
+     */
+    public BaseMenu getMenu(MenuType type) {
+        BaseMenu menu = menus.get(type);
+        if (menu == null) {
+            throw new IllegalStateException("Menu type not found: " + type);
+        }
+        return menu;
     }
 
     /**
@@ -132,4 +144,5 @@ public class MenuManager {
     }
 
     public MenuType getCurrentType() {return currentType;}
+    public MenuType getPrevType() {return prevType;}
 }

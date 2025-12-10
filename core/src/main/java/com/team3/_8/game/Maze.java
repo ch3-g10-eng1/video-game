@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -87,7 +88,7 @@ public class Maze {
    *
    * @param camera the view of the map is set to
    */
-  protected void renderMap(OrthographicCamera camera) {
+  public void renderMap(OrthographicCamera camera) {
     map_render.setView(camera);
     map_render.render(visible_layers);
   }

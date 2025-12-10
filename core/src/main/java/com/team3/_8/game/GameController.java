@@ -3,6 +3,7 @@ package com.team3._8.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,5 +71,16 @@ public class GameController {
     event_map.put("Negative", 0);
     event_map.put("Hidden", 0);
     return event_map;
+  }
+
+  public static Map<String, Boolean> setAchievementMap() {
+    Map<String, Boolean> achievements = new HashMap<String, Boolean>();
+    achievements.put("All Events", false);
+    achievements.put("Speed Run", false);
+    achievements.put("Positive Collector", false);
+    achievements.put("Negative Collector", false);
+    achievements.put("Goose Chaser", false);
+    achievements.put("Completionist", false);
+    return achievements;
   }
 }
