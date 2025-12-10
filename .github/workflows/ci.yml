@@ -83,7 +83,7 @@ jobs:
         name: build-and-reports-${{ github.run_id }}
         path: |
           artifact-${{ github.run_id }}.zip
-        # retention-days: 7   # optional: set retention (defaults to repo settings)
+        # retention-days: 7
 
   dependency-submission:
 
