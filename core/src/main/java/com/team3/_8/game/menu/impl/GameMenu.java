@@ -78,6 +78,8 @@ public class GameMenu extends BaseMenu {
     private Map<String, Boolean> puzzleEventReturnData = new HashMap<>();
     private Map<String, Boolean> campusSecurityReturnData = new HashMap<>();
     private Map<String, Integer> eventTracker;
+    private Map<String, Boolean> achievements;
+    private int gooseHits = 0;
 
     public GameMenu(MenuManager menuManager, SpriteBatch batch, BitmapFont font,
                     OrthographicCamera camera, Viewport viewport) {
@@ -155,6 +157,8 @@ public class GameMenu extends BaseMenu {
         SpriteBatch hudBatch = new SpriteBatch();
         hud = new HUD(hudBatch, events);
         eventTracker = GameController.setEventMap();
+        achievements = GameController.setAchievementMap();
+        gooseHits = 0;
 
     }
 
@@ -461,10 +465,12 @@ public class GameMenu extends BaseMenu {
         gameCamera.update();
 
         if (maze.HitsWinLayer(bob)) {
+            checkAchievements();
             WinMenu winMenu = (WinMenu) menuManager.getMenu(MenuType.WIN);
 
             if (winMenu != null) {
                 winMenu.setCompletionTime(timer);
+                winMenu.setAchievements(achievements);
             }
 
             menuManager.setMenu(MenuType.WIN);
@@ -579,6 +585,42 @@ public class GameMenu extends BaseMenu {
         eventTracker.merge(eventName, 1, Integer::sum);
     }
 
+    private void checkAchievements() {
+        int positiveCount = eventTracker.get("Positive");
+        int negativeCount = eventTracker.get("Negative");
+        int hiddenCount = eventTracker.get("Hidden");
+
+        if (positiveCount >= 6) {
+            achievements.put("Positive Collector", true);
+        }
+
+        if (negativeCount >= 2) {
+            achievements.put("Negative Collector", true);
+        }
+
+        if (positiveCount >= 6 && negativeCount >= 2 && hiddenCount >= 1) {
+            achievements.put("All Events", true);
+        }
+
+        if (timer < 120) {
+            achievements.put("Speed Run", true);
+        }
+
+        if (gooseHits >= 2) {
+            achievements.put("Goose Chaser", true);
+        }
+
+        boolean hasAllEvents = achievements.getOrDefault("All Events", false);
+        boolean hasSpeedRun = achievements.getOrDefault("Speed Run", false);
+        boolean hasPositive = achievements.getOrDefault("Positive Collector", false);
+        boolean hasNegative = achievements.getOrDefault("Negative Collector", false);
+        boolean hasGoose = achievements.getOrDefault("Goose Chaser", false);
+
+        if (hasAllEvents && hasSpeedRun && hasPositive && hasNegative && hasGoose) {
+            achievements.put("Completionist", true);
+        }
+    }
+
     private void handleInteraction() {
         // Create campus security if triggered
         if (evilBobReturnData.containsKey("Create Campus Security")) {
@@ -645,6 +687,7 @@ public class GameMenu extends BaseMenu {
                 if (campusSecurityReturnData.containsKey("Reset Player Position")) {
                     if (campusSecurityReturnData.get("Reset Player Position")&& !invincibilityActive) {
                         bobSprite.setPosition(100, 500);
+                        gooseHits++;
                     }
                 }
             }

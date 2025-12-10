@@ -21,6 +21,8 @@ import com.team3._8.game.menu.type.MenuType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class WinMenu extends BaseMenu {
 
@@ -39,6 +41,7 @@ public class WinMenu extends BaseMenu {
 
     private float completionTime = 0f;
     private List<Float> previousTimes = new ArrayList<>();
+    private Map<String, Boolean> achievements = new HashMap<>();
 
 
     public WinMenu(final MenuManager menuManager,
@@ -112,6 +115,10 @@ public class WinMenu extends BaseMenu {
         this.completionTime = completionTime;
     }
 
+    public void setAchievements(Map<String, Boolean> achievements) {
+        this.achievements = achievements;
+    }
+
 
     @Override
     public void show() {
@@ -157,6 +164,53 @@ public class WinMenu extends BaseMenu {
             statsFont.draw(spriteBatch, glyphLayout,
                 (screenW - glyphLayout.width) / 2f,
                 timesY - (i * 25));
+        }
+
+        if (!achievements.isEmpty()) {
+            float leftX = 50;
+            float achievementY = screenH * 0.75f;
+            float boxWidth = 280;
+            float boxHeight = 35;
+            float spacing = 10;
+
+            glyphLayout.setText(statsFont, "ACHIEVEMENTS");
+            statsFont.setColor(Color.GOLD);
+            statsFont.draw(spriteBatch, glyphLayout, leftX + 10, achievementY + 10);
+
+            achievementY -= 40;
+
+            String[] achOrder = {"Speed Run", "Positive Collector", "Negative Collector",
+                                 "Goose Chaser", "All Events", "Completionist"};
+
+            for (String achName : achOrder) {
+                if (achievements.containsKey(achName)) {
+                    boolean unlocked = achievements.get(achName);
+
+                    Gdx.gl.glEnable(GL20.GL_BLEND);
+                    Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+                    spriteBatch.end();
+                    spriteBatch.begin();
+
+                    if (unlocked) {
+                        statsFont.setColor(Color.WHITE);
+                        statsFont.draw(spriteBatch, achName, leftX + 10, achievementY + 22);
+
+                        glyphLayout.setText(statsFont, "DONE");
+                        statsFont.setColor(Color.GREEN);
+                        statsFont.draw(spriteBatch, glyphLayout,
+                                     leftX + boxWidth - glyphLayout.width - 10, achievementY + 22);
+                    } else {
+                        statsFont.setColor(Color.DARK_GRAY);
+                        statsFont.draw(spriteBatch, achName, leftX + 10, achievementY + 22);
+
+                        statsFont.setColor(new Color(0.3f, 0.3f, 0.3f, 1));
+                        statsFont.draw(spriteBatch, "LOCKED", leftX + boxWidth - 70, achievementY + 22);
+                    }
+
+                    achievementY -= (boxHeight + spacing);
+                }
+            }
         }
 
 

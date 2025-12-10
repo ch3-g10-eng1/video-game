@@ -72,4 +72,15 @@ public class GameController {
     event_map.put("Hidden", 0);
     return event_map;
   }
+
+  public static Map<String, Boolean> setAchievementMap() {
+    Map<String, Boolean> achievements = new HashMap<String, Boolean>();
+    achievements.put("All Events", false);
+    achievements.put("Speed Run", false);
+    achievements.put("Positive Collector", false);
+    achievements.put("Negative Collector", false);
+    achievements.put("Goose Chaser", false);
+    achievements.put("Completionist", false);
+    return achievements;
+  }
 }
