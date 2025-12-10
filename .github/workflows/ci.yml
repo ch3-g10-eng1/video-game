@@ -29,10 +29,7 @@ jobs:
     - name: Build with Gradle Wrapper
       run: ./gradlew build
 
-
-#start
     - name: Upload Gradle build artifacts
-      if: success() # Only run if build succeeds
       uses: actions/upload-artifact@v4
       with:
         name: gradle-build-artifacts-${{ github.run_id }}
@@ -42,8 +39,6 @@ jobs:
           lwjgl3/build/libs/**
           lwjgl3/build/distributions/**
         # retention-days: 7   # optional: set retention (defaults to repo settings)
-   
-#end        
 
   dependency-submission:
 
