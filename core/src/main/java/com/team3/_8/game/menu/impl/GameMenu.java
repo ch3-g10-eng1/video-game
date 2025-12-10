@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -32,19 +33,49 @@ public class GameMenu extends BaseMenu {
     private Bob bob;
     private Sprite bobSprite;
     private EvilBob evilBob;
-    private CollectableEntity keycard;
+    private PuzzleEvent puzzleEvent;
     private Maze maze;
     private HUD hud;
+
+    private CollectableEntity keycard, speedBoost, speedBoost2, timeOrb, shield, sizePotion, confusedDebuff, hiddenLightsOut, tomato;
+
+    private boolean speedBoostActive = false;
+    private float speedBoostTimer = 0f;
+
+    private boolean speedBoost2Active = false;
+    private float speedBoost2Timer = 0f;
+
+    private boolean invincibilityActive = false;
+    private float invincibilityTimer = 0f;
+
+    private boolean sizeChangeActive = false;
+    private float sizeChangeTimer = 0f;
+
+    private boolean confusedActive = false;
+    private float confusedTimer = 0f;
+
+    private boolean areLightsOut = false;
+    private float lightsOutTimer = 30f;
+
+    private boolean tomatoActive = false;
+    private float tomatoTimer = 0f;
+    private float tomatoAlpha = 1f;
+    private float tomatoFade = 0.1f;
+
+    private int originalSpeed = 60;
+
+    private Sprite lightsOutSprite, tomatoSplatSprite;
 
     private final CampusSecurity[] allCampusSecuritySprites = new  CampusSecurity[5];
     private boolean campusSecurityCreated;
 
     private boolean paused = false, intialised = false;
     private float timer = 0f;
-    private int events =0;
+    private int events = 0;
     private boolean[] movement_halter;
 
     private Map<String, Boolean> evilBobReturnData = new HashMap<>();
+    private Map<String, Boolean> puzzleEventReturnData = new HashMap<>();
     private Map<String, Boolean> campusSecurityReturnData = new HashMap<>();
     private Map<String, Integer> eventTracker;
 
@@ -56,7 +87,7 @@ public class GameMenu extends BaseMenu {
         gameViewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, gameCamera);
 
         initialiseGame();
-
+        intialised = true;
     }
 
     private void initialiseGame() {
@@ -66,13 +97,48 @@ public class GameMenu extends BaseMenu {
         paused = false;
         campusSecurityCreated = false;
 
+        speedBoostActive = false;
+        speedBoostTimer = 0f;
+        speedBoost2Active = false;
+        speedBoost2Timer = 0f;
+        invincibilityActive = false;
+        invincibilityTimer = 0f;
+        sizeChangeActive = false;
+        sizeChangeTimer = 0f;
+        confusedActive = false;
+        confusedTimer = 0f;
+        areLightsOut = false;
+        lightsOutTimer = 30f;
+        tomatoActive = false;
+        tomatoTimer = 0f;
+        tomatoAlpha = 1f;
+        tomatoFade = 0.1f;
+        originalSpeed = 60;
+
+        evilBobReturnData.clear();
+        puzzleEventReturnData.clear();
+        campusSecurityReturnData.clear();
+
         createLayers();
 
         createBob();
 
         createEvilBob();
 
+        createPuzzleEvent();
+
+
         createKeycard();
+        createLightsOutEvent();
+        createSpeedBoost();
+        createSpeedBoost2();
+        createTomato();
+        createTimeOrb();
+        createShield();
+        createSizePotion();
+        createConfusedDebuff();
+        createLightsOutOverlay();
+        createTomatoSplat();
 
         gameViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
 
@@ -118,12 +184,110 @@ public class GameMenu extends BaseMenu {
         );
     }
 
+    private void createLightsOutOverlay(){
+        Pixmap pixmap = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Pixmap.Format.RGBA8888);
+        pixmap.setColor(0, 0, 0, 0.98f);
+        pixmap.fill();
+        Texture lightsOutOverlay = new Texture(pixmap);
+        pixmap.dispose();
+
+        lightsOutSprite = new Sprite(lightsOutOverlay);
+        lightsOutSprite.setSize(WORLD_WIDTH*2, WORLD_WIDTH*2);
+    }
+
+    private void createTomatoSplat(){
+        Texture texture = new Texture ("tomatoSplat.png");
+        tomatoSplatSprite = new Sprite(texture);
+
+        tomatoSplatSprite.setSize(WORLD_WIDTH * 1.5f, WORLD_HEIGHT);
+        tomatoAlpha = 1f;
+    }
+
     private void createKeycard() {
         Texture keycardTexture = new Texture("keycard.png");
         Sprite keycardSprite = new Sprite(keycardTexture);
         keycardSprite.setPosition(20, 20);
         keycardSprite.setSize(BOB_WIDTH * 2, BOB_HEIGHT * 2);
         keycard = new CollectableEntity(keycardSprite, 0, "Keycard");
+    }
+
+    private void createLightsOutEvent(){
+        Texture lightsOutTexture = new Texture("keycard.png");
+        Sprite lightsOutEventSprite = new Sprite(lightsOutTexture);
+        // use keycard for placeholder, event is invisible anyways
+        lightsOutEventSprite.setPosition(1000, 950);
+        lightsOutEventSprite.setSize(BOB_WIDTH * 2, BOB_HEIGHT * 2);
+        hiddenLightsOut = new CollectableEntity(lightsOutEventSprite, 0, "Lights Out");
+        // i actually have no idea why this is invisible, but it is and its meant to be so i wont question it
+    }
+
+    private void createSpeedBoost() {
+        Texture texture = new Texture("speed_boost.png");
+        Sprite sprite = new Sprite(texture);
+        sprite.setPosition(176, 656);
+        sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
+        speedBoost = new CollectableEntity(sprite, 0, "SpeedBoost");
+    }
+
+    private void createTomato(){
+        Texture texture = new Texture("tomato.png");
+        Sprite sprite = new Sprite(texture);
+        sprite.setPosition(561, 532);
+        sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
+        tomato = new CollectableEntity(sprite, 0, "Tomato");
+    }
+
+    private void createSpeedBoost2() {
+        Texture texture = new Texture("speed_boost2.png");
+        Sprite sprite = new Sprite(texture);
+        sprite.setPosition(912, 160);
+        sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
+        speedBoost2 = new CollectableEntity(sprite, 0, "SpeedBoost2");
+    }
+
+    private void createTimeOrb() {
+        Texture texture = new Texture("time_orb.png");
+        Sprite sprite = new Sprite(texture);
+        sprite.setPosition(1408, 480);
+        sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
+        timeOrb = new CollectableEntity(sprite, 0, "TimeOrb");
+    }
+
+    private void createShield() {
+        Texture texture = new Texture("shield.png");
+        Sprite sprite = new Sprite(texture);
+        sprite.setPosition(1008, 1008);
+        sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
+        shield = new CollectableEntity(sprite, 0, "Shield");
+    }
+
+    private void createSizePotion() {
+        Texture texture = new Texture("size_potion.png");
+        Sprite sprite = new Sprite(texture);
+        sprite.setPosition(448, 944);
+        sprite.setSize(BOB_WIDTH, BOB_HEIGHT);
+        sizePotion = new CollectableEntity(sprite, 0, "SizePotion");
+    }
+
+    private void createConfusedDebuff(){
+        Texture texture = new Texture("confused.png");
+        Sprite sprite = new Sprite(texture);
+        sprite.setPosition(350, 400);
+        sprite.setSize(BOB_WIDTH*1.5f, BOB_HEIGHT*1.5f);
+        confusedDebuff = new CollectableEntity(sprite, 0, "ConfusedDebuff");
+    }
+
+    private void createPuzzleEvent(){
+        puzzleEvent =
+            createSprite(
+                "atlas/bob.atlas",
+                "evil-bob",
+                500,
+                470,
+                2 * BOB_WIDTH,
+                2 * BOB_HEIGHT,
+                0,
+                PuzzleEvent::new);
     }
 
     @Override
@@ -146,17 +310,116 @@ public class GameMenu extends BaseMenu {
 
     @Override
     public void update(float delta) {
-        if (!paused) {
-            if (keycard.collected(bob)) {
-                eventTriggered("Positive");
-                evilBob.setPlayerHasKeycard(true);
-                maze.removeCollisionLayer("Doors");
-                maze.removeVisibleLayer("ClosedDoors");
 
+        if (keycard.collected(bob)) {
+            eventTriggered("Positive");
+            evilBob.setPlayerHasKeycard(true);
+            maze.removeCollisionLayer("Doors");
+            maze.removeVisibleLayer("ClosedDoors");
+        }
+
+        if (hiddenLightsOut.collected(bob)) {
+            eventTriggered("Hidden");
+            areLightsOut = true;
+            lightsOutTimer = 30f; // reset timer when triggered
+        }
+
+        if (tomato.collected(bob)) {
+            eventTriggered("Negative");
+            tomatoActive = true;
+            tomatoTimer = 0f;
+            tomatoAlpha = 1f;
+        }
+
+        if (speedBoost.collected(bob)) {
+            eventTriggered("Positive");
+            speedBoostActive = true;
+            speedBoostTimer = 0f;
+            originalSpeed = (int) bob.getSpeed();
+            bob.setSpeed(originalSpeed + 60);
+        }
+
+        if (speedBoost2.collected(bob)) {
+            eventTriggered("Positive");
+            speedBoost2Active = true;
+            speedBoost2Timer = 0f;
+            originalSpeed = (int) bob.getSpeed();
+            bob.setSpeed(originalSpeed + 60);
+        }
+
+        if (timeOrb.collected(bob)) {
+            eventTriggered("Positive");
+            timer -= 60f;
+        }
+
+        if (shield.collected(bob)) {
+            eventTriggered("Positive");
+            invincibilityActive = true;
+            invincibilityTimer = 0f;
+        }
+
+        if (sizePotion.collected(bob)) {
+            eventTriggered("Positive");
+            sizeChangeActive = true;
+            sizeChangeTimer = 0f;
+            bobSprite.setScale(0.5f);
+        }
+
+        if (confusedDebuff.collected(bob)) {
+            eventTriggered("Negative");
+            confusedActive = true;
+            confusedTimer = 0f;
+            bob.setConfused(true);
+        }
+
+
+        if (!paused) {
+
+            if (speedBoostActive) {
+                speedBoostTimer += delta;
+                if (speedBoostTimer > 10f) {
+                    speedBoostActive = false;
+                    bob.setSpeed(originalSpeed);
+                }
+            }
+
+            if (speedBoost2Active) {
+                speedBoost2Timer += delta;
+                if (speedBoost2Timer > 20f) {
+                    speedBoost2Active = false;
+                    bob.setSpeed(originalSpeed);
+                }
+            }
+
+            if (invincibilityActive) {
+                invincibilityTimer += delta;
+                if (invincibilityTimer > 8f) {
+                    invincibilityActive = false;
+                }
+            }
+
+            if (sizeChangeActive) {
+                sizeChangeTimer += delta;
+                if (sizeChangeTimer > 12f) {
+                    sizeChangeActive = false;
+                    bobSprite.setScale(1f);
+                }
+            }
+
+            if (tomatoActive) {
+                tomatoSplatSprite.setColor(1f, 1f, 1f, tomatoAlpha);
+                tomatoSplatSprite.setPosition(
+                    gameCamera.position.x - tomatoSplatSprite.getWidth() / 2f,
+                    gameCamera.position.y - tomatoSplatSprite.getHeight() / 2f
+                );
             }
 
             movement_halter = maze.hitsWall(bob, delta);
-            evilBobReturnData = evilBob.collision(bob);
+            evilBobReturnData.clear();
+            evilBobReturnData.putAll(evilBob.collision(bob));
+
+            puzzleEventReturnData.clear();
+            puzzleEventReturnData.putAll(puzzleEvent.collision(bob));
 
             handleInteraction();
 
@@ -164,22 +427,29 @@ public class GameMenu extends BaseMenu {
 
             timer += delta;
 
-            if (maze.HitsWinLayer(bob)) {
-                WinMenu winMenu = (WinMenu) menuManager.getMenu(MenuType.WIN);
-
-                if (winMenu != null) {
-                    winMenu.setCompletionTime(timer);
+            if (areLightsOut) {
+                lightsOutTimer -= delta;
+                if (lightsOutTimer <= 0f) {
+                    areLightsOut = false;
                 }
-
-                menuManager.setMenu(MenuType.WIN);
             }
 
-            if (maze.HitsEventLayer(bob)) {
-                eventTriggered("Negative");
+
+            if (confusedActive) {
+                confusedTimer += delta;
+                if (confusedTimer >= 20f) {
+                    confusedActive = false;
+                    bob.setConfused(false);
+                }
             }
 
-            if (timer >= 300) {
-                menuManager.setMenu(MenuType.LOSE);
+            if (tomatoActive) {
+                tomatoAlpha -= (tomatoFade * delta);
+                tomatoTimer += delta;
+                if (tomatoTimer >= 15f) {
+                    tomatoActive = false;
+                    tomatoAlpha = 0f;
+                }
             }
         }
 
@@ -189,6 +459,24 @@ public class GameMenu extends BaseMenu {
             0
         );
         gameCamera.update();
+
+        if (maze.HitsWinLayer(bob)) {
+            WinMenu winMenu = (WinMenu) menuManager.getMenu(MenuType.WIN);
+
+            if (winMenu != null) {
+                winMenu.setCompletionTime(timer);
+            }
+
+            menuManager.setMenu(MenuType.WIN);
+        }
+
+        if (maze.HitsEventLayer(bob)) {
+            eventTriggered("Negative");
+        }
+
+        if (timer >= 300) {
+            menuManager.setMenu(MenuType.LOSE);
+        }
     }
 
     @Override
@@ -202,8 +490,16 @@ public class GameMenu extends BaseMenu {
         spriteBatch.begin();
 
         evilBob.draw(spriteBatch, 1000, 1050);
+        puzzleEvent.draw(spriteBatch, 345, 600);
         bob.draw(spriteBatch);
         keycard.draw(spriteBatch);
+        tomato.draw(spriteBatch);
+        speedBoost.draw(spriteBatch);
+        speedBoost2.draw(spriteBatch);
+        timeOrb.draw(spriteBatch);
+        shield.draw(spriteBatch);
+        sizePotion.draw(spriteBatch);
+        confusedDebuff.draw(spriteBatch);
 
         if (campusSecurityCreated) {
             int mod = 0;
@@ -213,10 +509,24 @@ public class GameMenu extends BaseMenu {
             }
         }
 
+        if (tomatoActive) {
+            tomatoSplatSprite.draw(spriteBatch);
+        }
+
         spriteBatch.end();
 
+        if (areLightsOut) {
+            spriteBatch.begin();
+            lightsOutSprite.setPosition(
+                gameCamera.position.x - WORLD_WIDTH,
+                gameCamera.position.y - WORLD_HEIGHT
+            );
+            lightsOutSprite.draw(spriteBatch);
+            spriteBatch.end();
+        }
+
         if (gameViewport.getScreenWidth() > 0 && gameViewport.getScreenHeight() > 0) {
-            hud.draw(font, GameController.formatTime(timer), eventTracker, bob, paused, gameViewport);
+            hud.draw(font, GameController.formatTime(timer), eventTracker, bob, paused, gameViewport, areLightsOut, GameController.formatTime(lightsOutTimer));
         }
 
     }
@@ -237,8 +547,6 @@ public class GameMenu extends BaseMenu {
 
         }
         return false;
-
-
     }
 
     @Override
@@ -259,6 +567,7 @@ public class GameMenu extends BaseMenu {
     public void dispose() {
         if (bob != null) bob.dispose();
         if (evilBob != null) evilBob.dispose();
+        if (puzzleEvent != null) puzzleEvent.dispose();
         if (maze != null) maze.dispose();
 
         for (CampusSecurity security : allCampusSecuritySprites) {
@@ -307,12 +616,34 @@ public class GameMenu extends BaseMenu {
             }
         }
 
+        if (puzzleEventReturnData.containsKey("Suspend")) {
+            bob.setSuspension(puzzleEventReturnData.get("Suspend"));
+        }
+
+        if (puzzleEventReturnData.containsKey("Enable Rocket Bob")) {
+            if (puzzleEventReturnData.get("Enable Rocket Bob")) {
+                bob.setAnimation("Rocket");
+                bob.setSpeed(150);
+                puzzleEventReturnData.remove("Enable Rocket Bob");
+                eventTriggered("Hidden");
+            }
+        }
+
+        if (puzzleEventReturnData.containsKey("Time penalty")) {
+            if (puzzleEventReturnData.get("Time penalty")) {
+                timer += 30f;
+                puzzleEventReturnData.remove("Time penalty");
+                eventTriggered("Hidden");
+            }
+        }
+
         // Check campus security collisions
         if (campusSecurityCreated) {
             for (CampusSecurity sec : allCampusSecuritySprites) {
-                campusSecurityReturnData = sec.collision(bob);
+                campusSecurityReturnData.clear();
+                campusSecurityReturnData.putAll(sec.collision(bob));
                 if (campusSecurityReturnData.containsKey("Reset Player Position")) {
-                    if (campusSecurityReturnData.get("Reset Player Position")) {
+                    if (campusSecurityReturnData.get("Reset Player Position")&& !invincibilityActive) {
                         bobSprite.setPosition(100, 500);
                     }
                 }
@@ -321,26 +652,8 @@ public class GameMenu extends BaseMenu {
     }
 
     public void resetGame() {
-        timer = 0f;
-        events = 0;
-        paused = false;
-        campusSecurityCreated = false;
-
-
-        evilBobReturnData.clear();
-        campusSecurityReturnData.clear();
-
-        if (bobSprite != null) {
-            bobSprite.setPosition(100, 500);
-        }
-
-        createKeycard();
-
-        eventTracker = GameController.setEventMap();
-
         initialiseGame();
         intialised = true;
-
     }
 
 
