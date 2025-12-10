@@ -12,6 +12,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -23,6 +24,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
     private Bob bob;
     private Sprite bobSprite;
     private Input mockInput;
+    private Graphics mockGraphics;
 
     @BeforeEach
     public void createBob() {
@@ -32,6 +34,8 @@ public class BobTests extends AbstractHeadlessGdxTest {
         bobSprite.setSize(15, 15);
         bob = new Bob(bobSprite, 60, -3);
         mockInput = mock(Input.class);
+        mockGraphics = mock(Graphics.class);
+        when(mockGraphics.getDeltaTime()).thenReturn(0.016f); // Approx 60 FPS
         Gdx.input = mockInput;
     }
 
@@ -75,13 +79,15 @@ public class BobTests extends AbstractHeadlessGdxTest {
         float initialX = bobSprite.getX();
         float initialY = bobSprite.getY();
         float deltaTime = 0.016f;
-
+        // Inject delta time into move()
+        Gdx.graphics = mockGraphics;
+        when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
         // Simulate LEFT key pressed
         when(mockInput.isKeyPressed(Input.Keys.LEFT)).thenReturn(true);
 
         bob.move(movementHalter);
 
-        assertEquals(initialX - bob.getSpeed() * deltaTime, bobSprite.getX(), deltaTime);
+        assertEquals(initialX - bob.getSpeed() * deltaTime, bobSprite.getX());
         assertEquals(initialY, bobSprite.getY());
     }
 
@@ -94,7 +100,9 @@ public class BobTests extends AbstractHeadlessGdxTest {
         float initialX = bobSprite.getX();
         float initialY = bobSprite.getY();
         float deltaTime = 0.016f;
-
+        // Inject delta time into move()
+        Gdx.graphics = mockGraphics;
+        when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
         // Simulate RIGHT key pressed
         when(mockInput.isKeyPressed(Input.Keys.RIGHT)).thenReturn(true);
 
@@ -113,14 +121,16 @@ public class BobTests extends AbstractHeadlessGdxTest {
         float initialX = bobSprite.getX();
         float initialY = bobSprite.getY();
         float deltaTime = 0.016f;
-
+        // Inject delta time into move()
+        Gdx.graphics = mockGraphics;
+        when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
         // Simulate UP key pressed
         when(mockInput.isKeyPressed(Input.Keys.UP)).thenReturn(true);
 
         bob.move(movementHalter);
 
         assertEquals(initialX, bobSprite.getX());
-        assertEquals(initialY + bob.getSpeed() * deltaTime, bobSprite.getY(), deltaTime);
+        assertEquals(initialY + bob.getSpeed() * deltaTime * bob.getVerticalSpeedMultiplier(), bobSprite.getY(), deltaTime);
     }
 
     @Test
@@ -132,14 +142,16 @@ public class BobTests extends AbstractHeadlessGdxTest {
         float initialX = bobSprite.getX();
         float initialY = bobSprite.getY();
         float deltaTime = 0.016f;
-
+        // Inject delta time into move()
+        Gdx.graphics = mockGraphics;
+        when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
         // Simulate DOWN key pressed
         when(mockInput.isKeyPressed(Input.Keys.DOWN)).thenReturn(true);
 
         bob.move(movementHalter);
 
         assertEquals(initialX, bobSprite.getX());
-        assertEquals(initialY - bob.getSpeed() * deltaTime, bobSprite.getY(), deltaTime);
+        assertEquals(initialY - bob.getSpeed() * deltaTime * bob.getVerticalSpeedMultiplier(), bobSprite.getY(), deltaTime);
     }
 
     @Test
@@ -151,7 +163,9 @@ public class BobTests extends AbstractHeadlessGdxTest {
         float initialX = bobSprite.getX();
         float initialY = bobSprite.getY();
         float deltaTime = 0.016f;
-
+        // Inject delta time into move()
+        Gdx.graphics = mockGraphics;
+        when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
         // Simulate LEFT key pressed
         when(mockInput.isKeyPressed(Input.Keys.LEFT)).thenReturn(true);
 
@@ -170,7 +184,9 @@ public class BobTests extends AbstractHeadlessGdxTest {
         float initialX = bobSprite.getX();
         float initialY = bobSprite.getY();
         float deltaTime = 0.016f;
-
+        // Inject delta time into move()
+        Gdx.graphics = mockGraphics;
+        when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
         // Simulate RIGHT key pressed
         when(mockInput.isKeyPressed(Input.Keys.RIGHT)).thenReturn(true);
 
@@ -189,14 +205,16 @@ public class BobTests extends AbstractHeadlessGdxTest {
         float initialX = bobSprite.getX();
         float initialY = bobSprite.getY();
         float deltaTime = 0.016f;
-
+        // Inject delta time into move()
+        Gdx.graphics = mockGraphics;
+        when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
         // Simulate UP key pressed
         when(mockInput.isKeyPressed(Input.Keys.UP)).thenReturn(true);
 
         bob.move(movementHalter);
 
         assertEquals(initialX, bobSprite.getX());
-        assertEquals(initialY - bob.getSpeed() * deltaTime, bobSprite.getY(), deltaTime);
+        assertEquals(initialY - bob.getSpeed() * deltaTime * bob.getVerticalSpeedMultiplier(), bobSprite.getY(), deltaTime);
     }
 
     @Test
@@ -208,14 +226,16 @@ public class BobTests extends AbstractHeadlessGdxTest {
         float initialX = bobSprite.getX();
         float initialY = bobSprite.getY();
         float deltaTime = 0.016f;
-
+        // Inject delta time into move()
+        Gdx.graphics = mockGraphics;
+        when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
         // Simulate DOWN key pressed
         when(mockInput.isKeyPressed(Input.Keys.DOWN)).thenReturn(true);
 
         bob.move(movementHalter);
 
         assertEquals(initialX, bobSprite.getX());
-        assertEquals(initialY + bob.getSpeed() * deltaTime, bobSprite.getY(), deltaTime);
+        assertEquals(initialY + bob.getSpeed() * deltaTime * bob.getVerticalSpeedMultiplier(), bobSprite.getY(), deltaTime);
     }
 
     @Test

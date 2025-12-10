@@ -227,20 +227,6 @@ public class Bob extends CollidableEntity {
     this.animationOverride = animationName;
   }
 
-  public TextureRegion getCurrentRegion() {
-    return new TextureRegion(
-            sprite.getTexture(),
-            sprite.getRegionX(),
-            sprite.getRegionY(),
-            sprite.getRegionWidth(),
-            sprite.getRegionHeight()
-    );
-}
-
-  public TextureRegion getAnimation(String animationName) {
-    return bob_animations.get(animationName).getKeyFrame(stateTime, true);
-  }
-
   public void setSpeed(Integer speed) {
     this.speed = speed;
   }
@@ -255,5 +241,25 @@ public class Bob extends CollidableEntity {
       frames.add(temp_frame);
     }
     return frames;
+  }
+
+  // Used for testing purposes only
+
+    public TextureRegion getCurrentRegion() {
+    return new TextureRegion(
+            sprite.getTexture(),
+            sprite.getRegionX(),
+            sprite.getRegionY(),
+            sprite.getRegionWidth(),
+            sprite.getRegionHeight()
+    );
+}
+
+  public TextureRegion getAnimation(String animationName) {
+    return bob_animations.get(animationName).getKeyFrame(stateTime, true);
+  }
+
+  public float getVerticalSpeedMultiplier() {
+    return VERTICAL_SPEED_MULTIPLIER;
   }
 }
