@@ -34,7 +34,7 @@ public class MazeGame extends ApplicationAdapter {
         menuManager.registerMenu(MenuType.WIN, new WinMenu(menuManager, batch, font, camera, viewport));
         menuManager.registerMenu(MenuType.LOSE, new LoseMenu(menuManager, batch, font, camera, viewport));
         menuManager.registerMenu(MenuType.PAUSE, new PauseMenu(menuManager, batch, font, camera, viewport));
-        //TODO tutorial screen
+        menuManager.registerMenu(MenuType.TUTORIAL, new TutorialMenu(menuManager, batch, font, camera, viewport));
 
         menuManager.setMenu(MenuType.MAIN_MENU);
 
