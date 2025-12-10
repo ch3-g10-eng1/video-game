@@ -28,13 +28,21 @@ jobs:
 
     - name: Build with Gradle Wrapper
       run: ./gradlew build
+
+
 #start
-    - name: Upload Game JAR
+    - name: Upload Gradle build artifacts
       if: success() # Only run if build succeeds
       uses: actions/upload-artifact@v4
       with:
-        name: game-jar
-        path: lwjgl3/build/libs/*.jar
+        name: gradle-build-artifacts-${{ github.run_id }}
+        path: |
+          build/libs/**
+          build/distributions/**
+          lwjgl3/build/libs/**
+          lwjgl3/build/distributions/**
+        # retention-days: 7   # optional: set retention (defaults to repo settings)
+   
 #end        
 
   dependency-submission:
