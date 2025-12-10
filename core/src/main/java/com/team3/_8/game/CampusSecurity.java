@@ -128,4 +128,8 @@ public class CampusSecurity extends InteractableEntity {
     this.collisionBox.setWidth(newWidth);
     this.collisionBox.setHeight(this.sprite.getHeight());
   }
+
+  public void doMove(boolean up) {
+    move(up);
+  }
 }

@@ -243,17 +243,17 @@ public class Bob extends CollidableEntity {
     return frames;
   }
 
-  // Used for testing purposes only
+  // Used for testing purposes
 
-    public TextureRegion getCurrentRegion() {
+  public TextureRegion getCurrentRegion() {
     return new TextureRegion(
-            sprite.getTexture(),
-            sprite.getRegionX(),
-            sprite.getRegionY(),
-            sprite.getRegionWidth(),
-            sprite.getRegionHeight()
+      sprite.getTexture(),
+      sprite.getRegionX(),
+      sprite.getRegionY(),
+      sprite.getRegionWidth(),
+      sprite.getRegionHeight()
     );
-}
+  }
 
   public TextureRegion getAnimation(String animationName) {
     return bob_animations.get(animationName).getKeyFrame(stateTime, true);
