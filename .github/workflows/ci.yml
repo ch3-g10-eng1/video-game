@@ -5,6 +5,7 @@ on:
     branches: [ "development" ]
   pull_request:
     branches: [ "development" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,11 +16,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
+        cache: gradle
+
+    - name: Ensure Gradle wrapper is executable
+      run: chmod +x ./gradlew
 
     # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
@@ -27,15 +33,57 @@ jobs:
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
     - name: Build with Gradle Wrapper
-      run: ./gradlew build
-#start
-    - name: Upload Game JAR
-      if: success() # Only run if build succeeds
+      run: ./gradlew clean build --no-daemon --console=plain
+
+    - name: Collect build outputs & test reports (always)
+      if: always()
+      shell: bash
+      run: |
+        set -e
+        ART_DIR=artifact
+        rm -rf "$ART_DIR"
+        mkdir -p "$ART_DIR"
+
+        # List of likely artifact/report locations (root project and lwjgl3 subproject)
+        paths=(
+          "build/libs"
+          "build/distributions"
+          "build/reports"
+          "build/test-results"
+          "lwjgl3/build/libs"
+          "lwjgl3/build/distributions"
+          "lwjgl3/build/reports"
+          "lwjgl3/build/test-results"
+        )
+
+        for p in "${paths[@]}"; do
+          if [ -e "$p" ]; then
+            # Preserve directory structure under artifact/
+            mkdir -p "$ART_DIR/$(dirname "$p")"
+            cp -r "$p" "$ART_DIR/$p" || true
+          fi
+        done
+
+        # If there's any other logs or coverage you want included, add paths above.
+
+        # If nothing was collected, create a small marker file so the artifact isn't empty.
+        if [ -z "$(ls -A $ART_DIR 2>/dev/null || true)" ]; then
+          echo "No build outputs or reports were found." > "$ART_DIR/no-artifacts.txt"
+        fi
+
+        # Create a single zip so upload-artifact is simpler/atomic
+        ZIP=artifact-${{ github.run_id }}.zip
+        rm -f "$ZIP"
+        zip -r "$ZIP" "$ART_DIR" >/dev/null
+
+    - name: Upload build + report artifact (always)
+      if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: game-jar
-        path: lwjgl3/build/libs/*.jar
-#end        
+        name: build-and-reports-${{ github.run_id }}
+        path: |
+          artifact-${{ github.run_id }}.zip
+        # retention-days: 7
 
   dependency-submission:
 
