@@ -188,4 +188,13 @@ public class EvilBob extends InteractableEntity {
   public void setPlayerHasKeycard(boolean playerHasKeycard) {
     this.playerHasKeycard = playerHasKeycard;
   }
+
+  // Used for testing purposes
+  public Boolean getPlayerHasKeycard() {
+    return playerHasKeycard;
+  }
+
+  public TextBubble getTextBubble() {
+    return textBubble;
+  }
 }

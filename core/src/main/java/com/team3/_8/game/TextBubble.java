@@ -77,4 +77,21 @@ public class TextBubble {
       font.setColor(Color.WHITE);
     }
   }
+
+  // Used for testing purposes
+  public String getText() {
+    return text;
+  }
+
+  public boolean isVisible() {
+    return visible;
+  }
+
+  public float getWidth() {
+    return width;
+  }
+
+  public float getHeight() {
+    return height;
+  }
 }
