@@ -1,5 +1,7 @@
 package uk.ac.york.cs.eng1.team10.headless;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +12,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.team3._8.game.Bob;
 import com.team3._8.game.EvilBob;
+
 
 public class EvilBobTests extends AbstractHeadlessGdxTest{
   private EvilBob evilBob;
@@ -67,6 +71,33 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
     evilBob.startInteraction();
     assertEquals(true, evilBob.getTextBubble().isVisible());
     assertEquals("You dare\nenter my realm", evilBob.getTextBubble().getText());
+  }
+
+  @Test
+  public void testCollision() {
+    // Create a Bob instance to collide with EvilBob
+    TextureAtlas atlas = new TextureAtlas("atlas/bob.atlas");
+    Sprite bobSprite = new Sprite(atlas.findRegion("front-bob"));
+    bobSprite.setPosition(87, 100);
+    bobSprite.setSize(15, 15);
+    Bob bob = new Bob(bobSprite, 60, 0);
+    when(mockInput.isKeyJustPressed(Input.Keys.N)).thenReturn(true);
+
+    // Used to force to not be returned blank
+    evilBob.setConversationReset(true);
+    evilBob.setSkipChoice(false);
+
+    // Collision should occur, and return command to create campus security
+    Map<String, Boolean> returnData = evilBob.collision(bob);
+    assertEquals(true, returnData.containsKey("Create Campus Security"));
+    assertEquals(true, returnData.get("Create Campus Security"));
+
+    // Creates a new bob at a different position to avoid collision
+    bobSprite.setPosition(0, 0);
+    Bob newBob = new Bob(bobSprite, 60, 0);
+    // Resets ReturnData to avoid use of previous collision data
+    evilBob.resetReturnData();
+    assertEquals(false, evilBob.collision(newBob).containsKey("Create Campus Security"));
   }
 
 }
