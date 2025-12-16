@@ -84,9 +84,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
   @Test
   public void testMoveLeft() {
-    bob.setSuspension(false);
-    bob.setConfused(false);
-
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
     float initialY = bobSprite.getY();
@@ -104,9 +101,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
   @Test
   public void testMoveRight() {
-    bob.setSuspension(false);
-    bob.setConfused(false);
-
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
     float initialY = bobSprite.getY();
@@ -124,9 +118,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
   @Test
   public void testMoveUp() {
-    bob.setSuspension(false);
-    bob.setConfused(false);
-
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
     float initialY = bobSprite.getY();
@@ -144,9 +135,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
   @Test
   public void testMoveDown() {
-    bob.setSuspension(false);
-    bob.setConfused(false);
-
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
     float initialY = bobSprite.getY();
@@ -164,7 +152,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
   @Test
   public void testConfusedMoveLeft() {
-    bob.setSuspension(false);
     bob.setConfused(true);
 
     boolean[] movementHalter = {false, false, false, false};
@@ -184,7 +171,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
   @Test
   public void testConfusedMoveRight() {
-    bob.setSuspension(false);
     bob.setConfused(true);
 
     boolean[] movementHalter = {false, false, false, false};
@@ -204,7 +190,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
   @Test
   public void testConfusedMoveUp() {
-    bob.setSuspension(false);
     bob.setConfused(true);
 
     boolean[] movementHalter = {false, false, false, false};
@@ -224,7 +209,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
   @Test
   public void testConfusedMoveDown() {
-    bob.setSuspension(false);
     bob.setConfused(true);
 
     boolean[] movementHalter = {false, false, false, false};
@@ -285,9 +269,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
   @Test
   public void testRightMoveAnimation() {
-    bob.setSuspension(false);
-    bob.setConfused(false);
-
     boolean[] movementHalter = {false, false, false, false};
 
     // Simulate RIGHT key pressed
@@ -306,9 +287,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
   @Test
   public void testLeftMoveAnimation() {
-    bob.setSuspension(false);
-    bob.setConfused(false);
-
     boolean[] movementHalter = {false, false, false, false};
 
     // Simulate LEFT key pressed
@@ -327,9 +305,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
   @Test
   public void testUpMoveAnimation() {
-    bob.setSuspension(false);
-    bob.setConfused(false);
-
     boolean[] movementHalter = {false, false, false, false};
 
     // Simulate UP key pressed
@@ -348,9 +323,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
   @Test
   public void testDownMoveAnimation() {
-    bob.setSuspension(false);
-    bob.setConfused(false);
-
     boolean[] movementHalter = {false, false, false, false};
 
     // Simulate DOWN key pressed
