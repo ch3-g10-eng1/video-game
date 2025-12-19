@@ -23,7 +23,7 @@ public class CollectableEntityTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testCollectableEntityCreation() {
+  public void testCollectableEntityCreationSetsCorrectValues() {
     assertEquals(0, collectableEntity.getSpeed());
     assertEquals(1, collectableEntity.getCollisionBox().getWidth());
     assertEquals(1, collectableEntity.getCollisionBox().getHeight());
@@ -32,7 +32,7 @@ public class CollectableEntityTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testCollectableEntityCollected() {
+  public void testCollectableEntityCollectedReturnsTrueWhenCollected() {
     // Create a Bob instance to collect the entity
     TextureAtlas atlas = new TextureAtlas("atlas/bob.atlas");
     Sprite bobSprite = new Sprite(atlas.findRegion("front-bob"));
@@ -40,13 +40,22 @@ public class CollectableEntityTests extends AbstractHeadlessGdxTest {
     bobSprite.setSize(15, 15);
     Bob bob = new Bob(bobSprite, 60, 0);
     assertEquals(true, collectableEntity.collected(bob));
+  }
+
+  @Test
+  public void testCollectableEntityCollectedReturnsFalseWhenNotCollected() {
+    TextureAtlas atlas = new TextureAtlas("atlas/bob.atlas");
+    Sprite bobSprite = new Sprite(atlas.findRegion("front-bob"));
+    bobSprite.setPosition(100, 100);
+    bobSprite.setSize(15, 15);
+    Bob bob = new Bob(bobSprite, 60, 0);
+    collectableEntity.collected(bob);
     // Collecting again should return false as it is already collected
     assertEquals(false, collectableEntity.collected(bob));
   }
 
   @Test
-  public void testCollectableEntityNotCollected() {
-    // Create a Bob instance to collect the entity
+  public void testCollectableEntityNotCollectedWhenNotInContactWithBob() {
     TextureAtlas atlas = new TextureAtlas("atlas/bob.atlas");
     Sprite bobSprite = new Sprite(atlas.findRegion("front-bob"));
     bobSprite.setPosition(500, 500);

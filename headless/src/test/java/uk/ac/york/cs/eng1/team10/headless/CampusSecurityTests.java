@@ -29,7 +29,7 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testCampusSecurityCreation() {
+  public void testCampusSecurityCreationSetsCorrectValues() {
     assertEquals(campusSecuritySprite.getHeight(), 15);
     assertEquals(campusSecuritySprite.getWidth(), 15);
     assertEquals(campusSecurity.getX(), 100);
@@ -38,13 +38,13 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testStartStopInteraction() {
+  public void testStartAndStopInteractionReturnCorrectData() {
     assertEquals(true, campusSecurity.startInteraction().get("Reset Player Position"));
     assertEquals(false, campusSecurity.stopInteraction().get("Reset Player Position"));
   }
 
   @Test
-  public void testCampusSecurityMoveUp() {
+  public void testCampusSecurityMoveUpChangesCampusSecurityPositionUp() {
     float initialX = campusSecurity.getX();
     float initialY = campusSecurity.getY();
     float deltaTime = 0.016f;
@@ -57,39 +57,33 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testCampusSecurityMoveDown() {
+  public void testCampusSecurityMoveDownChangesCampusSecurityPositionDown() {
     float initialX = campusSecurity.getX();
     float initialY = campusSecurity.getY();
     float deltaTime = 0.016f;
-    // Inject delta time into move()
     when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
-    // Move campus security up
     campusSecurity.doMove(false);
     assertEquals(initialX, campusSecurity.getX());
     assertEquals(initialY - campusSecurity.getSpeed() * deltaTime, campusSecurity.getY());
   }
 
   @Test
-  public void testCollisionBoxMoveUp() {
+  public void testCollisionBoxMoveUpChangesCollisionBoxPositionUp() {
     float initialX = campusSecurity.getCollisionBox().getX();
     float initialY = campusSecurity.getCollisionBox().getY();
     float deltaTime = 0.016f;
-    // Inject delta time into move()
     when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
-    // Move campus security up
     campusSecurity.doMove(true);
     assertEquals(initialX + 8f, campusSecurity.getCollisionBox().getX()); // 8f added as inset value
     assertEquals(initialY + deltaTime * campusSecurity.getSpeed(), campusSecurity.getCollisionBox().getY());
   }
 
   @Test
-  public void testCollisionBoxMoveDown() {
+  public void testCollisionBoxMoveDownChangesCollisionBoxPositionDown() {
     float initialX = campusSecurity.getCollisionBox().getX();
     float initialY = campusSecurity.getCollisionBox().getY();
     float deltaTime = 0.016f;
-    // Inject delta time into move()
     when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
-    // Move campus security up
     campusSecurity.doMove(false);
     assertEquals(initialX + 8f, campusSecurity.getCollisionBox().getX()); // 8f added as inset value
     assertEquals(initialY - deltaTime * campusSecurity.getSpeed(), campusSecurity.getCollisionBox().getY());
