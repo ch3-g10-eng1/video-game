@@ -14,6 +14,7 @@ import com.team3._8.game.CollectableEntity;
 public class CollectableEntityTests extends AbstractHeadlessGdxTest {
   private Sprite stubSprite;
   private CollectableEntity collectableEntity;
+
   @BeforeEach
   public void createCollectableEntity() {
     Texture texture = new Texture(new Pixmap(1, 1, Pixmap.Format.RGBA8888));

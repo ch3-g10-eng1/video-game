@@ -2,6 +2,7 @@ package uk.ac.york.cs.eng1.team10.headless;
 
 import java.util.Map;
 
+import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,16 +21,29 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
   private EvilBob evilBob;
   private Sprite evilBobSprite;
   private Input mockInput;
+  private Input originalInput;
+  private TextureAtlas atlas;
 
   @BeforeEach
   public void createEvilBob() {
-    TextureAtlas atlas = new TextureAtlas("atlas/bob.atlas");
+    originalInput = Gdx.input;
+    atlas = new TextureAtlas("atlas/bob.atlas");
     evilBobSprite = new Sprite(atlas.findRegion("front-bob"));
     evilBobSprite.setPosition(100, 100);
     evilBobSprite.setSize(15, 15);
     evilBob = new EvilBob(evilBobSprite, 60);
     mockInput = mock(Input.class);
     Gdx.input = mockInput;
+  }
+
+  @AfterEach
+  public void tearDown() {
+    Gdx.input = originalInput;
+
+    if (atlas != null) {
+        atlas.dispose();
+    }
+
   }
 
   // Initialization
@@ -90,7 +104,7 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
   @Test
   public void testEvilBobCollisionWithBobReturnsCorrectData() {
     // Create a Bob instance to collide with EvilBob
-    TextureAtlas atlas = new TextureAtlas("atlas/bob.atlas");
+    atlas = new TextureAtlas("atlas/bob.atlas");
     Sprite bobSprite = new Sprite(atlas.findRegion("front-bob"));
     bobSprite.setPosition(87, 100);
     bobSprite.setSize(15, 15);

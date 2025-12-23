@@ -2,10 +2,9 @@ package uk.ac.york.cs.eng1.team10.headless;
 
 import java.util.Set;
 
+import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
@@ -25,10 +24,16 @@ public class BobTests extends AbstractHeadlessGdxTest {
   private Sprite bobSprite;
   private Input mockInput;
   private Graphics mockGraphics;
+  private Input originalInput;
+  private Graphics originalGraphics;
+  private TextureAtlas atlas;
 
   @BeforeEach
   public void createBob() {
-    TextureAtlas atlas = new TextureAtlas("atlas/bob.atlas");
+    originalInput = Gdx.input;
+    originalGraphics = Gdx.graphics;
+
+    atlas = new TextureAtlas("atlas/bob.atlas");
     bobSprite = new Sprite(atlas.findRegion("front-bob"));
     bobSprite.setPosition(100, 500);
     bobSprite.setSize(15, 15);
@@ -38,6 +43,16 @@ public class BobTests extends AbstractHeadlessGdxTest {
     Gdx.input = mockInput;
     Gdx.graphics = mockGraphics;
   }
+
+  @AfterEach
+  public void tearDown() {
+    Gdx.input = originalInput;
+    Gdx.graphics = originalGraphics;
+
+    if (atlas != null) {
+        atlas.dispose();
+    }
+}
 
   // Initialization
   @Test
@@ -54,12 +69,12 @@ public class BobTests extends AbstractHeadlessGdxTest {
   // Inventory
   @Test
   public void testAddAndRemoveInventoryCorrectlyChangeInventory() {
-    assertTrue(bob.addInventory("Key"));
-    assertFalse(bob.addInventory("Key")); // duplicate
-    assertTrue(bob.getInventory().contains("Key"));
+    assertEquals(true,bob.addInventory("Key"));
+    assertEquals(false, bob.addInventory("Key")); // duplicate
+    assertEquals(true, bob.getInventory().contains("Key"));
 
-    assertTrue(bob.removeInventory("Key"));
-    assertFalse(bob.removeInventory("Key")); // already removed
+    assertEquals(true, bob.removeInventory("Key"));
+    assertEquals(false, bob.removeInventory("Key")); // already removed
   }
 
   @Test
@@ -69,8 +84,8 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
     Set<String> inv = bob.getInventory();
     assertEquals(2, inv.size());
-    assertTrue(inv.contains("Gem"));
-    assertTrue(inv.contains("Coin"));
+    assertEquals(true, inv.contains("Gem"));
+    assertEquals(true, inv.contains("Coin"));
   }
 
   // Movement

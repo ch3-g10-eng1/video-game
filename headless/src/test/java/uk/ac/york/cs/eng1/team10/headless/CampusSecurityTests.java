@@ -1,5 +1,6 @@
 package uk.ac.york.cs.eng1.team10.headless;
 
+import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,16 +17,29 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
   private CampusSecurity campusSecurity;
   private Sprite campusSecuritySprite;
   private Graphics mockGraphics;
+  private Graphics originalGraphics;
+  private TextureAtlas atlas;
 
   @BeforeEach
   public void createCampusSecurity() {
-    TextureAtlas atlas = new TextureAtlas("atlas/security_geese.atlas");
+    originalGraphics = Gdx.graphics;
+
+    atlas = new TextureAtlas("atlas/security_geese.atlas");
     campusSecuritySprite = new Sprite(atlas.findRegion("walking"));
     campusSecuritySprite.setPosition(100, 500);
     campusSecuritySprite.setSize(15, 15);
     campusSecurity = new CampusSecurity(campusSecuritySprite, 50);
     mockGraphics = mock(Graphics.class);
     Gdx.graphics = mockGraphics;
+  }
+
+  @AfterEach
+  public void tearDown() {
+    Gdx.graphics = originalGraphics;
+
+    if (atlas != null) {
+        atlas.dispose();
+    }
   }
 
   @Test
