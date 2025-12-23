@@ -33,86 +33,84 @@ public class GameControllerTests extends AbstractHeadlessGdxTest {
 
   @Test
   void testFormatTimeFormatsMinutesAndSecondsCorrectly() {
-      String result = GameController.formatTime(125.9f);
-      assertEquals("Timer: 2:05", result);
+    String result = GameController.formatTime(125.9f);
+
+    assertEquals("Timer: 2:05", result);
   }
 
   @Test
     void testFormatTimeHandlesZeroTime() {
-        assertEquals("Timer: 0:00", GameController.formatTime(0));
+      assertEquals("Timer: 0:00", GameController.formatTime(0));
     }
 
   @Test
   void testHandleInputTogglesPauseWhenEscapePressed() {
-      OrthographicCamera camera = new OrthographicCamera();
+    OrthographicCamera camera = new OrthographicCamera();
+    when(mockInput.isKeyJustPressed(Input.Keys.ESCAPE)).thenReturn(true);
 
-      when(mockInput.isKeyJustPressed(Input.Keys.ESCAPE)).thenReturn(true);
+    boolean paused = GameController.handleInput(camera, false, false);
 
-      boolean paused = GameController.handleInput(camera, false, false);
-
-      assertEquals(true, paused);
+    assertEquals(true, paused);
   }
 
   @Test
   void testHandleInputZoomIncreasesWhenMinusPressedAndZoomEnabled() {
-      OrthographicCamera camera = new OrthographicCamera();
-      camera.zoom = 1.0f;
+    OrthographicCamera camera = new OrthographicCamera();
+    camera.zoom = 1.0f;
+    when(mockInput.isKeyPressed(Input.Keys.MINUS)).thenReturn(true);
 
-      when(mockInput.isKeyPressed(Input.Keys.MINUS)).thenReturn(true);
+    GameController.handleInput(camera, false, true);
 
-      GameController.handleInput(camera, false, true);
-
-      assertEquals(1.02f, camera.zoom);
+    assertEquals(1.02f, camera.zoom);
   }
 
   @Test
   void testHandleInputZoomDecreasesWhenEqualsPressedAndZoomEnabled() {
-      OrthographicCamera camera = new OrthographicCamera();
-      camera.zoom = 1.0f;
+    OrthographicCamera camera = new OrthographicCamera();
+    camera.zoom = 1.0f;
+    when(mockInput.isKeyPressed(Input.Keys.EQUALS)).thenReturn(true);
 
-      when(mockInput.isKeyPressed(Input.Keys.EQUALS)).thenReturn(true);
+    GameController.handleInput(camera, false, true);
 
-      GameController.handleInput(camera, false, true);
-
-      assertEquals(0.98f, camera.zoom);
+    assertEquals(0.98f, camera.zoom);
   }
 
   @Test
   void testHandleInputDoesNotZoomWhenMinusPressedAndZoomDisabled() {
-      OrthographicCamera camera = new OrthographicCamera();
-      camera.zoom = 1.0f;
-      when(mockInput.isKeyPressed(Input.Keys.MINUS)).thenReturn(true);
+    OrthographicCamera camera = new OrthographicCamera();
+    camera.zoom = 1.0f;
+    when(mockInput.isKeyPressed(Input.Keys.MINUS)).thenReturn(true);
 
-      GameController.handleInput(camera, false, false);
+    GameController.handleInput(camera, false, false);
 
-      assertEquals(1.00f, camera.zoom);
+    assertEquals(1.00f, camera.zoom);
   }
 
   @Test
   void testHandleInputDoesNotZoomWhenEqualsPressedAndZoomDisabled() {
-      OrthographicCamera camera = new OrthographicCamera();
-      camera.zoom = 1.0f;
-      when(mockInput.isKeyPressed(Input.Keys.EQUALS)).thenReturn(true);
+    OrthographicCamera camera = new OrthographicCamera();
+    camera.zoom = 1.0f;
+    when(mockInput.isKeyPressed(Input.Keys.EQUALS)).thenReturn(true);
 
-      GameController.handleInput(camera, false, false);
+    GameController.handleInput(camera, false, false);
 
-      assertEquals(1.00f, camera.zoom);
+    assertEquals(1.00f, camera.zoom);
   }
 
   @Test
   void testSetEventMapCreatesExpectedMap() {
-      Map<String, Integer> eventMap = GameController.setEventMap();
+    Map<String, Integer> eventMap = GameController.setEventMap();
 
-      assertEquals(3, eventMap.size());
-      eventMap.values().forEach(value -> assertEquals(0, value));
+    assertEquals(3, eventMap.size());
+    eventMap.values().forEach(value -> assertEquals(0, value));
   }
 
   @Test
   void testSetAchievementMapCreatesExpectedMap() {
-      Map<String, Boolean> achievements = GameController.setAchievementMap();
+    Map<String, Boolean> achievements = GameController.setAchievementMap();
 
-      assertEquals(6, achievements.size());
-      achievements.values().forEach(value -> assertEquals(false, value));
+    assertEquals(6, achievements.size());
+    achievements.values().forEach(value -> assertEquals(false, value));
   }
 
 }

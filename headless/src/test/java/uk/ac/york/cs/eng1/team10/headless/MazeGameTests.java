@@ -62,7 +62,6 @@ public class MazeGameTests extends AbstractHeadlessGdxTest {
   void testResizeCallsViewportAndMenuManager() {
     int width = 800;
     int height = 600;
-
     game.resize(width, height);
 
     verify(mockViewport).update(width, height, true);

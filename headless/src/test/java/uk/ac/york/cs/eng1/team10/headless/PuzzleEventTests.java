@@ -53,6 +53,7 @@ public class PuzzleEventTests extends AbstractHeadlessGdxTest {
   @Test
   void testStartInteractionReturnsSuspendInitially() {
     Map<String, Boolean> result = puzzleEvent.startInteraction();
+
     assertEquals(true, result.containsKey("Suspend"));
     assertEquals(true, result.get("Suspend"));
   }
@@ -108,7 +109,6 @@ public class PuzzleEventTests extends AbstractHeadlessGdxTest {
   @Test
   void testStartInteractionWithIncorrectAnswerAddsTimePenalty() {
     puzzleEvent.setConversationReset(true);
-
     // Pick a number that is NOT the answer
     int wrongIndex = 0;
     if (puzzleEvent.getOptions()[0] == puzzleEvent.getAnswer()) wrongIndex = 1;

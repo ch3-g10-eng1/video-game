@@ -69,7 +69,9 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
   @Test
   public void testEvilBobStartInteractionWithNoKeycardReturnsCorrectTextBubble() {
     when(mockInput.isKeyJustPressed(Input.Keys.E)).thenReturn(true);
+
     evilBob.startInteraction();
+
     assertEquals(true, evilBob.getTextBubble().isVisible());
     assertEquals("Go Away!\nYou're missing\nmy keycard", evilBob.getTextBubble().getText());
   }
@@ -78,6 +80,7 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
   public void testEvilBobStopInteractionWithNoKeycardReturnsCorrectTextBubble() {
     evilBob.startInteraction();
     evilBob.stopInteraction();
+
     assertEquals("Interact: E", evilBob.getTextBubble().getText());
     assertEquals(false, evilBob.getTextBubble().isVisible());
   }
@@ -86,8 +89,11 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
   public void testEvilBobStartInteractionWithKeycardReturnsCorrectTextBubble() {
     evilBob.setPlayerHasKeycard(true);
     when(mockInput.isKeyJustPressed(Input.Keys.E)).thenReturn(true);
+
     assertEquals(true, evilBob.getPlayerHasKeycard());
+
     evilBob.startInteraction();
+
     assertEquals(true, evilBob.getTextBubble().isVisible());
     assertEquals("You dare\nenter my realm", evilBob.getTextBubble().getText());
   }
@@ -95,8 +101,10 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
   @Test
   public void testEvilBobStopInteractionWithKeycardReturnsCorrectTextBubble() {
     evilBob.setPlayerHasKeycard(true);
+
     evilBob.startInteraction();
     evilBob.stopInteraction();
+
     assertEquals("Interact: E", evilBob.getTextBubble().getText());
     assertEquals(false, evilBob.getTextBubble().isVisible());
   }
@@ -110,13 +118,13 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
     bobSprite.setSize(15, 15);
     Bob bob = new Bob(bobSprite, 60, 0);
     when(mockInput.isKeyJustPressed(Input.Keys.N)).thenReturn(true);
-
     // Simulates completing conversation, forcing data to be returned on collision
     evilBob.setConversationReset(true);
     evilBob.setSkipChoice(false);
 
     // Collision should occur, and return command to create campus security
     Map<String, Boolean> returnData = evilBob.collision(bob);
+
     assertEquals(true, returnData.containsKey("Create Campus Security"));
     assertEquals(true, returnData.get("Create Campus Security"));
 
@@ -125,6 +133,7 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
     Bob newBob = new Bob(bobSprite, 60, 0);
     // Resets ReturnData to avoid use of previous collision data
     evilBob.resetReturnData();
+
     assertEquals(false, evilBob.collision(newBob).containsKey("Create Campus Security"));
   }
 

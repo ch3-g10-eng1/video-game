@@ -72,7 +72,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
     assertEquals(true,bob.addInventory("Key"));
     assertEquals(false, bob.addInventory("Key")); // duplicate
     assertEquals(true, bob.getInventory().contains("Key"));
-
     assertEquals(true, bob.removeInventory("Key"));
     assertEquals(false, bob.removeInventory("Key")); // already removed
   }
@@ -83,6 +82,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
     bob.addInventory("Coin");
 
     Set<String> inv = bob.getInventory();
+
     assertEquals(2, inv.size());
     assertEquals(true, inv.contains("Gem"));
     assertEquals(true, inv.contains("Coin"));
@@ -93,7 +93,9 @@ public class BobTests extends AbstractHeadlessGdxTest {
   @Test
   public void testSetSpeedCorrectlyChangesSpeed() {
     int speed = 100;
+
     bob.setSpeed(speed);
+
     assertEquals(speed, bob.getSpeed());
   }
 
@@ -162,7 +164,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
   @Test
   public void testConfusedMoveLeftChangesBobPositionRight() {
     bob.setConfused(true);
-
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
     float initialY = bobSprite.getY();
@@ -179,7 +180,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
   @Test
   public void testConfusedMoveRightChangesBobPositionLeft() {
     bob.setConfused(true);
-
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
     float initialY = bobSprite.getY();
@@ -196,7 +196,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
   @Test
   public void testConfusedMoveUpChangesBobPositionDown() {
     bob.setConfused(true);
-
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
     float initialY = bobSprite.getY();
@@ -213,7 +212,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
   @Test
   public void testConfusedMoveDownChangesBobPositionUp() {
     bob.setConfused(true);
-
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
     float initialY = bobSprite.getY();
@@ -231,24 +229,24 @@ public class BobTests extends AbstractHeadlessGdxTest {
   public void testSetSuspensionDoesNotThrowWhenBobMoves() {
     bob.setSuspension(true);
     boolean[] movementHalter = {false, false, false, false};
+
     assertDoesNotThrow(() -> bob.move(movementHalter));
   }
 
   @Test
   public void testSetConfusedDoesNotThrow() {
     bob.setConfused(true);
+
     assertDoesNotThrow(() -> bob.setConfused(false));
   }
 
   @Test
   public void testCollisionBoxIsInCorrectLocation() {
     Rectangle box = bob.getCollisionBox();
-
     float spriteX = bobSprite.getX();
     float spriteY = bobSprite.getY();
     float spriteW = bobSprite.getWidth();
     float spriteH = bobSprite.getHeight();
-
     float offset = 3;
 
     assertEquals(spriteX + offset, box.getX());
@@ -265,13 +263,13 @@ public class BobTests extends AbstractHeadlessGdxTest {
     boolean[] movementHalter = {false, false, false, false};
     // Ensure game does not crash when moving (right as example)
     when(mockInput.isKeyPressed(Input.Keys.RIGHT)).thenReturn(true);
+
     assertDoesNotThrow(() -> bob.move(movementHalter));
   }
 
   @Test
   public void testRightMoveAnimationSetCorrectlyWhenBobMovesRight() {
     boolean[] movementHalter = {false, false, false, false};
-
     when(mockInput.isKeyPressed(Input.Keys.RIGHT)).thenReturn(true);
 
     bob.move(movementHalter);
@@ -288,7 +286,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
   @Test
   public void testLeftMoveAnimationSetCorrectlyWhenBobMovesLeft() {
     boolean[] movementHalter = {false, false, false, false};
-
     when(mockInput.isKeyPressed(Input.Keys.LEFT)).thenReturn(true);
 
     bob.move(movementHalter);
@@ -305,7 +302,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
   @Test
   public void testUpMoveAnimationSetCorrectlyWhenBobMovesUp() {
     boolean[] movementHalter = {false, false, false, false};
-
     when(mockInput.isKeyPressed(Input.Keys.UP)).thenReturn(true);
 
     bob.move(movementHalter);
@@ -322,7 +318,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
   @Test
   public void testDownMoveAnimationSetCorrectlyWhenBobMovesDown() {
     boolean[] movementHalter = {false, false, false, false};
-
     when(mockInput.isKeyPressed(Input.Keys.DOWN)).thenReturn(true);
 
     bob.move(movementHalter);

@@ -1,16 +1,14 @@
 package uk.ac.york.cs.eng1.team10.headless;
 
+import java.lang.reflect.Field;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.lang.reflect.Field;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import java.util.Set;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -117,6 +115,7 @@ public class MazeTests extends AbstractHeadlessGdxTest {
     void testRemoveCollisionLayerReturnsFalseIfLayerExistsButIsNotInCollidableObjects() {
         MapLayer missingLayer = mock(MapLayer.class);
         when(mockLayers.get("missing")).thenReturn(missingLayer);
+
         assertEquals(false, maze.removeCollisionLayer("missing"));
     }
 
@@ -126,11 +125,11 @@ public class MazeTests extends AbstractHeadlessGdxTest {
     Field collidableField = Maze.class.getDeclaredField("collidable_objects");
     collidableField.setAccessible(true);
     Set<MapObjects> collidableObjects = (Set<MapObjects>) collidableField.get(maze);
-
     // Add the mockObjects to simulate that the layer is already a collision layer
     collidableObjects.add(mockLayers.get("collisionLayer").getObjects());
 
     boolean result = maze.removeCollisionLayer("collisionLayer");
+
     assertEquals(true, result);
   }
 
@@ -142,6 +141,7 @@ public class MazeTests extends AbstractHeadlessGdxTest {
     bobSprite.setPosition(5, 5);
     bobSprite.setSize(15, 15);
     Bob bob = new Bob(bobSprite, 60, 0);
+
     assertEquals(true, maze.HitsWinLayer(bob));
   }
 

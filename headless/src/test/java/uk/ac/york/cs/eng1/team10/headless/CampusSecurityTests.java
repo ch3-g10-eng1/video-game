@@ -64,8 +64,10 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
     float deltaTime = 0.016f;
     // Inject delta time into move()
     when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
+
     // Move campus security up
     campusSecurity.doMove(true);
+
     assertEquals(initialX, campusSecurity.getX());
     assertEquals(initialY + campusSecurity.getSpeed() * deltaTime, campusSecurity.getY());
   }
@@ -76,7 +78,9 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
     float initialY = campusSecurity.getY();
     float deltaTime = 0.016f;
     when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
+
     campusSecurity.doMove(false);
+
     assertEquals(initialX, campusSecurity.getX());
     assertEquals(initialY - campusSecurity.getSpeed() * deltaTime, campusSecurity.getY());
   }
@@ -87,7 +91,9 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
     float initialY = campusSecurity.getCollisionBox().getY();
     float deltaTime = 0.016f;
     when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
+
     campusSecurity.doMove(true);
+
     assertEquals(initialX + 8f, campusSecurity.getCollisionBox().getX()); // 8f added as inset value
     assertEquals(initialY + deltaTime * campusSecurity.getSpeed(), campusSecurity.getCollisionBox().getY());
   }
@@ -98,7 +104,9 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
     float initialY = campusSecurity.getCollisionBox().getY();
     float deltaTime = 0.016f;
     when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
+
     campusSecurity.doMove(false);
+
     assertEquals(initialX + 8f, campusSecurity.getCollisionBox().getX()); // 8f added as inset value
     assertEquals(initialY - deltaTime * campusSecurity.getSpeed(), campusSecurity.getCollisionBox().getY());
   }

@@ -58,6 +58,7 @@ public class PuzzleEventLogicTests extends AbstractHeadlessGdxTest{
         int[] options = puzzle.getOptions();
 
         long count = Arrays.stream(options).filter(o -> o == answer).count();
+
         assertEquals(1, count);
     }
 

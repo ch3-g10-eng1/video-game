@@ -40,6 +40,7 @@ public class CollectableEntityTests extends AbstractHeadlessGdxTest {
     bobSprite.setPosition(100, 100);
     bobSprite.setSize(15, 15);
     Bob bob = new Bob(bobSprite, 60, 0);
+
     assertEquals(true, collectableEntity.collected(bob));
   }
 
@@ -50,7 +51,9 @@ public class CollectableEntityTests extends AbstractHeadlessGdxTest {
     bobSprite.setPosition(100, 100);
     bobSprite.setSize(15, 15);
     Bob bob = new Bob(bobSprite, 60, 0);
+
     collectableEntity.collected(bob);
+
     // Collecting again should return false as it is already collected
     assertEquals(false, collectableEntity.collected(bob));
   }
@@ -62,6 +65,7 @@ public class CollectableEntityTests extends AbstractHeadlessGdxTest {
     bobSprite.setPosition(500, 500);
     bobSprite.setSize(15, 15);
     Bob bob = new Bob(bobSprite, 60, -3);
+
     // Should not be able to collect as Bob is far away
     assertEquals(false, collectableEntity.collected(bob));
   }
