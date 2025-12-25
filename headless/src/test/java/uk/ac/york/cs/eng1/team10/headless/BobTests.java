@@ -24,15 +24,10 @@ public class BobTests extends AbstractHeadlessGdxTest {
   private Sprite bobSprite;
   private Input mockInput;
   private Graphics mockGraphics;
-  private Input originalInput;
-  private Graphics originalGraphics;
   private TextureAtlas atlas;
 
   @BeforeEach
   public void createBob() {
-    originalInput = Gdx.input;
-    originalGraphics = Gdx.graphics;
-
     atlas = new TextureAtlas("atlas/bob.atlas");
     bobSprite = new Sprite(atlas.findRegion("front-bob"));
     bobSprite.setPosition(100, 500);
@@ -46,9 +41,6 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
   @AfterEach
   public void tearDown() {
-    Gdx.input = originalInput;
-    Gdx.graphics = originalGraphics;
-
     if (atlas != null) {
         atlas.dispose();
     }
@@ -56,7 +48,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
   // Initialization
   @Test
-  public void testBobCreationSetsCorrectValues() {
+  void testBobCreationSetsCorrectValues() {
     assertEquals(bobSprite.getHeight(), 15);
     assertEquals(bobSprite.getWidth(), 15);
     assertEquals(bob.getX(), 100);
@@ -68,7 +60,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
 
   // Inventory
   @Test
-  public void testAddAndRemoveInventoryCorrectlyChangeInventory() {
+  void testAddAndRemoveInventoryCorrectlyChangeInventory() {
     assertEquals(true,bob.addInventory("Key"));
     assertEquals(false, bob.addInventory("Key")); // duplicate
     assertEquals(true, bob.getInventory().contains("Key"));
@@ -77,7 +69,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testGetInventoryReturnsCorrectSet() {
+  void testGetInventoryReturnsCorrectSet() {
     bob.addInventory("Gem");
     bob.addInventory("Coin");
 
@@ -91,7 +83,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   // Movement
 
   @Test
-  public void testSetSpeedCorrectlyChangesSpeed() {
+  void testSetSpeedCorrectlyChangesSpeed() {
     int speed = 100;
 
     bob.setSpeed(speed);
@@ -100,7 +92,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testMoveLeftChangesBobPositionLeft() {
+  void testMoveLeftChangesBobPositionLeft() {
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
     float initialY = bobSprite.getY();
@@ -117,7 +109,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testMoveRightChangesBobPositionRight() {
+  void testMoveRightChangesBobPositionRight() {
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
     float initialY = bobSprite.getY();
@@ -132,7 +124,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testMoveUpChangesBobPositionUp() {
+  void testMoveUpChangesBobPositionUp() {
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
     float initialY = bobSprite.getY();
@@ -147,7 +139,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testMoveDownChangesBobPositionDown() {
+  void testMoveDownChangesBobPositionDown() {
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
     float initialY = bobSprite.getY();
@@ -162,7 +154,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testConfusedMoveLeftChangesBobPositionRight() {
+  void testConfusedMoveLeftChangesBobPositionRight() {
     bob.setConfused(true);
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
@@ -178,7 +170,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testConfusedMoveRightChangesBobPositionLeft() {
+  void testConfusedMoveRightChangesBobPositionLeft() {
     bob.setConfused(true);
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
@@ -194,7 +186,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testConfusedMoveUpChangesBobPositionDown() {
+  void testConfusedMoveUpChangesBobPositionDown() {
     bob.setConfused(true);
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
@@ -210,7 +202,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testConfusedMoveDownChangesBobPositionUp() {
+  void testConfusedMoveDownChangesBobPositionUp() {
     bob.setConfused(true);
     boolean[] movementHalter = {false, false, false, false};
     float initialX = bobSprite.getX();
@@ -226,7 +218,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testSetSuspensionDoesNotThrowWhenBobMoves() {
+  void testSetSuspensionDoesNotThrowWhenBobMoves() {
     bob.setSuspension(true);
     boolean[] movementHalter = {false, false, false, false};
 
@@ -234,14 +226,14 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testSetConfusedDoesNotThrow() {
+  void testSetConfusedDoesNotThrow() {
     bob.setConfused(true);
 
     assertDoesNotThrow(() -> bob.setConfused(false));
   }
 
   @Test
-  public void testCollisionBoxIsInCorrectLocation() {
+  void testCollisionBoxIsInCorrectLocation() {
     Rectangle box = bob.getCollisionBox();
     float spriteX = bobSprite.getX();
     float spriteY = bobSprite.getY();
@@ -258,7 +250,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   // Texture tests
 
   @Test
-  public void testSetAnimationDoesNotCauseMoveToThrow() {
+  void testSetAnimationDoesNotCauseMoveToThrow() {
     bob.setAnimation("Squash");
     boolean[] movementHalter = {false, false, false, false};
     // Ensure game does not crash when moving (right as example)
@@ -268,7 +260,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testRightMoveAnimationSetCorrectlyWhenBobMovesRight() {
+  void testRightMoveAnimationSetCorrectlyWhenBobMovesRight() {
     boolean[] movementHalter = {false, false, false, false};
     when(mockInput.isKeyPressed(Input.Keys.RIGHT)).thenReturn(true);
 
@@ -284,7 +276,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testLeftMoveAnimationSetCorrectlyWhenBobMovesLeft() {
+  void testLeftMoveAnimationSetCorrectlyWhenBobMovesLeft() {
     boolean[] movementHalter = {false, false, false, false};
     when(mockInput.isKeyPressed(Input.Keys.LEFT)).thenReturn(true);
 
@@ -300,7 +292,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testUpMoveAnimationSetCorrectlyWhenBobMovesUp() {
+  void testUpMoveAnimationSetCorrectlyWhenBobMovesUp() {
     boolean[] movementHalter = {false, false, false, false};
     when(mockInput.isKeyPressed(Input.Keys.UP)).thenReturn(true);
 
@@ -316,7 +308,7 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testDownMoveAnimationSetCorrectlyWhenBobMovesDown() {
+  void testDownMoveAnimationSetCorrectlyWhenBobMovesDown() {
     boolean[] movementHalter = {false, false, false, false};
     when(mockInput.isKeyPressed(Input.Keys.DOWN)).thenReturn(true);
 

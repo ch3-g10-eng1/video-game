@@ -1,5 +1,10 @@
 package com.team3._8.game.menu.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -19,10 +24,6 @@ import com.team3._8.game.menu.button.MenuButton;
 import com.team3._8.game.menu.manager.MenuManager;
 import com.team3._8.game.menu.type.MenuType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 public class WinMenu extends BaseMenu {
 
@@ -69,6 +70,36 @@ public class WinMenu extends BaseMenu {
 
         initialiseDummyData();
     }
+
+  public WinMenu(
+    MenuManager menuManager,
+    SpriteBatch batch,
+    BitmapFont font,
+    OrthographicCamera camera,
+    Viewport viewport,
+    BitmapFont titleFont,
+    BitmapFont buttonFont,
+    BitmapFont statsFont,
+    TextureRegion idle,
+    TextureRegion hover,
+    TextureRegion play
+    ) {
+    super(menuManager, batch, font, camera, viewport);
+
+    this.uiCamera = camera;
+    this.uiViewport = viewport;
+
+    this.tittleFont = titleFont;
+    this.buttonFont = buttonFont;
+    this.statsFont = statsFont;
+
+    this.idle = idle;
+    this.hover = hover;
+    this.play = play;
+
+    createButtons();
+    initialiseDummyData();
+  }
 
     private void loadFonts() {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/OpenSans-Regular.ttf"));
@@ -302,4 +333,11 @@ public class WinMenu extends BaseMenu {
         if (buttonFont != null) buttonFont.dispose();
         if (statsFont != null) statsFont.dispose();
     }
+
+  // Used for testing purposes only
+
+  public List<MenuButton> getButtons() {
+    return buttons;
+  }
+
 }

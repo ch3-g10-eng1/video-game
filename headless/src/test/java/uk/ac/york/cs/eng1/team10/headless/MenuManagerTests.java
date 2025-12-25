@@ -18,7 +18,7 @@ import com.team3._8.game.menu.BaseMenu;
 import com.team3._8.game.menu.manager.MenuManager;
 import com.team3._8.game.menu.type.MenuType;
 
-public class MenuManagerTests extends AbstractHeadlessGdxTest {
+public class MenuManagerTests {
 
   private MenuManager menuManager;
 

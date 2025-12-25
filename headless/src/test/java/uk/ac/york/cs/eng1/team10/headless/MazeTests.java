@@ -23,13 +23,14 @@ import com.team3._8.game.Bob;
 import com.team3._8.game.Maze;
 
 public class MazeTests extends AbstractHeadlessGdxTest {
-  Maze maze;
-  TiledMap mockMap;
-  TiledMapRenderer mockRenderer;
-  MapObjects mockObjects;
-  MapLayers mockLayers;
-  RectangleMapObject mockWinLayer;
-  RectangleMapObject mockEventLayer;
+  private Maze maze;
+  private TiledMap mockMap;
+  private TiledMapRenderer mockRenderer;
+  private MapObjects mockObjects;
+  private MapLayers mockLayers;
+  private RectangleMapObject mockWinLayer;
+  private RectangleMapObject mockEventLayer;
+  private Bob mockBob;
 
   @BeforeEach
   public void createMaze() {
@@ -55,6 +56,11 @@ public class MazeTests extends AbstractHeadlessGdxTest {
     // Used to mock event layer hit box
     Rectangle eventRect = new Rectangle(0, 0, 10, 10);
     when(mockEventLayer.getRectangle()).thenReturn(eventRect);
+
+    mockBob = mock(Bob.class);
+    when(mockBob.getSpeed()).thenReturn(10f);
+    Rectangle entityBox = new Rectangle(50, 50, 10, 10);
+    mockBob.setCollisionBox(entityBox);
 
     maze = new Maze(
       mockMap,

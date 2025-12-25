@@ -16,7 +16,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.team3._8.game.TextBubble;
 
-public class TextBubbleTests extends AbstractHeadlessGdxTest {
+public class TextBubbleTests {
 
   private Texture mockTexture;
   private BitmapFont mockFont;

@@ -1,17 +1,48 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+}
+
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-headless'
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
-  implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
-  implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 
-  implementation project(':core')
+    implementation project(':core')
 
-  testImplementation platform('org.junit:junit-bom:5.10.0')
-  testImplementation 'org.junit.jupiter:junit-jupiter'
-  testImplementation 'org.mockito:mockito-core:5.11.0'
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.mockito:mockito-core:5.11.0'
 }
 
 test {
-  useJUnitPlatform()
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+jacocoTestReport {
+    dependsOn test
+
+    reports {
+        xml.required = true
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
+        csv.required = false
+    }
+
+    classDirectories.setFrom(files("$rootDir/core/build/classes/java/main"))
+
+    sourceDirectories.setFrom(files("$rootDir/core/src/main/java"))
+
+    executionData.setFrom(fileTree(buildDir).include("/jacoco/test.exec"))
 }

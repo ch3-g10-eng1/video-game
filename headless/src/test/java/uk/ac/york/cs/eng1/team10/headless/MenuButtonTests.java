@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.team3._8.game.menu.button.MenuButton;
 
-public class MenuButtonTests extends AbstractHeadlessGdxTest {
+public class MenuButtonTests {
 
   private TextureRegion mockIdle;
   private TextureRegion mockHover;

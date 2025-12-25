@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.team3._8.game.PuzzleEventLogic;
 
-public class PuzzleEventLogicTests extends AbstractHeadlessGdxTest{
+public class PuzzleEventLogicTests {
   private PuzzleEventLogic puzzle;
 
   @BeforeEach

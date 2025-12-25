@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.team3._8.game.MazeGame;
 import com.team3._8.game.menu.manager.MenuManager;
 
-public class MazeGameTests extends AbstractHeadlessGdxTest {
+public class MazeGameTests {
 
   private MazeGame game;
   private MenuManager mockMenuManager;
@@ -25,12 +25,9 @@ public class MazeGameTests extends AbstractHeadlessGdxTest {
   private OrthographicCamera mockCamera;
   private FillViewport mockViewport;
   private Graphics mockGraphics;
-  private Graphics originalGraphics;
 
   @BeforeEach
   public void createMazeGame() {
-    originalGraphics = Gdx.graphics;
-
     mockMenuManager = mock(MenuManager.class);
     mockBatch = mock(SpriteBatch.class);
     mockFont = mock(BitmapFont.class);
@@ -46,8 +43,9 @@ public class MazeGameTests extends AbstractHeadlessGdxTest {
 
   @AfterEach
   public void tearDown() {
-    Gdx.graphics = originalGraphics;
+    Gdx.graphics = null;
   }
+
 
   @Test
   void testRenderCallsMenuManagerUpdateAndRender() {

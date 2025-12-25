@@ -21,12 +21,10 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
   private EvilBob evilBob;
   private Sprite evilBobSprite;
   private Input mockInput;
-  private Input originalInput;
   private TextureAtlas atlas;
 
   @BeforeEach
   public void createEvilBob() {
-    originalInput = Gdx.input;
     atlas = new TextureAtlas("atlas/bob.atlas");
     evilBobSprite = new Sprite(atlas.findRegion("front-bob"));
     evilBobSprite.setPosition(100, 100);
@@ -38,8 +36,6 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
 
   @AfterEach
   public void tearDown() {
-    Gdx.input = originalInput;
-
     if (atlas != null) {
         atlas.dispose();
     }
@@ -48,7 +44,7 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
 
   // Initialization
   @Test
-  public void testEvilBobCreationSetsCorrectValues() {
+  void testEvilBobCreationSetsCorrectValues() {
     assertEquals(15, evilBobSprite.getHeight());
     assertEquals(15, evilBobSprite.getWidth());
     assertEquals(100, evilBob.getX());
@@ -57,17 +53,27 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
   }
 
   @Test
-  public void testTextBoxCreationSetsCorrectValues() {
+  void testTextBoxCreationSetsCorrectValues() {
     assertEquals(170,evilBob.getTextBubble().getWidth());
     assertEquals(120,evilBob.getTextBubble().getHeight());
     assertEquals("Interact: E", evilBob.getTextBubble().getText());
     assertEquals(false, evilBob.getTextBubble().isVisible());
   }
 
+  @Test
+  void testSetPositionChangesPositionAndUpdatesCollisionBox() {
+    evilBob.setPosition(50f, 20f);
+
+    assertEquals(50, evilBob.getX());
+    assertEquals(20, evilBob.getY());
+    assertEquals(50, evilBob.getCollisionBox().getX());
+    assertEquals(20, evilBob.getCollisionBox().getY());
+  }
+
   // Interaction
 
   @Test
-  public void testEvilBobStartInteractionWithNoKeycardReturnsCorrectTextBubble() {
+  void testEvilBobStartInteractionWithNoKeycardReturnsCorrectTextBubble() {
     when(mockInput.isKeyJustPressed(Input.Keys.E)).thenReturn(true);
 
     evilBob.startInteraction();
@@ -77,7 +83,7 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
   }
 
   @Test
-  public void testEvilBobStopInteractionWithNoKeycardReturnsCorrectTextBubble() {
+  void testEvilBobStopInteractionWithNoKeycardReturnsCorrectTextBubble() {
     evilBob.startInteraction();
     evilBob.stopInteraction();
 
@@ -86,7 +92,7 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
   }
 
   @Test
-  public void testEvilBobStartInteractionWithKeycardReturnsCorrectTextBubble() {
+  void testEvilBobStartInteractionWithKeycardReturnsCorrectTextBubble() {
     evilBob.setPlayerHasKeycard(true);
     when(mockInput.isKeyJustPressed(Input.Keys.E)).thenReturn(true);
 
@@ -99,7 +105,7 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
   }
 
   @Test
-  public void testEvilBobStopInteractionWithKeycardReturnsCorrectTextBubble() {
+  void testEvilBobStopInteractionWithKeycardReturnsCorrectTextBubble() {
     evilBob.setPlayerHasKeycard(true);
 
     evilBob.startInteraction();
@@ -110,7 +116,7 @@ public class EvilBobTests extends AbstractHeadlessGdxTest{
   }
 
   @Test
-  public void testEvilBobCollisionWithBobReturnsCorrectData() {
+  void testEvilBobCollisionWithBobReturnsCorrectData() {
     // Create a Bob instance to collide with EvilBob
     atlas = new TextureAtlas("atlas/bob.atlas");
     Sprite bobSprite = new Sprite(atlas.findRegion("front-bob"));

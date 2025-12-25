@@ -14,21 +14,19 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.team3._8.game.GameController;
 
-public class GameControllerTests extends AbstractHeadlessGdxTest {
+public class GameControllerTests {
 
   Input mockInput;
-  Input originalInput;
 
   @BeforeEach
   public void createGameController() {
-    originalInput = Gdx.input;
     mockInput = mock(Input.class);
     Gdx.input = mockInput;
   }
 
   @AfterEach
   public void tearDown() {
-    Gdx.input = originalInput;
+    Gdx.input = null;
   }
 
   @Test
@@ -39,9 +37,9 @@ public class GameControllerTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-    void testFormatTimeHandlesZeroTime() {
-      assertEquals("Timer: 0:00", GameController.formatTime(0));
-    }
+  void testFormatTimeHandlesZeroTime() {
+    assertEquals("Timer: 0:00", GameController.formatTime(0));
+  }
 
   @Test
   void testHandleInputTogglesPauseWhenEscapePressed() {

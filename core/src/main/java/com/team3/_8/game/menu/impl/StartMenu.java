@@ -1,6 +1,9 @@
 package com.team3._8.game.menu.impl;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -19,9 +22,6 @@ import com.team3._8.game.menu.BaseMenu;
 import com.team3._8.game.menu.button.MenuButton;
 import com.team3._8.game.menu.manager.MenuManager;
 import com.team3._8.game.menu.type.MenuType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class StartMenu extends BaseMenu {
 
@@ -259,6 +259,12 @@ public class StartMenu extends BaseMenu {
         buttons.get(1).bounds.set(centerX, centerY - 30, btnW, btnH);
         buttons.get(2).bounds.set(centerX, centerY - 120, btnW, btnH);
     }
+
+  // Used for testing purposes only
+
+  public List<MenuButton> getButtons() {
+    return buttons;
+  }
 
 
 }

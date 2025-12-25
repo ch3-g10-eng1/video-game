@@ -17,13 +17,10 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
   private CampusSecurity campusSecurity;
   private Sprite campusSecuritySprite;
   private Graphics mockGraphics;
-  private Graphics originalGraphics;
   private TextureAtlas atlas;
 
   @BeforeEach
   public void createCampusSecurity() {
-    originalGraphics = Gdx.graphics;
-
     atlas = new TextureAtlas("atlas/security_geese.atlas");
     campusSecuritySprite = new Sprite(atlas.findRegion("walking"));
     campusSecuritySprite.setPosition(100, 500);
@@ -35,15 +32,13 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
 
   @AfterEach
   public void tearDown() {
-    Gdx.graphics = originalGraphics;
-
     if (atlas != null) {
         atlas.dispose();
     }
   }
 
   @Test
-  public void testCampusSecurityCreationSetsCorrectValues() {
+  void testCampusSecurityCreationSetsCorrectValues() {
     assertEquals(campusSecuritySprite.getHeight(), 15);
     assertEquals(campusSecuritySprite.getWidth(), 15);
     assertEquals(campusSecurity.getX(), 100);
@@ -52,13 +47,13 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testStartAndStopInteractionReturnCorrectData() {
+  void testStartAndStopInteractionReturnCorrectData() {
     assertEquals(true, campusSecurity.startInteraction().get("Reset Player Position"));
     assertEquals(false, campusSecurity.stopInteraction().get("Reset Player Position"));
   }
 
   @Test
-  public void testCampusSecurityMoveUpChangesCampusSecurityPositionUp() {
+  void testCampusSecurityMoveUpChangesCampusSecurityPositionUp() {
     float initialX = campusSecurity.getX();
     float initialY = campusSecurity.getY();
     float deltaTime = 0.016f;
@@ -73,7 +68,7 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testCampusSecurityMoveDownChangesCampusSecurityPositionDown() {
+  void testCampusSecurityMoveDownChangesCampusSecurityPositionDown() {
     float initialX = campusSecurity.getX();
     float initialY = campusSecurity.getY();
     float deltaTime = 0.016f;
@@ -86,7 +81,7 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testCollisionBoxMoveUpChangesCollisionBoxPositionUp() {
+  void testCollisionBoxMoveUpChangesCollisionBoxPositionUp() {
     float initialX = campusSecurity.getCollisionBox().getX();
     float initialY = campusSecurity.getCollisionBox().getY();
     float deltaTime = 0.016f;
@@ -99,7 +94,7 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testCollisionBoxMoveDownChangesCollisionBoxPositionDown() {
+  void testCollisionBoxMoveDownChangesCollisionBoxPositionDown() {
     float initialX = campusSecurity.getCollisionBox().getX();
     float initialY = campusSecurity.getCollisionBox().getY();
     float deltaTime = 0.016f;

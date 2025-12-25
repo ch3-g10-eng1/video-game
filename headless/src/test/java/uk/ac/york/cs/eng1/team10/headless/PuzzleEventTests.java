@@ -2,10 +2,9 @@ package uk.ac.york.cs.eng1.team10.headless;
 
 import java.util.Map;
 
+import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.contains;
@@ -22,7 +21,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.team3._8.game.PuzzleEvent;
 import com.team3._8.game.TextBubble;
 
-public class PuzzleEventTests extends AbstractHeadlessGdxTest {
+public class PuzzleEventTests {
 
   PuzzleEvent puzzleEvent;
   Sprite mockSprite;
@@ -30,11 +29,9 @@ public class PuzzleEventTests extends AbstractHeadlessGdxTest {
   SpriteBatch mockBatch;
   Input mockInput;
   TextBubble mockTextBubble;
-  Input originalInput;
 
   @BeforeEach
   public void createPuzzleEvent() {
-    originalInput = Gdx.input;
     mockSprite = mock(Sprite.class);
     mockFont = mock(BitmapFont.class);
     mockBatch = mock(SpriteBatch.class);
@@ -47,7 +44,7 @@ public class PuzzleEventTests extends AbstractHeadlessGdxTest {
 
   @AfterEach
   public void tearDown() {
-    Gdx.input = originalInput;
+    Gdx.input = null;
   }
 
   @Test
@@ -137,17 +134,17 @@ public class PuzzleEventTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-    void testDrawUpdatesSpriteAndTextBubble() {
-        puzzleEvent.setX(0);
-        puzzleEvent.setY(0);
-        puzzleEvent.setDrawNext(true);
+  void testDrawUpdatesSpriteAndTextBubble() {
+    puzzleEvent.setX(0);
+    puzzleEvent.setY(0);
+    puzzleEvent.setDrawNext(true);
 
-        puzzleEvent.draw(mockBatch, 10, 20);
+    puzzleEvent.draw(mockBatch, 10, 20);
 
-        verify(mockSprite).setPosition(10, 20);
-        verify(mockSprite).setColor(0f, 0f, 0f, 0f);
-        verify(mockTextBubble).draw(mockBatch, 330, 605);
-        verify(mockFont).setColor(Color.WHITE);
-    }
+    verify(mockSprite).setPosition(10, 20);
+    verify(mockSprite).setColor(0f, 0f, 0f, 0f);
+    verify(mockTextBubble).draw(mockBatch, 330, 605);
+    verify(mockFont).setColor(Color.WHITE);
+  }
 
 }
