@@ -88,7 +88,7 @@ public class Maze {
   public Maze(TiledMap map,
             TiledMapRenderer renderer,
             String[] visible_layer_names,
-            String[] collision_layers,
+            Set<MapObjects> collidable_objects,
             MapObject winLayer,
             MapObject eventLayer) {
 
@@ -101,10 +101,7 @@ public class Maze {
         this.addVisibleLayer(layer);
     }
 
-    collidable_objects = new HashSet<>();
-    for (String layer : collision_layers) {
-        collidable_objects.add(map.getLayers().get(layer).getObjects());
-    }
+    this.collidable_objects = collidable_objects;
 
     this.win_layer = winLayer;
     this.event_layer = eventLayer;

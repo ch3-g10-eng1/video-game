@@ -69,6 +69,33 @@ public class StartMenu extends BaseMenu {
 
     }
 
+    public StartMenu(MenuManager menuManager,
+                      SpriteBatch batch,
+                      BitmapFont defaultFont,
+                      OrthographicCamera camera,
+                      Viewport viewport,
+                      BitmapFont titleFont,
+                      BitmapFont buttonFont,
+                      TextureRegion idle,
+                      TextureRegion hover,
+                      TextureRegion play) {
+
+      super(menuManager, batch, defaultFont, camera, viewport);
+
+      this.uiCamera = camera;
+      this.uiViewport = viewport;
+
+      this.tittleFont = titleFont;
+      this.buttonFont = buttonFont;
+
+      this.idle = idle;
+      this.hover = hover;
+      this.play = play;
+
+      createButtons();
+      repositionButtons();
+  }
+
     private void loadFonts() {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/OpenSans-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter params =  new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -265,6 +292,5 @@ public class StartMenu extends BaseMenu {
   public List<MenuButton> getButtons() {
     return buttons;
   }
-
 
 }

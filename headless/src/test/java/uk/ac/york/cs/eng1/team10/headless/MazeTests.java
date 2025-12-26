@@ -1,8 +1,10 @@
 package uk.ac.york.cs.eng1.team10.headless;
 
 import java.lang.reflect.Field;
+import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +13,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObjects;
@@ -20,9 +21,10 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.team3._8.game.Bob;
+import com.team3._8.game.CollectableEntity;
 import com.team3._8.game.Maze;
 
-public class MazeTests extends AbstractHeadlessGdxTest {
+public class MazeTests {
   private Maze maze;
   private TiledMap mockMap;
   private TiledMapRenderer mockRenderer;
@@ -66,11 +68,28 @@ public class MazeTests extends AbstractHeadlessGdxTest {
       mockMap,
       mockRenderer,
       new String[]{"layer1", "layer2"},
-      new String[]{"collisionLayer"},
+      createWallForMaze(new Rectangle(50, 50, 20, 20)),
       mockWinLayer,
       mockEventLayer
     );
   }
+
+  private Set<MapObjects> createWallForMaze(Rectangle wallRect) {
+    RectangleMapObject wall = new RectangleMapObject(
+            wallRect.x,
+            wallRect.y,
+            wallRect.width,
+            wallRect.height
+    );
+
+    MapObjects objects = new MapObjects();
+    objects.add(wall);
+
+    Set<MapObjects> collidable = new HashSet<>();
+    collidable.add(objects);
+
+    return collidable;
+}
 
   @Test
     void testAddVisibleLayerReturnsFalseForNonexistentLayer() {
@@ -141,26 +160,98 @@ public class MazeTests extends AbstractHeadlessGdxTest {
 
   @Test
   void testHitsWinLayerReturnsTrueWhenBobOverlaps() {
-    // Creates a Bob instance to collide with win layer
-    TextureAtlas atlas = new TextureAtlas("atlas/bob.atlas");
-    Sprite bobSprite = new Sprite(atlas.findRegion("front-bob"));
-    bobSprite.setPosition(5, 5);
-    bobSprite.setSize(15, 15);
-    Bob bob = new Bob(bobSprite, 60, 0);
+    // Creates an entity instance (CollectableEntity for easy field control) to collide with Win Layer
+    Sprite mockSprite = mock(Sprite.class);
+    when(mockSprite.getX()).thenReturn(0f);
+    when(mockSprite.getY()).thenReturn(0f);
+    when(mockSprite.getWidth()).thenReturn(10f);
+    when(mockSprite.getHeight()).thenReturn(10f);
+    CollectableEntity entity = new CollectableEntity(mockSprite, 10, null);
 
-    assertEquals(true, maze.HitsWinLayer(bob));
+    assertEquals(true, maze.HitsWinLayer(entity));
   }
 
   @Test
   void testHitsEventLayerTriggersOnlyOnce() {
-    // Creates a Bob instance to collide with event layer
-    TextureAtlas atlas = new TextureAtlas("atlas/bob.atlas");
-    Sprite bobSprite = new Sprite(atlas.findRegion("front-bob"));
-    bobSprite.setPosition(5, 5);
-    bobSprite.setSize(15, 15);
-    Bob bob = new Bob(bobSprite, 60, 0);
+    Sprite mockSprite = mock(Sprite.class);
+    when(mockSprite.getX()).thenReturn(0f);
+    when(mockSprite.getY()).thenReturn(0f);
+    when(mockSprite.getWidth()).thenReturn(10f);
+    when(mockSprite.getHeight()).thenReturn(10f);
+    CollectableEntity entity = new CollectableEntity(mockSprite, 10, null);
 
-    assertEquals(true, maze.HitsEventLayer(bob));
-    assertEquals(false, maze.HitsEventLayer(bob)); // second call should be false
+    assertEquals(true, maze.HitsEventLayer(entity));
+    assertEquals(false, maze.HitsEventLayer(entity)); // second call should be false
   }
+
+  @Test
+  void testHitsWallWithNoCollisionReturnsAllFalse() {
+    Sprite mockSprite = mock(Sprite.class);
+    when(mockSprite.getX()).thenReturn(0f);
+    when(mockSprite.getY()).thenReturn(0f);
+    when(mockSprite.getWidth()).thenReturn(10f);
+    when(mockSprite.getHeight()).thenReturn(10f);
+    CollectableEntity entity = new CollectableEntity(mockSprite, 5, null);
+
+    boolean[] result = maze.hitsWall(entity, 0.1f);
+
+    assertArrayEquals(new boolean[]{false, false, false, false}, result);
+  }
+
+  @Test
+  void testHitsWallFromLeftBlocksLeft() {
+    Sprite mockSprite = mock(Sprite.class);
+    when(mockSprite.getX()).thenReturn(40.1f);
+    when(mockSprite.getY()).thenReturn(55f);
+    when(mockSprite.getWidth()).thenReturn(10f);
+    when(mockSprite.getHeight()).thenReturn(10f);
+    CollectableEntity entity = new CollectableEntity(mockSprite, 5, null);
+
+    boolean[] result = maze.hitsWall(entity, 0.1f);
+
+    assertArrayEquals(new boolean[]{true, false, false, false}, result);
+  }
+
+  @Test
+  void testHitsWallFromRightBlocksRight() {
+    Sprite mockSprite = mock(Sprite.class);
+    when(mockSprite.getX()).thenReturn(69f);
+    when(mockSprite.getY()).thenReturn(55f);
+    when(mockSprite.getWidth()).thenReturn(10f);
+    when(mockSprite.getHeight()).thenReturn(10f);
+    CollectableEntity entity = new CollectableEntity(mockSprite, 5, null);
+
+    boolean[] result = maze.hitsWall(entity, 0.1f);
+
+    assertArrayEquals(new boolean[]{false, false, true, false}, result);
+  }
+
+  @Test
+  void testHitsWallFromAboveBlocksDown() {
+    Sprite mockSprite = mock(Sprite.class);
+    when(mockSprite.getX()).thenReturn(50f);
+    when(mockSprite.getY()).thenReturn(40.1f);
+    when(mockSprite.getWidth()).thenReturn(10f);
+    when(mockSprite.getHeight()).thenReturn(10f);
+    CollectableEntity entity = new CollectableEntity(mockSprite, 5, null);
+
+    boolean[] result = maze.hitsWall(entity, 0.1f);
+
+    assertArrayEquals(new boolean[]{false, false, false, true}, result);
+  }
+
+  @Test
+  void testHitsWallFromBelowBlocksUp() {
+    Sprite mockSprite = mock(Sprite.class);
+    when(mockSprite.getX()).thenReturn(50f);
+    when(mockSprite.getY()).thenReturn(69f);
+    when(mockSprite.getWidth()).thenReturn(10f);
+    when(mockSprite.getHeight()).thenReturn(10f);
+    CollectableEntity entity = new CollectableEntity(mockSprite, 5, null);
+
+    boolean[] result = maze.hitsWall(entity, 0.1f);
+
+    assertArrayEquals(new boolean[]{false, true, false, false}, result);
+  }
+
 }

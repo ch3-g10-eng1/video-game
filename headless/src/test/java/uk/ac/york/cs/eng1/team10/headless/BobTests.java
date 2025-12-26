@@ -260,12 +260,12 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  void testRightMoveAnimationSetCorrectlyWhenBobMovesRight() {
+  void testLeftMoveAnimationSetCorrectlyWhenBobMovesLeft() {
     boolean[] movementHalter = {false, false, false, false};
-    when(mockInput.isKeyPressed(Input.Keys.RIGHT)).thenReturn(true);
+    when(mockInput.isKeyPressed(Input.Keys.LEFT)).thenReturn(true);
 
     bob.move(movementHalter);
-    TextureRegion expected = bob.getAnimation("Right");
+    TextureRegion expected = bob.getAnimation("Left");
     TextureRegion actual = bob.getCurrentRegion();
 
     assertEquals(expected.getTexture(), actual.getTexture());
@@ -276,12 +276,12 @@ public class BobTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  void testLeftMoveAnimationSetCorrectlyWhenBobMovesLeft() {
+  void testRightMoveAnimationSetCorrectlyWhenBobMovesRight() {
     boolean[] movementHalter = {false, false, false, false};
-    when(mockInput.isKeyPressed(Input.Keys.LEFT)).thenReturn(true);
+    when(mockInput.isKeyPressed(Input.Keys.RIGHT)).thenReturn(true);
 
     bob.move(movementHalter);
-    TextureRegion expected = bob.getAnimation("Left");
+    TextureRegion expected = bob.getAnimation("Right");
     TextureRegion actual = bob.getCurrentRegion();
 
     assertEquals(expected.getTexture(), actual.getTexture());
@@ -322,6 +322,75 @@ public class BobTests extends AbstractHeadlessGdxTest {
     assertEquals(expected.getRegionWidth(), actual.getRegionWidth());
     assertEquals(expected.getRegionHeight(), actual.getRegionHeight());
   }
+
+  @Test
+  void testLeftMoveAnimationSetCorrectlyWhenBobMovesLeftWithAnimationOverride() {
+    boolean[] movementHalter = {false, false, false, false};
+    when(mockInput.isKeyPressed(Input.Keys.LEFT)).thenReturn(true);
+    bob.setAnimation("Override");
+
+    bob.move(movementHalter);
+    TextureRegion expected = bob.getAnimation("RocketLeft");
+    TextureRegion actual = bob.getCurrentRegion();
+
+    assertEquals(expected.getTexture(), actual.getTexture());
+    assertEquals(expected.getRegionX(), actual.getRegionX());
+    assertEquals(expected.getRegionY(), actual.getRegionY());
+    assertEquals(expected.getRegionWidth(), actual.getRegionWidth());
+    assertEquals(expected.getRegionHeight(), actual.getRegionHeight());
+  }
+
+  @Test
+  void testRightMoveAnimationSetCorrectlyWhenBobMovesRightWithAnimationOverride() {
+    boolean[] movementHalter = {false, false, false, false};
+    when(mockInput.isKeyPressed(Input.Keys.RIGHT)).thenReturn(true);
+    bob.setAnimation("Override");
+
+    bob.move(movementHalter);
+    TextureRegion expected = bob.getAnimation("RocketRight");
+    TextureRegion actual = bob.getCurrentRegion();
+
+    assertEquals(expected.getTexture(), actual.getTexture());
+    assertEquals(expected.getRegionX(), actual.getRegionX());
+    assertEquals(expected.getRegionY(), actual.getRegionY());
+    assertEquals(expected.getRegionWidth(), actual.getRegionWidth());
+    assertEquals(expected.getRegionHeight(), actual.getRegionHeight());
+  }
+
+  @Test
+  void testUpMoveAnimationSetCorrectlyWhenBobMovesUpWithAnimationOverride() {
+    boolean[] movementHalter = {false, false, false, false};
+    when(mockInput.isKeyPressed(Input.Keys.UP)).thenReturn(true);
+    bob.setAnimation("Override");
+
+    bob.move(movementHalter);
+    TextureRegion expected = bob.getAnimation("RocketUp");
+    TextureRegion actual = bob.getCurrentRegion();
+
+    assertEquals(expected.getTexture(), actual.getTexture());
+    assertEquals(expected.getRegionX(), actual.getRegionX());
+    assertEquals(expected.getRegionY(), actual.getRegionY());
+    assertEquals(expected.getRegionWidth(), actual.getRegionWidth());
+    assertEquals(expected.getRegionHeight(), actual.getRegionHeight());
+  }
+
+  @Test
+  void testDownMoveAnimationSetCorrectlyWhenBobMovesDownWithAnimationOverride() {
+    boolean[] movementHalter = {false, false, false, false};
+    when(mockInput.isKeyPressed(Input.Keys.DOWN)).thenReturn(true);
+    bob.setAnimation("Override");
+
+    bob.move(movementHalter);
+    TextureRegion expected = bob.getAnimation("RocketDown");
+    TextureRegion actual = bob.getCurrentRegion();
+
+    assertEquals(expected.getTexture(), actual.getTexture());
+    assertEquals(expected.getRegionX(), actual.getRegionX());
+    assertEquals(expected.getRegionY(), actual.getRegionY());
+    assertEquals(expected.getRegionWidth(), actual.getRegionWidth());
+    assertEquals(expected.getRegionHeight(), actual.getRegionHeight());
+  }
+
 }
 
 
