@@ -1,6 +1,7 @@
 package uk.ac.york.cs.eng1.team10.headless;
 
 import org.junit.jupiter.api.AfterEach;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +10,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
@@ -18,11 +20,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.team3._8.game.menu.button.MenuButton;
-import com.team3._8.game.menu.impl.TutorialMenu;
+import com.team3._8.game.menu.impl.LoseMenu;
 import com.team3._8.game.menu.manager.MenuManager;
 import com.team3._8.game.menu.type.MenuType;
 
-public class TutorialMenuTests {
+public class LoseMenuTests {
 
   private MenuManager mockMenuManager;
   private SpriteBatch mockBatch;
@@ -31,13 +33,16 @@ public class TutorialMenuTests {
   private Viewport mockViewport;
   private Input mockInput;
   private Graphics mockGraphics;
+  private Application mockApplication;
 
-  private TutorialMenu tutorialMenu;
+  private LoseMenu loseMenu;
 
   @BeforeEach
-  public void createTutorialMenu() {
+  public void createPauseMenu() {
+    mockApplication = mock(Application.class);
     mockInput = mock(Input.class);
     mockGraphics = mock(Graphics.class);
+    Gdx.app = mockApplication;
     Gdx.input = mockInput;
     Gdx.graphics = mockGraphics;
 
@@ -52,7 +57,7 @@ public class TutorialMenuTests {
     when(mockViewport.getWorldWidth()).thenReturn(800f);
     when(mockViewport.getWorldHeight()).thenReturn(600f);
 
-    tutorialMenu = new TutorialMenu(
+    loseMenu = new LoseMenu(
             mockMenuManager,
             mockBatch,
             mockFont,
@@ -69,36 +74,53 @@ public class TutorialMenuTests {
 
   @AfterEach
   public void tearDown() {
+    Gdx.app = null;
     Gdx.input = null;
     Gdx.graphics = null;
   }
 
   @Test
-  void testHandleInputClickPlayAgainButtonSetsMainMenu() {
-    MenuButton button = tutorialMenu.getButtons().get(0);
+  void testHandleInputClickTryAgainButtonSetsGameMenu() {
+    MenuButton button = loseMenu.getButtons().get(0);
     when(mockInput.justTouched()).thenReturn(true);
     when(mockInput.getX()).thenReturn((int) button.bounds.getX());
     when(mockInput.getY()).thenReturn((int) button.bounds.getY());
 
-    boolean result = tutorialMenu.handleInput();
+    boolean result = loseMenu.handleInput();
+
+    assertEquals(true, result);
+    verify(mockMenuManager).setMenu(MenuType.GAME);
+  }
+
+  @Test
+  void testHandleInputClickTitleScreenButtonSetsMainMenu() {
+    MenuButton button = loseMenu.getButtons().get(1);
+    when(mockInput.justTouched()).thenReturn(true);
+    when(mockInput.getX()).thenReturn((int) button.bounds.getX());
+    when(mockInput.getY()).thenReturn((int) button.bounds.getY());
+
+    boolean result = loseMenu.handleInput();
 
     assertEquals(true, result);
     verify(mockMenuManager).setMenu(MenuType.MAIN_MENU);
   }
 
   @Test
-  void testEscapeKeyTriggersMainMenu() {
-    when(mockInput.isKeyJustPressed(Input.Keys.ESCAPE)).thenReturn(true);
+  void testHandleInputClickQuitButtonRunsExit() {
+    MenuButton button = loseMenu.getButtons().get(2);
+    when(mockInput.justTouched()).thenReturn(true);
+    when(mockInput.getX()).thenReturn((int) button.bounds.getX());
+    when(mockInput.getY()).thenReturn((int) button.bounds.getY());
 
-    boolean result = tutorialMenu.handleInput();
+    boolean result = loseMenu.handleInput();
 
     assertEquals(true, result);
-    verify(mockMenuManager).setMenu(MenuType.MAIN_MENU);
+    verify(mockApplication).exit();
   }
 
   @Test
   void testShowDoesNotThrow() {
-    assertDoesNotThrow(() -> tutorialMenu.show());
+    assertDoesNotThrow(() -> loseMenu.show());
   }
 
 }

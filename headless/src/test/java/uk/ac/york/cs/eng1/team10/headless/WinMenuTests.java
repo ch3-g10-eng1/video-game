@@ -8,10 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyFloat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -21,10 +17,8 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -45,8 +39,6 @@ public class WinMenuTests {
   private Input mockInput;
   private Graphics mockGraphics;
   private Application mockApplication;
-  private GlyphLayout dummyLayout;
-  private BitmapFont.BitmapFontData fontData;
 
   @BeforeEach
   public void createWinMenu() {
@@ -59,19 +51,6 @@ public class WinMenuTests {
     mockViewport = mock(Viewport.class);
     mockInput = mock(Input.class);
     mockGraphics = mock(Graphics.class);
-    mockFont = mock(BitmapFont.class);
-
-    fontData = new BitmapFont.BitmapFontData();
-    fontData.markupEnabled = false;
-    when(mockFont.getData()).thenReturn(fontData);
-
-    when(mockFont.getColor()).thenReturn(Color.WHITE);
-    doNothing().when(mockFont).setColor(any(Color.class));
-
-    dummyLayout = new GlyphLayout();
-    when(mockFont.draw(any(SpriteBatch.class), anyString(), anyFloat(), anyFloat()))
-        .thenReturn(dummyLayout);
-    doNothing().when(mockFont).draw(any(SpriteBatch.class), any(GlyphLayout.class), anyFloat(), anyFloat());
 
     when(mockGraphics.getWidth()).thenReturn(800);
     when(mockGraphics.getHeight()).thenReturn(600);

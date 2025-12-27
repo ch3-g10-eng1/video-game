@@ -1,5 +1,8 @@
 package com.team3._8.game.menu.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -18,9 +21,6 @@ import com.team3._8.game.menu.BaseMenu;
 import com.team3._8.game.menu.button.MenuButton;
 import com.team3._8.game.menu.manager.MenuManager;
 import com.team3._8.game.menu.type.MenuType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class LoseMenu extends BaseMenu {
 
@@ -61,6 +61,34 @@ public class LoseMenu extends BaseMenu {
         createButtons();
 
     }
+
+    public LoseMenu(MenuManager menuManager,
+                  SpriteBatch batch,
+                  BitmapFont defaultFont,
+                  OrthographicCamera camera,
+                  Viewport viewport,
+                  BitmapFont titleFont,
+                  BitmapFont buttonFont,
+                  BitmapFont messageFont,
+                  TextureRegion idle,
+                  TextureRegion hover,
+                  TextureRegion play) {
+
+      super(menuManager, batch, defaultFont, camera, viewport);
+
+      this.uiCamera = camera;
+      this.uiViewport = viewport;
+
+      this.tittleFont = titleFont;
+      this.buttonFont = buttonFont;
+      this.messageFont = messageFont;
+
+      this.idle = idle;
+      this.hover = hover;
+      this.play = play;
+
+      createButtons();
+  }
 
     private void loadFonts() {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/OpenSans-Regular.ttf"));
@@ -212,4 +240,10 @@ public class LoseMenu extends BaseMenu {
         if (buttonFont != null) buttonFont.dispose();
         if (messageFont != null) messageFont.dispose();
     }
+
+  // Used for testing purposes only
+
+  public List<MenuButton> getButtons() {
+    return buttons;
+  }
 }

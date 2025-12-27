@@ -1,8 +1,15 @@
 package com.team3._8.game.menu.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,9 +22,6 @@ import com.team3._8.game.menu.BaseMenu;
 import com.team3._8.game.menu.button.MenuButton;
 import com.team3._8.game.menu.manager.MenuManager;
 import com.team3._8.game.menu.type.MenuType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PauseMenu extends BaseMenu {
 
@@ -73,6 +77,32 @@ public class PauseMenu extends BaseMenu {
         createButtons();
 
     }
+
+  public PauseMenu(MenuManager menuManager,
+                  SpriteBatch batch,
+                  BitmapFont defaultFont,
+                  OrthographicCamera camera,
+                  Viewport viewport,
+                  BitmapFont titleFont,
+                  BitmapFont buttonFont,
+                  TextureRegion idle,
+                  TextureRegion hover,
+                  TextureRegion play) {
+
+      super(menuManager, batch, defaultFont, camera, viewport);
+
+      this.uiCamera = camera;
+      this.uiViewport = viewport;
+
+      this.tittleFont = titleFont;
+      this.buttonFont = buttonFont;
+
+      this.idle = idle;
+      this.hover = hover;
+      this.play = play;
+
+      createButtons();
+  }
 
     private void loadFonts() {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/OpenSans-Regular.ttf"));
@@ -227,4 +257,10 @@ public class PauseMenu extends BaseMenu {
         if (tittleFont != null) tittleFont.dispose();
         if (buttonFont != null) buttonFont.dispose();
     }
+
+  // Used for testing purposes only
+
+  public List<MenuButton> getButtons() {
+    return buttons;
+  }
 }

@@ -1,5 +1,8 @@
 package com.team3._8.game.menu.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,13 +15,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.team3._8.game.*;
+import com.team3._8.game.Bob;
+import com.team3._8.game.CampusSecurity;
+import com.team3._8.game.CollectableEntity;
+import com.team3._8.game.EvilBob;
+import com.team3._8.game.GameController;
+import com.team3._8.game.HUD;
+import com.team3._8.game.Maze;
+import com.team3._8.game.PuzzleEvent;
 import com.team3._8.game.menu.BaseMenu;
 import com.team3._8.game.menu.manager.MenuManager;
 import com.team3._8.game.menu.type.MenuType;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class GameMenu extends BaseMenu {
 
@@ -89,6 +96,20 @@ public class GameMenu extends BaseMenu {
         gameViewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, gameCamera);
 
         initialiseGame();
+        intialised = true;
+    }
+
+    // Constructor used for testing purposes only
+
+    public GameMenu(MenuManager menuManager, SpriteBatch batch, BitmapFont font,
+                    OrthographicCamera camera, Viewport viewport, boolean isStub) {
+        super(menuManager, batch, font, camera, viewport);
+
+        gameCamera = camera;
+        gameViewport = viewport;
+        this.eventTracker = new HashMap<>();
+        this.achievements = new HashMap<>();
+
         intialised = true;
     }
 
@@ -480,9 +501,7 @@ public class GameMenu extends BaseMenu {
             eventTriggered("Negative");
         }
 
-        if (timer >= 300) {
-            menuManager.setMenu(MenuType.LOSE);
-        }
+        checkTimeout();
     }
 
     @Override
@@ -716,4 +735,27 @@ public class GameMenu extends BaseMenu {
         this.intialised = intialised;
     }
 
+    public void checkTimeout() {
+      if (timer >= 300) {
+            menuManager.setMenu(MenuType.LOSE);
+      }
+    }
+
+    // Used for testing purposes only
+
+    public void setEventTracker(Map<String, Integer> eventTracker) {
+      this.eventTracker = eventTracker;
+    }
+
+    public void setTimer(float time) {
+      timer = time;
+    }
+
+    public Map<String, Boolean> getAchievements() {
+      return achievements;
+    }
+
+    public void doCheckAchievements() {
+      checkAchievements();
+    }
 }
