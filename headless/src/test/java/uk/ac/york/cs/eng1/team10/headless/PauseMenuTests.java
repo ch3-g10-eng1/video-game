@@ -1,6 +1,8 @@
 package uk.ac.york.cs.eng1.team10.headless;
 
 import org.junit.jupiter.api.AfterEach;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -90,6 +92,16 @@ public class PauseMenuTests {
   }
 
   @Test
+  void testHandleInputPressEscapeKeySetsGameMenu() {
+    when(mockInput.isKeyJustPressed(Input.Keys.ESCAPE)).thenReturn(true);
+
+    boolean result = pauseMenu.handleInput();
+
+    assertEquals(true, result);
+    verify(mockMenuManager).setMenu(MenuType.GAME);
+  }
+
+  @Test
   void testHandleInputClickRestartButtonSetsMainMenu() {
     MenuButton button = pauseMenu.getButtons().get(1);
     when(mockInput.justTouched()).thenReturn(true);
@@ -116,13 +128,8 @@ public class PauseMenuTests {
   }
 
   @Test
-  void testHandleInputPressEscapeKeySetsGameMenu() {
-    when(mockInput.isKeyJustPressed(Input.Keys.ESCAPE)).thenReturn(true);
-
-    boolean result = pauseMenu.handleInput();
-
-    assertEquals(true, result);
-    verify(mockMenuManager).setMenu(MenuType.GAME);
+  void testShowDoesNotThrow() {
+    assertDoesNotThrow(() -> pauseMenu.show());
   }
 
 }

@@ -3,6 +3,7 @@ package uk.ac.york.cs.eng1.team10.headless;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -88,6 +89,11 @@ public class GameMenuTests {
     gameMenu.checkTimeout();
 
     verify(mockMenuManager).setMenu(MenuType.LOSE);
+  }
+
+  @Test
+  void testShowDoesNotThrow() {
+    assertDoesNotThrow(() -> gameMenu.show());
   }
 
 }

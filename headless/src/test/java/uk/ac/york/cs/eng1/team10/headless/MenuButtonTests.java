@@ -30,6 +30,22 @@ public class MenuButtonTests {
   }
 
   @Test
+  void testConstructorSetsBoundsCorrectly() {
+    Rectangle bounds = button.bounds;
+
+    assertEquals(10, bounds.x);
+    assertEquals(20, bounds.y);
+    assertEquals(100, bounds.width);
+    assertEquals(40, bounds.height);
+  }
+
+  @Test
+  void testConstructorSetsTextAndOnClick() {
+    assertEquals("Test", button.text);
+    assertSame(mockOnClick, button.onClick);
+  }
+
+  @Test
   void testGetFrameReturnsIdleByDefault() {
     TextureRegion frame = button.getFrame();
 
@@ -74,21 +90,5 @@ public class MenuButtonTests {
 
     assertSame(mockHover, frame);
   }
-
-  @Test
-  void testConstructorSetsBoundsCorrectly() {
-    Rectangle bounds = button.bounds;
-
-    assertEquals(10, bounds.x);
-    assertEquals(20, bounds.y);
-    assertEquals(100, bounds.width);
-    assertEquals(40, bounds.height);
-  }
-
-  @Test
-    void testConstructorSetsTextAndOnClick() {
-      assertEquals("Test", button.text);
-      assertSame(mockOnClick, button.onClick);
-    }
 
 }
