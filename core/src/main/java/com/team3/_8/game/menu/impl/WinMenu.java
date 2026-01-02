@@ -74,8 +74,6 @@ public class WinMenu extends BaseMenu {
 
         loadFonts();
         createButtons();
-
-        initialiseDummyData();
     }
 
     public WinMenu(
@@ -105,7 +103,6 @@ public class WinMenu extends BaseMenu {
         this.play = play;
 
         createButtons();
-        initialiseDummyData();
     }
 
     private void loadFonts() {
@@ -138,15 +135,6 @@ public class WinMenu extends BaseMenu {
         buttons.add(new MenuButton("Quit", 0, 0, 220, 70, idle, hover, play, () -> Gdx.app.exit()));
 
         repositionButtons();
-    }
-
-    private void initialiseDummyData() {
-        previousTimes.clear();
-        previousTimes.add(45.2f);
-        previousTimes.add(52.8f);
-        previousTimes.add(61.3f);
-        previousTimes.add(89.7f);
-        previousTimes.add(125.4f);
     }
 
     public void setCompletionTime(float completionTime) {
