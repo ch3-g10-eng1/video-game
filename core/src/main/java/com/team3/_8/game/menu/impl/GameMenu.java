@@ -16,6 +16,8 @@ import com.team3._8.game.*;
 import com.team3._8.game.menu.BaseMenu;
 import com.team3._8.game.menu.manager.MenuManager;
 import com.team3._8.game.menu.type.MenuType;
+import com.team3._8.game.sound.manager.SoundManager;
+import com.team3._8.game.sound.type.SoundType;
 import com.team3._8.game.storage.data.LeaderboardData;
 import com.team3._8.game.storage.impl.JsonStorageService;
 import com.team3._8.game.storage.manager.TimeStorageManager;
@@ -335,6 +337,7 @@ public class GameMenu extends BaseMenu {
     public void update(float delta) {
 
         if (keycard.collected(bob)) {
+            SoundManager.getInstance().play(SoundType.PICKUP_COIN);
             eventTriggered("Positive");
             evilBob.setPlayerHasKeycard(true);
             maze.removeCollisionLayer("Doors");
