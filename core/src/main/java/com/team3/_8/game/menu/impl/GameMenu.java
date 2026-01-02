@@ -338,6 +338,7 @@ public class GameMenu extends BaseMenu {
 
         if (keycard.collected(bob)) {
             SoundManager.getInstance().play(SoundType.PICKUP_COIN);
+            SoundManager.getInstance().play(SoundType.DOOR_OPEN);
             eventTriggered("Positive");
             evilBob.setPlayerHasKeycard(true);
             maze.removeCollisionLayer("Doors");
@@ -351,6 +352,7 @@ public class GameMenu extends BaseMenu {
         }
 
         if (tomato.collected(bob)) {
+            SoundManager.getInstance().play(SoundType.DAMAGE);
             eventTriggered("Negative");
             tomatoActive = true;
             tomatoTimer = 0f;
@@ -358,6 +360,7 @@ public class GameMenu extends BaseMenu {
         }
 
         if (speedBoost.collected(bob)) {
+            SoundManager.getInstance().play(SoundType.POWERUP);
             eventTriggered("Positive");
             speedBoostActive = true;
             speedBoostTimer = 0f;
@@ -366,6 +369,7 @@ public class GameMenu extends BaseMenu {
         }
 
         if (speedBoost2.collected(bob)) {
+            SoundManager.getInstance().play(SoundType.POWERUP);
             eventTriggered("Positive");
             speedBoost2Active = true;
             speedBoost2Timer = 0f;
@@ -374,17 +378,20 @@ public class GameMenu extends BaseMenu {
         }
 
         if (timeOrb.collected(bob)) {
+            SoundManager.getInstance().play(SoundType.TIME_BONUS);
             eventTriggered("Positive");
             timer -= 60f;
         }
 
         if (shield.collected(bob)) {
+            SoundManager.getInstance().play(SoundType.POWERUP);
             eventTriggered("Positive");
             invincibilityActive = true;
             invincibilityTimer = 0f;
         }
 
         if (sizePotion.collected(bob)) {
+            SoundManager.getInstance().play(SoundType.SHRINK);
             eventTriggered("Positive");
             sizeChangeActive = true;
             sizeChangeTimer = 0f;
@@ -392,6 +399,7 @@ public class GameMenu extends BaseMenu {
         }
 
         if (confusedDebuff.collected(bob)) {
+            SoundManager.getInstance().play(SoundType.CONFUSED);
             eventTriggered("Negative");
             confusedActive = true;
             confusedTimer = 0f;
@@ -487,6 +495,7 @@ public class GameMenu extends BaseMenu {
         gameCamera.update();
 
         if (maze.HitsWinLayer(bob)) {
+            SoundManager.getInstance().play(SoundType.WIN);
             checkAchievements();
 
             TimeStorageManager manager = new TimeStorageManager(new JsonStorageService<>("leaderboard.json", LeaderboardData.class));
@@ -654,6 +663,7 @@ public class GameMenu extends BaseMenu {
         // Create campus security if triggered
         if (evilBobReturnData.containsKey("Create Campus Security")) {
             if (evilBobReturnData.get("Create Campus Security") && !campusSecurityCreated) {
+                SoundManager.getInstance().play(SoundType.GOOSE_SPAWN);
                 eventTriggered("Hidden");
                 for (int i = 0; i < allCampusSecuritySprites.length; i++) {
                     allCampusSecuritySprites[i] = createSprite(
@@ -715,6 +725,7 @@ public class GameMenu extends BaseMenu {
                 campusSecurityReturnData.putAll(sec.collision(bob));
                 if (campusSecurityReturnData.containsKey("Reset Player Position")) {
                     if (campusSecurityReturnData.get("Reset Player Position")&& !invincibilityActive) {
+                        SoundManager.getInstance().play(SoundType.HIT);
                         bobSprite.setPosition(100, 500);
                         gooseHits++;
                     }

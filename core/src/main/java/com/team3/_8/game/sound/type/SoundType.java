@@ -8,7 +8,18 @@ package com.team3._8.game.sound.type;
  */
 public enum SoundType {
 
-    PICKUP_COIN("pickup_coin.mp3", 0.7f, false);
+    PICKUP_COIN("pickup_coin.mp3", 0.7f, false),
+    POWERUP("powerup.ogg", 0.6f, false),
+    HIT("hit.ogg", 0.8f, false),
+    DAMAGE("damage.ogg", 0.7f, false),
+    CONFUSED("confused.ogg", 0.5f, false),
+    PUZZLE_RIGHT("puzzle_right.ogg", 0.7f, false),
+    PUZZLE_WRONG("puzzle_wrong.ogg", 0.7f, false),
+    WIN("win.ogg", 0.8f, false),
+    SHRINK("shrink.ogg", 0.6f, false),
+    DOOR_OPEN("door_open.ogg", 0.7f, false),
+    TIME_BONUS("time_bonus.ogg", 0.6f, false),
+    GOOSE_SPAWN("goose_spawn.ogg", 0.7f, false);
 
     private final String filepath;
     private final float defaultVolume;

@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.team3._8.game.sound.manager.SoundManager;
+import com.team3._8.game.sound.type.SoundType;
 
 /**
  * Implements PuzzleEventLogic and creates a hidden event where the player can choose to solve an equation for a reward
@@ -112,9 +114,11 @@ public class PuzzleEvent extends InteractableEntity{
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)){
                 if(options[0] == answer){
+                    SoundManager.getInstance().play(SoundType.PUZZLE_RIGHT);
                     returnData.put("Enable Rocket Bob", true);
                 }
                 else{
+                    SoundManager.getInstance().play(SoundType.PUZZLE_WRONG);
                     returnData.put("Time penalty", true);
                 }
                 isSolved = true;
@@ -124,9 +128,11 @@ public class PuzzleEvent extends InteractableEntity{
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)){
                 if(options[1] == answer){
+                    SoundManager.getInstance().play(SoundType.PUZZLE_RIGHT);
                     returnData.put("Enable Rocket Bob", true);
                 }
                 else{
+                    SoundManager.getInstance().play(SoundType.PUZZLE_WRONG);
                     returnData.put("Time penalty", true);
                 }
                 isSolved = true;
@@ -136,9 +142,11 @@ public class PuzzleEvent extends InteractableEntity{
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)){
                 if(options[2] == answer){
+                    SoundManager.getInstance().play(SoundType.PUZZLE_RIGHT);
                     returnData.put("Enable Rocket Bob", true);
                 }
                 else{
+                    SoundManager.getInstance().play(SoundType.PUZZLE_WRONG);
                     returnData.put("Time penalty", true);
                 }
                 isSolved = true;
@@ -148,9 +156,11 @@ public class PuzzleEvent extends InteractableEntity{
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)){
                 if(options[3] == answer){
+                    SoundManager.getInstance().play(SoundType.PUZZLE_RIGHT);
                     returnData.put("Enable Rocket Bob", true);
                 }
                 else{
+                    SoundManager.getInstance().play(SoundType.PUZZLE_WRONG);
                     returnData.put("Time penalty", true);
                 }
                 isSolved = true;
