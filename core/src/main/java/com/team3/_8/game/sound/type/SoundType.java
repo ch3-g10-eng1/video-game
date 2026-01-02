@@ -19,7 +19,8 @@ public enum SoundType {
     SHRINK("shrink.ogg", 0.6f, false),
     DOOR_OPEN("door_open.ogg", 0.7f, false),
     TIME_BONUS("time_bonus.ogg", 0.6f, false),
-    GOOSE_SPAWN("goose_spawn.ogg", 0.7f, false);
+    GOOSE_SPAWN("goose_spawn.ogg", 0.7f, false),
+    BACKGROUND_MUSIC("bg_ambient.ogg", 0.3f, true);
 
     private final String filepath;
     private final float defaultVolume;

@@ -87,6 +87,7 @@ public class GameMenu extends BaseMenu {
     private Map<String, Integer> eventTracker;
     private Map<String, Boolean> achievements;
     private int gooseHits = 0;
+    private long bgMusicId = -1;
 
     public GameMenu(MenuManager menuManager, SpriteBatch batch, BitmapFont font,
                     OrthographicCamera camera, Viewport viewport) {
@@ -325,6 +326,10 @@ public class GameMenu extends BaseMenu {
         }else if (!intialised) {
             initialiseGame();
             intialised = true;
+        }
+
+        if (bgMusicId == -1) {
+            bgMusicId = SoundManager.getInstance().play(SoundType.BACKGROUND_MUSIC);
         }
 
         gameViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
