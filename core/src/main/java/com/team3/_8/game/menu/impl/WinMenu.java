@@ -163,6 +163,8 @@ public class WinMenu extends BaseMenu {
         super.show();
         uiViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         repositionButtons();
+
+        playerName = "";
     }
 
     @Override
@@ -293,6 +295,32 @@ public class WinMenu extends BaseMenu {
 
     @Override
     public boolean handleInput() {
+
+        if (askForName) {
+            for (int key = Input.Keys.A; key <= Input.Keys.Z; key++) {
+                if (Gdx.input.isKeyJustPressed(key)) {
+                    playerName += Input.Keys.toString(key);
+                }
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE) && playerName.length() > 0) {
+                playerName = playerName.substring(0, playerName.length() - 1);
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                if (playerName.isEmpty()) playerName = "Player";
+
+                storageManager.saveEntry(playerName, completionTime);
+                askForName = false;
+
+                leaderboard = storageManager.load();
+
+                playerName = "";
+                previousTimes.clear();
+                for (LeaderboardEntry e : leaderboard.getEntries()) {
+                    previousTimes.add(e.getTime());
+                }
+            }
+            return false;
+        }
 
         if (Gdx.input.justTouched()) {
 
