@@ -304,8 +304,13 @@ public class WinMenu extends BaseMenu {
                 for (LeaderboardEntry e : leaderboard.getEntries()) {
                     previousTimes.add(e.getTime());
                 }
+                return true;
             }
-            return false;
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                askForName = false;
+                playerName = "";
+                return true;
+            }
         }
 
         if (Gdx.input.justTouched()) {
