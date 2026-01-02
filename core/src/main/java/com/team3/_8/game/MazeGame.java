@@ -7,7 +7,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.team3._8.game.menu.impl.*;
+import com.team3._8.game.menu.impl.GameMenu;
+import com.team3._8.game.menu.impl.LoseMenu;
+import com.team3._8.game.menu.impl.PauseMenu;
+import com.team3._8.game.menu.impl.StartMenu;
+import com.team3._8.game.menu.impl.TutorialMenu;
+import com.team3._8.game.menu.impl.WinMenu;
 import com.team3._8.game.menu.manager.MenuManager;
 import com.team3._8.game.menu.type.MenuType;
 
@@ -39,6 +44,19 @@ public class MazeGame extends ApplicationAdapter {
         menuManager.setMenu(MenuType.MAIN_MENU);
 
     }
+
+
+  // Used for testing purposes only
+  public MazeGame(SpriteBatch batch, BitmapFont font, OrthographicCamera camera, Viewport viewport, MenuManager menuManager) {
+    this.batch = batch;
+    this.font = font;
+    this.camera = camera;
+    this.viewport = viewport;
+    this.menuManager = menuManager;
+  }
+
+  // Used to resolve confliction, create() initializes the game normally
+  public MazeGame() {}
 
     /**
      * Renders different screens based on activeScreen configuration

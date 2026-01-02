@@ -83,6 +83,31 @@ public class Maze {
     }
   }
 
+  // Additional constructor for testing purposes only
+
+  public Maze(TiledMap map,
+            TiledMapRenderer renderer,
+            String[] visible_layer_names,
+            Set<MapObjects> collidable_objects,
+            MapObject winLayer,
+            MapObject eventLayer) {
+
+    this.map = map;
+    this.map_render = renderer;
+
+    this.visible_layers = new int[map.getLayers().getCount()];
+
+    for (String layer : visible_layer_names) {
+        this.addVisibleLayer(layer);
+    }
+
+    this.collidable_objects = collidable_objects;
+
+    this.win_layer = winLayer;
+    this.event_layer = eventLayer;
+    this.event_triggered = false;
+}
+
   /**
    * Renders the map and sets its view to camera, called every frame
    *

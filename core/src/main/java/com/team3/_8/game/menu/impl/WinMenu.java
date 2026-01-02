@@ -75,7 +75,38 @@ public class WinMenu extends BaseMenu {
         loadFonts();
         createButtons();
 
+        initialiseDummyData();
     }
+
+  public WinMenu(
+    MenuManager menuManager,
+    SpriteBatch batch,
+    BitmapFont font,
+    OrthographicCamera camera,
+    Viewport viewport,
+    BitmapFont titleFont,
+    BitmapFont buttonFont,
+    BitmapFont statsFont,
+    TextureRegion idle,
+    TextureRegion hover,
+    TextureRegion play
+    ) {
+    super(menuManager, batch, font, camera, viewport);
+
+    this.uiCamera = camera;
+    this.uiViewport = viewport;
+
+    this.tittleFont = titleFont;
+    this.buttonFont = buttonFont;
+    this.statsFont = statsFont;
+
+    this.idle = idle;
+    this.hover = hover;
+    this.play = play;
+
+    createButtons();
+    initialiseDummyData();
+  }
 
     private void loadFonts() {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/OpenSans-Regular.ttf"));
@@ -132,8 +163,6 @@ public class WinMenu extends BaseMenu {
         super.show();
         uiViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         repositionButtons();
-
-        playerName = "";
     }
 
     @Override
@@ -265,32 +294,6 @@ public class WinMenu extends BaseMenu {
     @Override
     public boolean handleInput() {
 
-        if (askForName) {
-            for (int key = Input.Keys.A; key <= Input.Keys.Z; key++) {
-                if (Gdx.input.isKeyJustPressed(key)) {
-                    playerName += Input.Keys.toString(key);
-                }
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE) && playerName.length() > 0) {
-                playerName = playerName.substring(0, playerName.length() - 1);
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                if (playerName.isEmpty()) playerName = "Player";
-
-                storageManager.saveEntry(playerName, completionTime);
-                askForName = false;
-
-                leaderboard = storageManager.load();
-
-                playerName = "";
-                previousTimes.clear();
-                for (LeaderboardEntry e : leaderboard.getEntries()) {
-                    previousTimes.add(e.getTime());
-                }
-            }
-            return false;
-        }
-
         if (Gdx.input.justTouched()) {
 
             touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -375,3 +378,9 @@ public class WinMenu extends BaseMenu {
         this.leaderboard = data;
     }
 }
+
+  // Used for testing purposes only
+
+  public List<MenuButton> getButtons() {
+    return buttons;
+  }

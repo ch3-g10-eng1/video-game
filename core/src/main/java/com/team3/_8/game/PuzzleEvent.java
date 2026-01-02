@@ -1,5 +1,8 @@
 package com.team3._8.game;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -7,9 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Implements PuzzleEventLogic and creates a hidden event where the player can choose to solve an equation for a reward
@@ -53,6 +53,16 @@ public class PuzzleEvent extends InteractableEntity{
         options = thisPuzzle.getOptions();
         equationString = thisPuzzle.getPrintableExpression();
         answer = thisPuzzle.getAnswer();
+    }
+
+    public PuzzleEvent(Sprite sprite, float speed, TextBubble textBubble, BitmapFont font){
+      super(sprite, speed);
+      this.textBubble = textBubble;
+      this.font = font;
+      PuzzleEventLogic thisPuzzle = new PuzzleEventLogic();
+      options = thisPuzzle.getOptions();
+      equationString = thisPuzzle.getPrintableExpression();
+      answer = thisPuzzle.getAnswer();
     }
 
     /**
@@ -214,5 +224,51 @@ public class PuzzleEvent extends InteractableEntity{
         textBubble = new TextBubble(bubble, font, 170, 120);
         textBubble.setText(script[0]);
         conversationPointer += 1;
+    }
+
+    // Used for testing purposes only
+
+    public void setConversationReset(boolean reset) {
+        this.conversationReset = reset;
+    }
+
+    public void setDrawNext(boolean drawNext) {
+        this.drawNext = drawNext;
+    }
+
+    public void setTextBubbleVisible(boolean visible) {
+        this.textBubbleVisible = visible;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public boolean getDrawNext() {
+        return this.drawNext;
+    }
+
+    public String[] getScript() {
+        return this.script;
+    }
+
+    public String getEquationString() {
+        return this.equationString;
+    }
+
+    public int[] getOptions() {
+        return this.options;
+    }
+
+    public int getAnswer() {
+        return this.answer;
+    }
+
+    public boolean isSolved() {
+        return this.isSolved;
     }
 }

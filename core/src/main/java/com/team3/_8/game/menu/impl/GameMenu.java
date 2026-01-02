@@ -21,9 +21,8 @@ import com.team3._8.game.storage.impl.JsonStorageService;
 import com.team3._8.game.storage.manager.TimeStorageManager;
 import com.team3._8.game.storage.model.LeaderboardEntry;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GameMenu extends BaseMenu {
@@ -95,6 +94,20 @@ public class GameMenu extends BaseMenu {
         gameViewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, gameCamera);
 
         initialiseGame();
+        intialised = true;
+    }
+
+    // Constructor used for testing purposes only
+
+    public GameMenu(MenuManager menuManager, SpriteBatch batch, BitmapFont font,
+                    OrthographicCamera camera, Viewport viewport, boolean isStub) {
+        super(menuManager, batch, font, camera, viewport);
+
+        gameCamera = camera;
+        gameViewport = viewport;
+        this.eventTracker = new HashMap<>();
+        this.achievements = new HashMap<>();
+
         intialised = true;
     }
 
@@ -476,15 +489,12 @@ public class GameMenu extends BaseMenu {
             TimeStorageManager manager = new TimeStorageManager(new JsonStorageService<>("leaderboard.json", LeaderboardData.class));
 
             LeaderboardData data = manager.load();
-
-
             WinMenu winMenu = (WinMenu) menuManager.getMenu(MenuType.WIN);
 
             if (winMenu != null) {
-
                 winMenu.setLeaderboard(data);
-                winMenu.setAchievements(achievements);
                 winMenu.setCompletionTime(timer);
+                winMenu.setAchievements(achievements);
 
                 if (data.qualifies(timer)) {
                     winMenu.enableNameEntry(timer, manager, data);
@@ -498,9 +508,7 @@ public class GameMenu extends BaseMenu {
             eventTriggered("Negative");
         }
 
-        if (timer >= 300) {
-            menuManager.setMenu(MenuType.LOSE);
-        }
+        checkTimeout();
     }
 
     @Override
@@ -732,6 +740,30 @@ public class GameMenu extends BaseMenu {
 
     public void setIntialised(boolean intialised) {
         this.intialised = intialised;
+    }
+
+    public void checkTimeout() {
+        if (timer >= 300) {
+            menuManager.setMenu(MenuType.LOSE);
+        }
+    }
+
+    // Used for testing purposes only
+
+    public void setEventTracker(Map<String, Integer> eventTracker) {
+        this.eventTracker = eventTracker;
+    }
+
+    public void setTimer(float time) {
+        timer = time;
+    }
+
+    public Map<String, Boolean> getAchievements() {
+        return achievements;
+    }
+
+    public void doCheckAchievements() {
+        checkAchievements();
     }
 
 }

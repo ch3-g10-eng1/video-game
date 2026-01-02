@@ -1,6 +1,9 @@
 package com.team3._8.game.menu.impl;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -19,9 +22,6 @@ import com.team3._8.game.menu.BaseMenu;
 import com.team3._8.game.menu.button.MenuButton;
 import com.team3._8.game.menu.manager.MenuManager;
 import com.team3._8.game.menu.type.MenuType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class StartMenu extends BaseMenu {
 
@@ -68,6 +68,33 @@ public class StartMenu extends BaseMenu {
         createButtons();
 
     }
+
+    public StartMenu(MenuManager menuManager,
+                      SpriteBatch batch,
+                      BitmapFont defaultFont,
+                      OrthographicCamera camera,
+                      Viewport viewport,
+                      BitmapFont titleFont,
+                      BitmapFont buttonFont,
+                      TextureRegion idle,
+                      TextureRegion hover,
+                      TextureRegion play) {
+
+      super(menuManager, batch, defaultFont, camera, viewport);
+
+      this.uiCamera = camera;
+      this.uiViewport = viewport;
+
+      this.tittleFont = titleFont;
+      this.buttonFont = buttonFont;
+
+      this.idle = idle;
+      this.hover = hover;
+      this.play = play;
+
+      createButtons();
+      repositionButtons();
+  }
 
     private void loadFonts() {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/OpenSans-Regular.ttf"));
@@ -260,5 +287,10 @@ public class StartMenu extends BaseMenu {
         buttons.get(2).bounds.set(centerX, centerY - 120, btnW, btnH);
     }
 
+  // Used for testing purposes only
+
+  public List<MenuButton> getButtons() {
+    return buttons;
+  }
 
 }

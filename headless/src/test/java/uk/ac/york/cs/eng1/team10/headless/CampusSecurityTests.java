@@ -1,5 +1,6 @@
 package uk.ac.york.cs.eng1.team10.headless;
 
+import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,10 +17,11 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
   private CampusSecurity campusSecurity;
   private Sprite campusSecuritySprite;
   private Graphics mockGraphics;
+  private TextureAtlas atlas;
 
   @BeforeEach
   public void createCampusSecurity() {
-    TextureAtlas atlas = new TextureAtlas("atlas/security_geese.atlas");
+    atlas = new TextureAtlas("atlas/security_geese.atlas");
     campusSecuritySprite = new Sprite(atlas.findRegion("walking"));
     campusSecuritySprite.setPosition(100, 500);
     campusSecuritySprite.setSize(15, 15);
@@ -28,8 +30,15 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
     Gdx.graphics = mockGraphics;
   }
 
+  @AfterEach
+  public void tearDown() {
+    if (atlas != null) {
+        atlas.dispose();
+    }
+  }
+
   @Test
-  public void testCampusSecurityCreation() {
+  void testCampusSecurityCreationSetsCorrectValues() {
     assertEquals(campusSecuritySprite.getHeight(), 15);
     assertEquals(campusSecuritySprite.getWidth(), 15);
     assertEquals(campusSecurity.getX(), 100);
@@ -38,59 +47,61 @@ public class CampusSecurityTests extends AbstractHeadlessGdxTest {
   }
 
   @Test
-  public void testStartStopInteraction() {
+  void testStartAndStopInteractionReturnCorrectData() {
     assertEquals(true, campusSecurity.startInteraction().get("Reset Player Position"));
     assertEquals(false, campusSecurity.stopInteraction().get("Reset Player Position"));
   }
 
   @Test
-  public void testCampusSecurityMoveUp() {
+  void testCampusSecurityMoveUpChangesCampusSecurityPositionUp() {
     float initialX = campusSecurity.getX();
     float initialY = campusSecurity.getY();
     float deltaTime = 0.016f;
     // Inject delta time into move()
     when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
+
     // Move campus security up
     campusSecurity.doMove(true);
+
     assertEquals(initialX, campusSecurity.getX());
     assertEquals(initialY + campusSecurity.getSpeed() * deltaTime, campusSecurity.getY());
   }
 
   @Test
-  public void testCampusSecurityMoveDown() {
+  void testCampusSecurityMoveDownChangesCampusSecurityPositionDown() {
     float initialX = campusSecurity.getX();
     float initialY = campusSecurity.getY();
     float deltaTime = 0.016f;
-    // Inject delta time into move()
     when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
-    // Move campus security up
+
     campusSecurity.doMove(false);
+
     assertEquals(initialX, campusSecurity.getX());
     assertEquals(initialY - campusSecurity.getSpeed() * deltaTime, campusSecurity.getY());
   }
 
   @Test
-  public void testCollisionBoxMoveUp() {
+  void testCollisionBoxMoveUpChangesCollisionBoxPositionUp() {
     float initialX = campusSecurity.getCollisionBox().getX();
     float initialY = campusSecurity.getCollisionBox().getY();
     float deltaTime = 0.016f;
-    // Inject delta time into move()
     when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
-    // Move campus security up
+
     campusSecurity.doMove(true);
+
     assertEquals(initialX + 8f, campusSecurity.getCollisionBox().getX()); // 8f added as inset value
     assertEquals(initialY + deltaTime * campusSecurity.getSpeed(), campusSecurity.getCollisionBox().getY());
   }
 
   @Test
-  public void testCollisionBoxMoveDown() {
+  void testCollisionBoxMoveDownChangesCollisionBoxPositionDown() {
     float initialX = campusSecurity.getCollisionBox().getX();
     float initialY = campusSecurity.getCollisionBox().getY();
     float deltaTime = 0.016f;
-    // Inject delta time into move()
     when(mockGraphics.getDeltaTime()).thenReturn(deltaTime);
-    // Move campus security up
+
     campusSecurity.doMove(false);
+
     assertEquals(initialX + 8f, campusSecurity.getCollisionBox().getX()); // 8f added as inset value
     assertEquals(initialY - deltaTime * campusSecurity.getSpeed(), campusSecurity.getCollisionBox().getY());
   }

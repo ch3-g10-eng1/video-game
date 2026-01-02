@@ -98,4 +98,10 @@ abstract class CollidableEntity extends Entity {
    */
   @Override
   public abstract void move(boolean[] movement_halter);
+
+  // Used for testing purposes only
+
+  public void setCollisionBox(Rectangle collisionBox) {
+    this.collisionBox = collisionBox;
+  }
 }

@@ -39,6 +39,8 @@ public class EvilBob extends InteractableEntity {
   private Boolean playerHasKeycard = false;
   // Used to control animation time
   private float stateTime = 0f;
+  // Used for testing purposes only
+  private boolean skipChoice = false;
 
   /**
    * Creates character, loads character Texture + Animation, and creates text-bubble for character
@@ -58,7 +60,7 @@ public class EvilBob extends InteractableEntity {
   @Override
   public Map<String, Boolean> startInteraction() {
     // Controls final option section of interaction
-    boolean skipChoice = false;
+    skipChoice = false;
 
     // Makes textBubbleVisible if no already
     if (!textBubbleVisible) {
@@ -187,5 +189,32 @@ public class EvilBob extends InteractableEntity {
   /** Sets player keycard status */
   public void setPlayerHasKeycard(boolean playerHasKeycard) {
     this.playerHasKeycard = playerHasKeycard;
+  }
+
+  // Used for testing purposes only
+  public Boolean getPlayerHasKeycard() {
+    return playerHasKeycard;
+  }
+
+  public TextBubble getTextBubble() {
+    return textBubble;
+  }
+
+  public void setSkipChoice(boolean skipChoice) {
+    this.skipChoice = skipChoice;
+  }
+
+  public void setConversationReset(boolean conversationReset) {
+    this.conversationReset = conversationReset;
+  }
+
+  public void setPosition(float x, float y) {
+    this.sprite.setX(x);
+    this.sprite.setY(y);
+    updateCollisionBox();
+  }
+
+  public void resetReturnData() {
+    this.returnData.clear();
   }
 }
