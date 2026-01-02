@@ -27,7 +27,7 @@ public class LeaderboardData {
         entries.sort(Comparator.comparingDouble(LeaderboardEntry::getTime));
 
         if (entries.size() > 5) {
-            entries = entries.subList(0, 5);
+            entries = new ArrayList<>(entries.subList(0, 5));
         }
     }
 

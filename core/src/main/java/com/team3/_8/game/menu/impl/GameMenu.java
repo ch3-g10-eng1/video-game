@@ -16,8 +16,14 @@ import com.team3._8.game.*;
 import com.team3._8.game.menu.BaseMenu;
 import com.team3._8.game.menu.manager.MenuManager;
 import com.team3._8.game.menu.type.MenuType;
+import com.team3._8.game.storage.data.LeaderboardData;
+import com.team3._8.game.storage.impl.JsonStorageService;
+import com.team3._8.game.storage.manager.TimeStorageManager;
+import com.team3._8.game.storage.model.LeaderboardEntry;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GameMenu extends BaseMenu {
@@ -466,11 +472,23 @@ public class GameMenu extends BaseMenu {
 
         if (maze.HitsWinLayer(bob)) {
             checkAchievements();
+
+            TimeStorageManager manager = new TimeStorageManager(new JsonStorageService<>("leaderboard.json", LeaderboardData.class));
+
+            LeaderboardData data = manager.load();
+
+
             WinMenu winMenu = (WinMenu) menuManager.getMenu(MenuType.WIN);
 
             if (winMenu != null) {
-                winMenu.setCompletionTime(timer);
+
+                winMenu.setLeaderboard(data);
                 winMenu.setAchievements(achievements);
+                winMenu.setCompletionTime(timer);
+
+                if (data.qualifies(timer)) {
+                    winMenu.enableNameEntry(timer, manager, data);
+                }
             }
 
             menuManager.setMenu(MenuType.WIN);

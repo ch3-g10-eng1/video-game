@@ -18,6 +18,9 @@ import com.team3._8.game.menu.BaseMenu;
 import com.team3._8.game.menu.button.MenuButton;
 import com.team3._8.game.menu.manager.MenuManager;
 import com.team3._8.game.menu.type.MenuType;
+import com.team3._8.game.storage.data.LeaderboardData;
+import com.team3._8.game.storage.manager.TimeStorageManager;
+import com.team3._8.game.storage.model.LeaderboardEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +46,11 @@ public class WinMenu extends BaseMenu {
     private List<Float> previousTimes = new ArrayList<>();
     private Map<String, Boolean> achievements = new HashMap<>();
 
+    private boolean askForName = false;
+    private String playerName = "";
+    private TimeStorageManager storageManager;
+    private LeaderboardData leaderboard;
+
 
     public WinMenu(final MenuManager menuManager,
                    final SpriteBatch batch,
@@ -67,7 +75,6 @@ public class WinMenu extends BaseMenu {
         loadFonts();
         createButtons();
 
-        initialiseDummyData();
     }
 
     private void loadFonts() {
@@ -125,6 +132,8 @@ public class WinMenu extends BaseMenu {
         super.show();
         uiViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         repositionButtons();
+
+        playerName = "";
     }
 
     @Override
@@ -150,6 +159,18 @@ public class WinMenu extends BaseMenu {
         statsFont.setColor(Color.YELLOW);
         statsFont.draw(spriteBatch, glyphLayout, (screenW - glyphLayout.width) /2f, titleY - 60);
 
+        if (askForName) {
+            glyphLayout.setText(statsFont, "New High Score! Enter your name: ");
+            statsFont.draw(spriteBatch, glyphLayout, (screenW - glyphLayout.width) /2f, titleY - 120);
+
+            glyphLayout.setText(statsFont, playerName + "_");
+            statsFont.draw(spriteBatch, glyphLayout,
+                (screenW - glyphLayout.width) / 2f,
+                titleY - 150);
+
+
+        }
+
         glyphLayout.setText(statsFont, "Previous Best Times:");
         statsFont.setColor(Color.LIGHT_GRAY);
         float timesY = titleY - 100;
@@ -158,12 +179,22 @@ public class WinMenu extends BaseMenu {
             timesY);
 
         timesY -= 30;
-        for (int i = 0; i < Math.min(5, previousTimes.size()); i++) {
-            String prevTime = String.format("%d. %.2f seconds", i + 1, previousTimes.get(i));
-            glyphLayout.setText(statsFont, prevTime);
-            statsFont.draw(spriteBatch, glyphLayout,
-                (screenW - glyphLayout.width) / 2f,
-                timesY - (i * 25));
+        if (leaderboard != null) {
+
+            List<LeaderboardEntry> entries = leaderboard.getEntries();
+
+            for (int i = 0; i < Math.min(5, entries.size()); i++) {
+                LeaderboardEntry entry = entries.get(i);
+                String line = String.format("%d. %s - %.2f seconds",
+                    i + 1,
+                    entry.getName(),
+                    entry.getTime());
+
+                glyphLayout.setText(statsFont, line);
+                statsFont.draw(spriteBatch, glyphLayout,
+                    (screenW - glyphLayout.width) / 2f,
+                    timesY - (i * 25));
+            }
         }
 
         if (!achievements.isEmpty()) {
@@ -234,6 +265,32 @@ public class WinMenu extends BaseMenu {
     @Override
     public boolean handleInput() {
 
+        if (askForName) {
+            for (int key = Input.Keys.A; key <= Input.Keys.Z; key++) {
+                if (Gdx.input.isKeyJustPressed(key)) {
+                    playerName += Input.Keys.toString(key);
+                }
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE) && playerName.length() > 0) {
+                playerName = playerName.substring(0, playerName.length() - 1);
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                if (playerName.isEmpty()) playerName = "Player";
+
+                storageManager.saveEntry(playerName, completionTime);
+                askForName = false;
+
+                leaderboard = storageManager.load();
+
+                playerName = "";
+                previousTimes.clear();
+                for (LeaderboardEntry e : leaderboard.getEntries()) {
+                    previousTimes.add(e.getTime());
+                }
+            }
+            return false;
+        }
+
         if (Gdx.input.justTouched()) {
 
             touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -301,5 +358,20 @@ public class WinMenu extends BaseMenu {
         if (tittleFont != null) tittleFont.dispose();
         if (buttonFont != null) buttonFont.dispose();
         if (statsFont != null) statsFont.dispose();
+    }
+
+    public void setPreviousTimes(List<Float> times) {
+        previousTimes = times;
+    }
+
+    public void setLeaderboard(LeaderboardData data) {
+        this.leaderboard = data;
+    }
+
+    public void enableNameEntry(float completionTime, TimeStorageManager manager, LeaderboardData data) {
+        this.askForName = true;
+        this.completionTime = completionTime;
+        this.storageManager = manager;
+        this.leaderboard = data;
     }
 }

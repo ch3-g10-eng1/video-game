@@ -22,7 +22,7 @@ public class JsonStorageService<T> implements StorageService<T> {
     private final Class<T> type;
 
     public JsonStorageService(String filePath, Class<T> type) {
-        this.file = Gdx.files.internal(filePath);
+        this.file = Gdx.files.local(filePath);
         this.gson = new GsonBuilder().setPrettyPrinting().create();
         this.type = type;
     }
