@@ -78,35 +78,35 @@ public class WinMenu extends BaseMenu {
         initialiseDummyData();
     }
 
-  public WinMenu(
-    MenuManager menuManager,
-    SpriteBatch batch,
-    BitmapFont font,
-    OrthographicCamera camera,
-    Viewport viewport,
-    BitmapFont titleFont,
-    BitmapFont buttonFont,
-    BitmapFont statsFont,
-    TextureRegion idle,
-    TextureRegion hover,
-    TextureRegion play
-    ) {
-    super(menuManager, batch, font, camera, viewport);
+    public WinMenu(
+        MenuManager menuManager,
+        SpriteBatch batch,
+        BitmapFont font,
+        OrthographicCamera camera,
+        Viewport viewport,
+        BitmapFont titleFont,
+        BitmapFont buttonFont,
+        BitmapFont statsFont,
+        TextureRegion idle,
+        TextureRegion hover,
+        TextureRegion play
+        ) {
+        super(menuManager, batch, font, camera, viewport);
 
-    this.uiCamera = camera;
-    this.uiViewport = viewport;
+        this.uiCamera = camera;
+        this.uiViewport = viewport;
 
-    this.tittleFont = titleFont;
-    this.buttonFont = buttonFont;
-    this.statsFont = statsFont;
+        this.tittleFont = titleFont;
+        this.buttonFont = buttonFont;
+        this.statsFont = statsFont;
 
-    this.idle = idle;
-    this.hover = hover;
-    this.play = play;
+        this.idle = idle;
+        this.hover = hover;
+        this.play = play;
 
-    createButtons();
-    initialiseDummyData();
-  }
+        createButtons();
+        initialiseDummyData();
+    }
 
     private void loadFonts() {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/OpenSans-Regular.ttf"));
@@ -377,10 +377,11 @@ public class WinMenu extends BaseMenu {
         this.storageManager = manager;
         this.leaderboard = data;
     }
+
+    // Used for testing purposes only
+
+    public List<MenuButton> getButtons() {
+        return buttons;
+    }
 }
 
-  // Used for testing purposes only
-
-  public List<MenuButton> getButtons() {
-    return buttons;
-  }
