@@ -327,7 +327,7 @@ public class WinMenu extends BaseMenu {
 
         float centerX = screenW / 2f - btnW / 2f;
 
-        float startY = screenH * 0.10f;
+        float startY = screenH * 0.15f;
 
         buttons.get(0).bounds.set(centerX, startY + btnH + spacing, btnW, btnH);
         buttons.get(1).bounds.set(centerX, startY, btnW, btnH);
