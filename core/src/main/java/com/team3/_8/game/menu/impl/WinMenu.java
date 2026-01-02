@@ -198,33 +198,31 @@ public class WinMenu extends BaseMenu {
             statsFont.draw(spriteBatch, glyphLayout,
                 (screenW - glyphLayout.width) / 2f,
                 titleY - 150);
+        } else {
+            glyphLayout.setText(statsFont, "Previous Best Times:");
+            statsFont.setColor(Color.LIGHT_GRAY);
+            float timesY = titleY - 100;
+            statsFont.draw(spriteBatch, glyphLayout,
+                (screenW - glyphLayout.width) / 2f,
+                timesY);
 
+            timesY -= 30;
+            if (leaderboard != null) {
 
-        }
+                List<LeaderboardEntry> entries = leaderboard.getEntries();
 
-        glyphLayout.setText(statsFont, "Previous Best Times:");
-        statsFont.setColor(Color.LIGHT_GRAY);
-        float timesY = titleY - 100;
-        statsFont.draw(spriteBatch, glyphLayout,
-            (screenW - glyphLayout.width) / 2f,
-            timesY);
+                for (int i = 0; i < Math.min(5, entries.size()); i++) {
+                    LeaderboardEntry entry = entries.get(i);
+                    String line = String.format("%d. %s - %.2f seconds",
+                        i + 1,
+                        entry.getName(),
+                        entry.getTime());
 
-        timesY -= 30;
-        if (leaderboard != null) {
-
-            List<LeaderboardEntry> entries = leaderboard.getEntries();
-
-            for (int i = 0; i < Math.min(5, entries.size()); i++) {
-                LeaderboardEntry entry = entries.get(i);
-                String line = String.format("%d. %s - %.2f seconds",
-                    i + 1,
-                    entry.getName(),
-                    entry.getTime());
-
-                glyphLayout.setText(statsFont, line);
-                statsFont.draw(spriteBatch, glyphLayout,
-                    (screenW - glyphLayout.width) / 2f,
-                    timesY - (i * 25));
+                    glyphLayout.setText(statsFont, line);
+                    statsFont.draw(spriteBatch, glyphLayout,
+                        (screenW - glyphLayout.width) / 2f,
+                        timesY - (i * 25));
+                }
             }
         }
 
