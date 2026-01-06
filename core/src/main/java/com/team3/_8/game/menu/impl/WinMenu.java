@@ -1,5 +1,10 @@
 package com.team3._8.game.menu.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -21,11 +26,6 @@ import com.team3._8.game.menu.type.MenuType;
 import com.team3._8.game.storage.data.LeaderboardData;
 import com.team3._8.game.storage.manager.TimeStorageManager;
 import com.team3._8.game.storage.model.LeaderboardEntry;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 public class WinMenu extends BaseMenu {
 

@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.team3._8.game.PuzzleEvent;
 import com.team3._8.game.TextBubble;
+import com.team3._8.game.sound.manager.SoundManager;
 
 public class PuzzleEventTests {
 
@@ -29,6 +30,7 @@ public class PuzzleEventTests {
   SpriteBatch mockBatch;
   Input mockInput;
   TextBubble mockTextBubble;
+  SoundManager mockSoundManager;
 
   @BeforeEach
   public void createPuzzleEvent() {
@@ -37,9 +39,10 @@ public class PuzzleEventTests {
     mockBatch = mock(SpriteBatch.class);
     mockInput = mock(Input.class);
     mockTextBubble = mock(TextBubble.class);
+    mockSoundManager = mock(SoundManager.class);
     Gdx.input = mockInput;
 
-    puzzleEvent = new PuzzleEvent(mockSprite, 0f, mockTextBubble, mockFont);
+    puzzleEvent = new PuzzleEvent(mockSprite, 0f, mockTextBubble, mockFont, mockSoundManager);
   }
 
   @AfterEach

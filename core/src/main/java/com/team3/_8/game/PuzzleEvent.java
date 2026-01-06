@@ -57,7 +57,9 @@ public class PuzzleEvent extends InteractableEntity{
         answer = thisPuzzle.getAnswer();
     }
 
-    public PuzzleEvent(Sprite sprite, float speed, TextBubble textBubble, BitmapFont font){
+
+    // Used for testing purposes only
+    public PuzzleEvent(Sprite sprite, float speed, TextBubble textBubble, BitmapFont font, SoundManager soundManager){
       super(sprite, speed);
       this.textBubble = textBubble;
       this.font = font;
@@ -65,6 +67,8 @@ public class PuzzleEvent extends InteractableEntity{
       options = thisPuzzle.getOptions();
       equationString = thisPuzzle.getPrintableExpression();
       answer = thisPuzzle.getAnswer();
+      SoundManager mockSoundManager = soundManager;
+      SoundManager.setInstance(mockSoundManager);
     }
 
     /**

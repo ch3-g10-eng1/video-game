@@ -1,5 +1,8 @@
 package com.team3._8.game.menu.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,7 +15,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.team3._8.game.*;
+import com.team3._8.game.Bob;
+import com.team3._8.game.CampusSecurity;
+import com.team3._8.game.CollectableEntity;
+import com.team3._8.game.EvilBob;
+import com.team3._8.game.GameController;
+import com.team3._8.game.HUD;
+import com.team3._8.game.Maze;
+import com.team3._8.game.PuzzleEvent;
 import com.team3._8.game.menu.BaseMenu;
 import com.team3._8.game.menu.manager.MenuManager;
 import com.team3._8.game.menu.type.MenuType;
@@ -21,11 +31,6 @@ import com.team3._8.game.sound.type.SoundType;
 import com.team3._8.game.storage.data.LeaderboardData;
 import com.team3._8.game.storage.impl.JsonStorageService;
 import com.team3._8.game.storage.manager.TimeStorageManager;
-import com.team3._8.game.storage.model.LeaderboardEntry;
-
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class GameMenu extends BaseMenu {
 
@@ -112,6 +117,7 @@ public class GameMenu extends BaseMenu {
         this.achievements = new HashMap<>();
 
         intialised = true;
+        bgMusicId = 0;
     }
 
     private void initialiseGame() {

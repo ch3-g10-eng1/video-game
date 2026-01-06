@@ -103,7 +103,7 @@ public class WinMenuTests {
   void testUpdateSetsButtonHoverAndClickCorrectly() {
     MenuButton button = winMenu.getButtons().get(0);
     when(mockInput.getX()).thenReturn((int) button.bounds.getX());
-    when(mockInput.getY()).thenReturn((int) button.bounds.getX());
+    when(mockInput.getY()).thenReturn((int) button.bounds.getY());
     // Hovered but mouse not pressed
     when(Gdx.input.isButtonPressed(Input.Buttons.LEFT)).thenReturn(false);
     winMenu.update(0.016f);

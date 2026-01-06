@@ -1,16 +1,16 @@
 package com.team3._8.game.sound.manager;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 import com.team3._8.game.sound.type.SoundType;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * A centralised sound management system for the game
@@ -360,6 +360,11 @@ public class SoundManager implements Disposable {
         prefs.putBoolean("soundsMuted", isMuted);
         prefs.putBoolean("soundsEnabled", soundsEnabled);
         prefs.flush();
+    }
+
+    // Used for testing purposes only
+    public static void setInstance(SoundManager soundManager) {
+        instance = soundManager;
     }
 
 }
