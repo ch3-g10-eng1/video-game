@@ -127,41 +127,65 @@ public class Maze {
    *     1-top, 2-right, 3-bottom
    */
   public boolean[] hitsWall(CollidableEntity entity, float delta) {
-    boolean[] movement_halter = new boolean[4];
-    // Walls of the collision box, used to determine which direction entity is colliding in
-    double right_wall_X;
-    double left_wall_X;
-    double wall_Y;
-    Rectangle wall_collision = null; // collision box of the map
-    // Distance bob moves every time function is called (+allowance for changes to delta)
-    // System.out.println(delta);
-    float effective_speed = entity.getSpeed() * delta * 3;
+      boolean[] movement_halter = new boolean[4];
 
-    for (MapObjects collidable_layer : collidable_objects) {
-      for (RectangleMapObject wall : collidable_layer.getByType(RectangleMapObject.class)) {
-        wall_collision = wall.getRectangle();
+      float effective_speed = entity.getSpeed() * delta * 1.5f;
 
-        // Define different points to measure where entity is in comparison
-        right_wall_X = wall_collision.getX() + wall_collision.getWidth() - effective_speed;
-        left_wall_X = wall_collision.getX() + effective_speed;
-        wall_Y = wall_collision.getY() + effective_speed;
+      Rectangle testRight = new Rectangle(
+          entity.collisionBox.x + effective_speed,
+          entity.collisionBox.y,
+          entity.collisionBox.width,
+          entity.collisionBox.height
+      );
 
-        if (Intersector.overlaps(wall_collision, entity.collisionBox)) {
-          // If entity collides with box, which side of the box
-          // Use a whiteboard to visualise
-          if ((left_wall_X) > entity.collisionBox.getX() + entity.collisionBox.getWidth()) {
-            movement_halter[0] = true;
-          } else if (right_wall_X < entity.collisionBox.getX()) {
-            movement_halter[2] = true;
-          } else if ((wall_Y > entity.collisionBox.getY())) {
-            movement_halter[3] = true;
-          } else if ((wall_Y < entity.collisionBox.getY() + entity.collisionBox.getHeight())) {
-            movement_halter[1] = true;
+      Rectangle testLeft = new Rectangle(
+          entity.collisionBox.x - effective_speed,
+          entity.collisionBox.y,
+          entity.collisionBox.width,
+          entity.collisionBox.height
+      );
+
+      Rectangle testUp = new Rectangle(
+          entity.collisionBox.x,
+          entity.collisionBox.y + effective_speed,
+          entity.collisionBox.width,
+          entity.collisionBox.height
+      );
+
+      Rectangle testDown = new Rectangle(
+          entity.collisionBox.x,
+          entity.collisionBox.y - effective_speed,
+          entity.collisionBox.width,
+          entity.collisionBox.height
+      );
+
+      for (MapObjects collidable_layer : collidable_objects) {
+          for (RectangleMapObject wall : collidable_layer.getByType(RectangleMapObject.class)) {
+              Rectangle wall_collision = wall.getRectangle();
+
+              // Check if moving right would cause collision
+              if (Intersector.overlaps(wall_collision, testRight)) {
+                  movement_halter[0] = true;
+              }
+
+              // Check if moving left would cause collision
+              if (Intersector.overlaps(wall_collision, testLeft)) {
+                  movement_halter[2] = true;
+              }
+
+              // Check if moving up would cause collision
+              if (Intersector.overlaps(wall_collision, testUp)) {
+                  movement_halter[3] = true;
+              }
+
+              // Check if moving down would cause collision
+              if (Intersector.overlaps(wall_collision, testDown)) {
+                  movement_halter[1] = true;
+              }
           }
-        }
       }
-    }
-    return movement_halter;
+
+      return movement_halter;
   }
 
   /**
