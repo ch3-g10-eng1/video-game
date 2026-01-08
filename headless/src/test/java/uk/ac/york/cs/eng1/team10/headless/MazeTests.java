@@ -201,7 +201,7 @@ public class MazeTests {
   @Test
   void testHitsWallFromLeftBlocksLeft() {
     Sprite mockSprite = mock(Sprite.class);
-    when(mockSprite.getX()).thenReturn(40.1f);
+    when(mockSprite.getX()).thenReturn(39.9f);
     when(mockSprite.getY()).thenReturn(55f);
     when(mockSprite.getWidth()).thenReturn(10f);
     when(mockSprite.getHeight()).thenReturn(10f);
@@ -215,7 +215,7 @@ public class MazeTests {
   @Test
   void testHitsWallFromRightBlocksRight() {
     Sprite mockSprite = mock(Sprite.class);
-    when(mockSprite.getX()).thenReturn(69f);
+    when(mockSprite.getX()).thenReturn(70f);
     when(mockSprite.getY()).thenReturn(55f);
     when(mockSprite.getWidth()).thenReturn(10f);
     when(mockSprite.getHeight()).thenReturn(10f);
@@ -230,7 +230,7 @@ public class MazeTests {
   void testHitsWallFromAboveBlocksDown() {
     Sprite mockSprite = mock(Sprite.class);
     when(mockSprite.getX()).thenReturn(50f);
-    when(mockSprite.getY()).thenReturn(40.1f);
+    when(mockSprite.getY()).thenReturn(39.9f);
     when(mockSprite.getWidth()).thenReturn(10f);
     when(mockSprite.getHeight()).thenReturn(10f);
     CollectableEntity entity = new CollectableEntity(mockSprite, 5, null);
@@ -244,7 +244,7 @@ public class MazeTests {
   void testHitsWallFromBelowBlocksUp() {
     Sprite mockSprite = mock(Sprite.class);
     when(mockSprite.getX()).thenReturn(50f);
-    when(mockSprite.getY()).thenReturn(69f);
+    when(mockSprite.getY()).thenReturn(70f);
     when(mockSprite.getWidth()).thenReturn(10f);
     when(mockSprite.getHeight()).thenReturn(10f);
     CollectableEntity entity = new CollectableEntity(mockSprite, 5, null);
